@@ -235,9 +235,16 @@ function toast(msg, kind = "") {
   $("#toasts").append(t); setTimeout(() => t.remove(), kind === "bad" ? 7000 : 3500);
 }
 function errMsg(e) {
+  console.error("[admin]", e?.code, e?.message, e);
   const code = e?.code || "";
-  if (code.includes("permission-denied") || code.includes("unauthorized")) return "تم رفض العملية من قواعد الأمان (permission denied). تأكد من صلاحية fireCMSUser ومن القواعد المنشورة فعلياً.";
-  return (e?.message || String(e));
+  const msg = String(e?.message || e || "");
+  const tag = code ? ` [${code}]` : "";
+  if (code === "auth/unauthorized-domain") return "هذا العنوان موش مسموح للدخول بـ Google. افتح اللوحة من localhost (موش file://) ولا زيد الدومين في Authentication ← Settings ← Authorized domains." + tag;
+  if (code === "auth/popup-blocked" || code === "auth/popup-closed-by-user") return "نافذة Google تسكّرت ولا تحجبت. اسمح بالنوافذ المنبثقة وعاود." + tag;
+  if (/api.?key|referer|android client application|blocked/i.test(msg)) return "مفتاح الـ API رافض الطلب (قيود على المفتاح أو API موش مفعّل). شوف Google Cloud ← Credentials." + tag + " " + msg;
+  if (/app.?check/i.test(msg)) return "App Check رافض الطلب: الواجهة هذي ما عندهاش توكن App Check." + tag;
+  if (code === "permission-denied" || code === "storage/unauthorized") return "Firebase رفض العملية." + tag + " " + msg;
+  return msg + tag;
 }
 function maskEmail(e) {
   if (!e) return "—";
