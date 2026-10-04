@@ -1,0 +1,1030 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>لوحة التحكم | مسلسلات تونسية QUIZ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#123A63; --blue-2:#1F5A93; --blue-soft:#E7EEF6;
+  --wall:#F4F6F9; --paper:#FFFFFF; --ink:#18212C; --muted:#5D6B7A; --line:#DCE2EA;
+  --jasmine:#E3A72F; --jasmine-soft:#FBF1DA;
+  --red:#B42318; --red-soft:#FDECEA; --green:#1E7B4F; --green-soft:#E5F4EC;
+  --r-sm:6px; --r-md:10px; --r-lg:16px;
+  --font:"Readex Pro","Segoe UI",Tahoma,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:var(--font);background:var(--wall);color:var(--ink);font-size:15px;line-height:1.6}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--jasmine);outline-offset:2px}
+.hidden{display:none!important}
+a{color:var(--blue-2)}
+
+/* ---------- auth ---------- */
+#auth{min-height:100%;display:grid;place-items:center;padding:24px;background:var(--blue)}
+.auth-card{background:var(--paper);border-radius:var(--r-lg);padding:36px 32px;max-width:440px;width:100%}
+.auth-card h1{margin:0 0 4px;font-size:26px;font-weight:700;color:var(--blue)}
+.auth-card p{color:var(--muted);margin:0 0 24px}
+.auth-card code{background:var(--wall);padding:2px 6px;border-radius:4px;font-size:13px;direction:ltr;display:inline-block}
+.auth-card pre{background:var(--wall);padding:12px;border-radius:var(--r-sm);direction:ltr;text-align:left;overflow:auto;font-size:12.5px}
+
+/* ---------- layout ---------- */
+#app{display:grid;grid-template-columns:240px 1fr;min-height:100%}
+aside{background:var(--blue);color:#fff;padding:20px 0;position:sticky;top:0;height:100vh;display:flex;flex-direction:column}
+.brand{padding:0 20px 18px;border-bottom:1px solid rgba(255,255,255,.12);margin-bottom:10px}
+.brand b{display:block;font-size:18px}
+.brand span{font-size:12.5px;opacity:.7}
+nav a{display:flex;justify-content:space-between;align-items:center;padding:10px 20px;color:#fff;text-decoration:none;opacity:.82;border-inline-start:4px solid transparent}
+nav a:hover{opacity:1;background:rgba(255,255,255,.06)}
+nav a.active{opacity:1;background:rgba(255,255,255,.1);border-inline-start-color:var(--jasmine);font-weight:600}
+nav .pill{background:var(--jasmine);color:var(--ink);font-size:12px;font-weight:700;border-radius:999px;padding:0 8px;min-width:22px;text-align:center}
+.who{margin-top:auto;padding:14px 20px;border-top:1px solid rgba(255,255,255,.12);font-size:13px}
+.who img{width:30px;height:30px;border-radius:50%;vertical-align:middle;margin-inline-end:8px}
+.who button{background:none;border:1px solid rgba(255,255,255,.35);color:#fff;border-radius:var(--r-sm);padding:4px 10px;margin-top:8px;cursor:pointer;font-size:13px}
+main{padding:28px 32px 60px;min-width:0}
+.head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:20px;flex-wrap:wrap}
+.head h2{margin:0;font-size:24px;font-weight:600}
+.head p{margin:2px 0 0;color:var(--muted);font-size:14px}
+
+/* ---------- controls ---------- */
+.btn{border:1px solid var(--line);background:var(--paper);border-radius:var(--r-sm);padding:7px 14px;cursor:pointer;white-space:nowrap}
+.btn:hover{border-color:var(--blue-2)}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+.btn.primary:hover{background:var(--blue-2)}
+.btn.danger{color:var(--red);border-color:#F1C4BF}
+.btn.danger:hover{background:var(--red-soft)}
+.btn.ok{background:var(--green);border-color:var(--green);color:#fff}
+.btn.sm{padding:3px 10px;font-size:13px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+input[type=text],input[type=email],input[type=url],input[type=search],select,textarea{border:1px solid var(--line);border-radius:var(--r-sm);padding:7px 10px;background:var(--paper);width:100%}
+textarea{resize:vertical;min-height:70px}
+label.f{display:block;font-size:13px;color:var(--muted);margin:14px 0 4px}
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
+.filters>*{width:auto}
+.filters input[type=search]{min-width:240px;flex:1}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:var(--r-sm);overflow:hidden}
+.seg button{border:0;background:var(--paper);padding:7px 14px;cursor:pointer}
+.seg button.on{background:var(--blue);color:#fff}
+
+/* ---------- surfaces ---------- */
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:var(--r-md)}
+.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:24px}
+.stat{background:var(--paper);border:1px solid var(--line);border-radius:var(--r-md);padding:14px 16px;text-decoration:none;color:inherit;display:block}
+.stat:hover{border-color:var(--blue-2)}
+.stat b{display:block;font-size:28px;font-weight:600;color:var(--blue)}
+.stat span{font-size:13.5px;color:var(--muted)}
+.stat.warn b{color:var(--red)}
+.section-t{font-size:16px;font-weight:600;margin:28px 0 10px}
+
+table{width:100%;border-collapse:collapse}
+.tbl-wrap{overflow-x:auto}
+th{font-weight:500;font-size:13px;color:var(--muted);text-align:start;padding:10px 12px;border-bottom:1px solid var(--line);background:#FAFBFD;white-space:nowrap}
+td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+tbody tr:hover{background:#FAFBFD}
+td.q{max-width:380px}
+td.actions{white-space:nowrap;text-align:end}
+.thumb{width:64px;height:36px;object-fit:cover;border-radius:4px;background:var(--wall);display:block}
+.thumb.empty{display:grid;place-items:center;font-size:11px;color:var(--muted)}
+.tag{display:inline-block;font-size:12px;border-radius:999px;padding:1px 9px;background:var(--blue-soft);color:var(--blue);white-space:nowrap}
+.tag.qcm{background:var(--jasmine-soft);color:#7A5410}
+.tag.bad{background:var(--red-soft);color:var(--red)}
+.tag.good{background:var(--green-soft);color:var(--green)}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+.ltr{direction:ltr;unicode-bidi:isolate}
+.pager{display:flex;gap:8px;align-items:center;justify-content:center;padding:14px}
+.empty-state{padding:40px;text-align:center;color:var(--muted)}
+.err{background:var(--red-soft);border:1px solid #F1C4BF;color:var(--red);border-radius:var(--r-md);padding:14px 16px}
+.note{background:var(--jasmine-soft);border-radius:var(--r-md);padding:10px 14px;font-size:13.5px;margin-bottom:14px}
+.loading{padding:40px;text-align:center;color:var(--muted)}
+
+/* the "screen": question image framed like a TV */
+.screen{background:#1B2430;padding:8px 8px 14px;border-radius:14px;position:relative;max-width:360px}
+.screen::after{content:"";position:absolute;bottom:4px;left:50%;width:28px;height:4px;margin-left:-14px;border-radius:2px;background:#3A4656}
+.screen .glass{aspect-ratio:16/9;border-radius:8px;overflow:hidden;background:#0F151D;display:grid;place-items:center;color:#7C8796;font-size:13px}
+.screen img{width:100%;height:100%;object-fit:cover;display:block}
+
+/* moderation cards */
+.mod-list{display:grid;gap:12px}
+.mod{display:grid;grid-template-columns:220px 1fr auto;gap:18px;padding:16px;align-items:start}
+.mod .screen{max-width:220px}
+.mod h4{margin:0 0 6px;font-size:16px;font-weight:600}
+.mod .ans{background:var(--green-soft);color:var(--green);border-radius:var(--r-sm);padding:2px 8px;display:inline-block}
+.mod .acts{display:flex;flex-direction:column;gap:8px}
+
+/* media */
+.media-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
+.mi{background:var(--paper);border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden;display:flex;flex-direction:column}
+.mi .img{aspect-ratio:16/9;background:var(--wall);display:grid;place-items:center;color:var(--muted);font-size:12px}
+.mi .img img{width:100%;height:100%;object-fit:cover}
+.mi .meta{padding:8px 10px;font-size:12px;display:flex;flex-direction:column;gap:6px;flex:1}
+.mi .name{direction:ltr;text-align:left;word-break:break-all;color:var(--muted)}
+.mi .row{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto}
+.mi.pick{cursor:pointer}
+.mi.pick:hover{border-color:var(--blue-2)}
+.drop{border:2px dashed var(--line);border-radius:var(--r-md);padding:18px;text-align:center;color:var(--muted);margin-bottom:16px;background:var(--paper)}
+.drop.over{border-color:var(--jasmine);background:var(--jasmine-soft)}
+
+/* dialogs */
+dialog{border:0;border-radius:var(--r-lg);padding:0;width:min(720px,94vw);max-height:92vh;color:var(--ink)}
+dialog::backdrop{background:rgba(18,34,52,.55)}
+dialog.wide{width:min(1000px,96vw)}
+.dlg-h{display:flex;justify-content:space-between;align-items:center;padding:16px 22px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--paper);z-index:1}
+.dlg-h h3{margin:0;font-size:18px;font-weight:600}
+.dlg-b{padding:6px 22px 20px;overflow:auto}
+.dlg-f{display:flex;gap:8px;justify-content:flex-start;padding:14px 22px;border-top:1px solid var(--line);position:sticky;bottom:0;background:var(--paper)}
+.x{background:none;border:0;font-size:22px;cursor:pointer;color:var(--muted);line-height:1}
+.choice{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+.choice input[type=radio]{width:18px;height:18px;accent-color:var(--green);flex:none}
+.choice.correct input[type=text]{border-color:var(--green);background:var(--green-soft)}
+.form-errors{background:var(--red-soft);color:var(--red);border-radius:var(--r-sm);padding:8px 12px;margin-top:14px;font-size:13.5px}
+.form-errors ul{margin:0;padding-inline-start:18px}
+.img-tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.kv{display:grid;grid-template-columns:140px 1fr;gap:6px 14px;font-size:14px;margin-top:10px}
+.kv dt{color:var(--muted)}
+.kv dd{margin:0;word-break:break-word}
+
+#toasts{position:fixed;bottom:20px;left:20px;display:flex;flex-direction:column;gap:8px;z-index:100}
+.toast{background:var(--ink);color:#fff;padding:10px 16px;border-radius:var(--r-sm);font-size:14px;max-width:360px}
+.toast.bad{background:var(--red)}
+.toast.good{background:var(--green)}
+
+@media (max-width:860px){
+  #app{grid-template-columns:1fr}
+  aside{position:static;height:auto;padding:12px 0}
+  nav{display:flex;overflow-x:auto}
+  nav a{border-inline-start:0;border-bottom:3px solid transparent;white-space:nowrap;gap:8px}
+  nav a.active{border-bottom-color:var(--jasmine)}
+  .who{display:none}
+  main{padding:18px 14px 50px}
+  .mod{grid-template-columns:1fr}
+  .mod .acts{flex-direction:row}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<div id="auth">
+  <div class="auth-card" id="authCard">
+    <h1>لوحة التحكم</h1>
+    <p>مسلسلات تونسية QUIZ</p>
+    <div class="loading">جاري التحقق…</div>
+  </div>
+</div>
+
+<div id="app" class="hidden">
+  <aside>
+    <div class="brand"><b>مسلسلات QUIZ</b><span>لوحة الإدارة</span></div>
+    <nav id="nav"></nav>
+    <div class="who" id="who"></div>
+  </aside>
+  <main id="view"></main>
+</div>
+
+<dialog id="modal"></dialog>
+<dialog id="picker" class="wide"></dialog>
+<dialog id="confirm"></dialog>
+<div id="toasts" aria-live="polite"></div>
+
+<script type="module">
+/* ==================================================================
+   CONFIGURATION
+   apiKey / projectId / bucket come from the reference document.
+   appId: register a WEB app in Firebase console (Project settings →
+   Your apps → Add app → Web) and paste its appId here. The Android
+   appId must NOT be used. Auth/Firestore/Storage usually work without
+   it, but a proper web app registration is the clean setup.
+   ================================================================== */
+const firebaseConfig = {
+  apiKey: "AIzaSyA2SziyIfYV-ZWdyyeVwjf62dF2yyBrlx0",
+  authDomain: "mosalsalat-quiz.firebaseapp.com",
+  projectId: "mosalsalat-quiz",
+  storageBucket: "mosalsalat-quiz.appspot.com",
+  messagingSenderId: "266806267610",
+  appId: "" // TODO: web appId
+};
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, collection, doc, getDocs, getDoc, addDoc, setDoc, deleteDoc, query, where, limit, writeBatch, serverTimestamp, getCountFromServer } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getStorage, ref, listAll, getDownloadURL, uploadBytes, deleteObject } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+
+const cfg = { ...firebaseConfig }; if (!cfg.appId) delete cfg.appId;
+const fbApp = initializeApp(cfg);
+const auth = getAuth(fbApp);
+const db = getFirestore(fbApp);
+const storage = getStorage(fbApp);
+
+/* ================= helpers ================= */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const fmtDate = ts => { try { const d = ts?.toDate ? ts.toDate() : (ts ? new Date(ts) : null); return d ? new Intl.DateTimeFormat("ar-TN", { dateStyle: "medium", timeStyle: "short" }).format(d) : "—"; } catch { return "—"; } };
+const tsMs = ts => ts?.toMillis ? ts.toMillis() : 0;
+const norm = s => String(s ?? "").toLowerCase().replace(/[\u064B-\u0652\u0640]/g, "").replace(/[أإآ]/g, "ا").replace(/ى/g, "ي").replace(/ة/g, "ه").trim();
+
+function toast(msg, kind = "") {
+  const t = document.createElement("div");
+  t.className = "toast " + kind; t.textContent = msg;
+  $("#toasts").append(t); setTimeout(() => t.remove(), kind === "bad" ? 7000 : 3500);
+}
+function errMsg(e) {
+  console.error("[admin]", e?.code, e?.message, e);
+  const code = e?.code || "";
+  const msg = String(e?.message || e || "");
+  const tag = code ? ` [${code}]` : "";
+  if (code === "auth/unauthorized-domain") return "هذا العنوان موش مسموح للدخول بـ Google. افتح اللوحة من localhost (موش file://) ولا زيد الدومين في Authentication ← Settings ← Authorized domains." + tag;
+  if (code === "auth/popup-blocked" || code === "auth/popup-closed-by-user") return "نافذة Google تسكّرت ولا تحجبت. اسمح بالنوافذ المنبثقة وعاود." + tag;
+  if (/api.?key|referer|android client application|blocked/i.test(msg)) return "مفتاح الـ API رافض الطلب (قيود على المفتاح أو API موش مفعّل). شوف Google Cloud ← Credentials." + tag + " " + msg;
+  if (/app.?check/i.test(msg)) return "App Check رافض الطلب: الواجهة هذي ما عندهاش توكن App Check." + tag;
+  if (code === "permission-denied" || code === "storage/unauthorized") return "Firebase رفض العملية." + tag + " " + msg;
+  return msg + tag;
+}
+function maskEmail(e) {
+  if (!e) return "—";
+  if (S.showEmails) return e;
+  const [u, d] = String(e).split("@");
+  return d ? (u.slice(0, 2) + "•••@" + d) : "•••";
+}
+function confirmBox(text, okLabel = "تأكيد", danger = true) {
+  return new Promise(res => {
+    const d = $("#confirm");
+    d.innerHTML = `<div class="dlg-h"><h3>تأكيد</h3></div><div class="dlg-b"><p>${esc(text)}</p></div>
+      <div class="dlg-f"><button class="btn ${danger ? "danger" : "primary"}" data-ok>${esc(okLabel)}</button><button class="btn" data-no>إلغاء</button></div>`;
+    d.querySelector("[data-ok]").onclick = () => { d.close(); res(true); };
+    d.querySelector("[data-no]").onclick = () => { d.close(); res(false); };
+    d.oncancel = () => res(false);
+    d.showModal();
+  });
+}
+function openModal(html, wide = false) {
+  const d = $("#modal");
+  d.className = wide ? "wide" : "";
+  d.innerHTML = html;
+  $$("[data-close]", d).forEach(b => b.onclick = () => d.close());
+  d.showModal();
+  return d;
+}
+function screenHTML(url) {
+  return `<div class="screen"><div class="glass">${url ? `<img src="${esc(url)}" alt="" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'الصورة ما تحمّلتش'}))">` : "بدون صورة"}</div></div>`;
+}
+function thumbHTML(url) {
+  return url ? `<img class="thumb" src="${esc(url)}" alt="" loading="lazy">` : `<div class="thumb empty">—</div>`;
+}
+function downloadJSON(name, data) {
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+  const a = Object.assign(document.createElement("a"), { href: URL.createObjectURL(blob), download: name });
+  a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+}
+
+/* ================= state & loaders ================= */
+const S = {
+  series: null, questions: null, pending: null, media: null,
+  showEmails: false, qFilter: { series: "", type: "", issue: "", image: "", text: "" }, qPage: 0, qSel: new Set(),
+  mediaFilter: { prefix: "", text: "", unused: false }
+};
+
+async function loadSeries(force) {
+  if (S.series && !force) return S.series;
+  const snap = await getDocs(collection(db, "mosalsal"));
+  S.series = snap.docs.map(d => ({ id: d.id, name: d.data().name || "", image: d.data().image || "" }))
+    .sort((a, b) => a.name.localeCompare(b.name, "ar"));
+  return S.series;
+}
+const seriesName = id => S.series?.find(s => s.id === id)?.name || (id ? "مسلسل غير موجود" : "—");
+
+/* Read-side normalization: legacy docs may have correct_answer (snake) or choices as JSON string. */
+function normalizeQuestion(id, d) {
+  let choices = d.choices, legacy = false;
+  if (typeof choices === "string") { legacy = true; try { choices = JSON.parse(choices); } catch { choices = []; } }
+  if (!Array.isArray(choices)) choices = [];
+  let correctAnswer = d.correctAnswer ?? null;
+  if (correctAnswer == null && d.correct_answer != null) { correctAnswer = d.correct_answer; legacy = true; }
+  if ("correct_answer" in d) legacy = true;
+  return {
+    id, question: d.question || "", answer: d.answer || "", mousalsal: d.mousalsal || "",
+    image: d.image || "", resolved: typeof d.resolved === "number" ? d.resolved : 0, user: d.user || "",
+    type: d.type ?? null, choices: choices.map(c => String(c)), correctAnswer: correctAnswer == null ? null : String(correctAnswer), legacy
+  };
+}
+function issuesOf(q) {
+  const out = [];
+  if (q.type === "qcm") {
+    const ch = q.choices.map(c => c.trim()).filter(Boolean);
+    if (ch.length < 2) out.push("اختيارات ناقصة");
+    if (!q.correctAnswer || !q.correctAnswer.trim()) out.push("ما فماش إجابة صحيحة");
+    else if (!ch.includes(q.correctAnswer.trim())) out.push("الإجابة الصحيحة موش من الاختيارات");
+  } else if (!q.answer.trim()) out.push("إجابة فارغة");
+  if (!S.series?.some(s => s.id === q.mousalsal)) out.push("مسلسل غير موجود");
+  if (q.legacy) out.push("صيغة قديمة");
+  return out;
+}
+async function loadQuestions(force) {
+  if (S.questions && !force) return S.questions;
+  const snap = await getDocs(collection(db, "questions"));
+  S.questions = snap.docs.map(d => normalizeQuestion(d.id, d.data()));
+  return S.questions;
+}
+async function loadPending(force) {
+  if (S.pending && !force) return S.pending;
+  const snap = await getDocs(collection(db, "users_questions"));
+  S.pending = snap.docs.map(d => normalizeQuestion(d.id, d.data()));
+  updateNav();
+  return S.pending;
+}
+
+/* ---------- storage ---------- */
+function pathFromUrl(url) {
+  if (!url) return null;
+  const m = String(url).match(/\/o\/([^?#]+)/);
+  if (m) { try { return decodeURIComponent(m[1]); } catch { return m[1]; } }
+  const g = String(url).match(/^gs:\/\/[^/]+\/(.+)$/);
+  return g ? g[1] : null;
+}
+function usageMap() {
+  const map = new Map();
+  const add = (url, label) => { const p = pathFromUrl(url); if (!p) return; if (!map.has(p)) map.set(p, []); map.get(p).push(label); };
+  (S.questions || []).forEach(q => add(q.image, "سؤال"));
+  (S.pending || []).forEach(q => add(q.image, "سؤال في الانتظار"));
+  (S.series || []).forEach(s => add(s.image, "غلاف مسلسل"));
+  return map;
+}
+async function loadMedia(force) {
+  if (S.media && !force) return S.media;
+  const items = [];
+  async function walk(r, depth) {
+    const res = await listAll(r);
+    res.items.forEach(it => items.push({ path: it.fullPath, name: it.name, prefix: it.parent?.fullPath || "", url: null }));
+    if (depth < 4) for (const p of res.prefixes) await walk(p, depth + 1);
+  }
+  await walk(ref(storage, ""), 0);
+  S.media = items.sort((a, b) => b.name.localeCompare(a.name));
+  return S.media;
+}
+async function uploadFile(file, prefix = "images") {
+  if (!file.type.startsWith("image/")) throw new Error("الملف موش صورة: " + file.name);
+  const safe = file.name.replace(/[^\w.\-]+/g, "_").slice(-60);
+  const uid = (crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2)).slice(0, 8);
+  const path = `${prefix}/${Date.now()}_${uid}_${safe}`; // unique: never overwrites an existing object
+  const r = ref(storage, path);
+  await uploadBytes(r, file, { contentType: file.type });
+  const url = await getDownloadURL(r);
+  if (S.media) S.media.unshift({ path, name: r.name, prefix, url });
+  return url;
+}
+
+/* ================= validation / canonical write shape ================= */
+function buildCanonical(f) {
+  const errors = [];
+  const question = (f.question || "").trim();
+  if (!question) errors.push("نص السؤال فارغ.");
+  if (!f.mousalsal) errors.push("اختار المسلسل.");
+  const isQcm = f.type === "qcm";
+  let answer, choices, correctAnswer;
+  if (isQcm) {
+    choices = (f.choices || []).map(c => (c || "").trim()).filter(Boolean);
+    if (choices.length < 2) errors.push("لازم على الأقل زوز اختيارات.");
+    if (new Set(choices).size !== choices.length) errors.push("فما اختيارات مكررة.");
+    correctAnswer = (f.correctAnswer || "").trim();
+    if (!correctAnswer) errors.push("حدد الإجابة الصحيحة.");
+    else if (!choices.includes(correctAnswer)) errors.push("الإجابة الصحيحة لازم تكون واحدة من الاختيارات.");
+    answer = correctAnswer;
+  } else {
+    answer = (f.answer || "").trim();
+    if (!answer) errors.push("الإجابة فارغة.");
+    choices = []; correctAnswer = null;
+  }
+  return {
+    errors,
+    data: {
+      question, answer, mousalsal: f.mousalsal || "", image: (f.image || "").trim(),
+      resolved: Number(f.resolved) || 0, user: f.user || "",
+      type: isQcm ? "qcm" : null, choices, correctAnswer
+    }
+  };
+}
+
+/* ================= navigation ================= */
+const ROUTES = [
+  ["overview", "نظرة عامة"], ["questions", "الأسئلة"], ["moderation", "المراجعة"], ["series", "المسلسلات"],
+  ["media", "مكتبة الصور"], ["suggestions", "الاقتراحات"], ["bans", "الحظر"], ["players", "اللاعبين"], ["challenges", "التحديات"]
+];
+function updateNav() {
+  const cur = (location.hash.replace("#/", "") || "overview").split("?")[0];
+  $("#nav").innerHTML = ROUTES.map(([k, l]) => {
+    const pill = k === "moderation" && S.pending?.length ? `<span class="pill">${S.pending.length}</span>` : "";
+    return `<a href="#/${k}" class="${k === cur ? "active" : ""}"><span>${l}</span>${pill}</a>`;
+  }).join("");
+}
+async function route() {
+  updateNav();
+  const name = (location.hash.replace("#/", "") || "overview").split("?")[0];
+  const view = $("#view");
+  view.innerHTML = `<div class="loading">جاري التحميل…</div>`;
+  try {
+    await (VIEWS[name] || VIEWS.overview)(view);
+  } catch (e) {
+    console.error(e);
+    view.innerHTML = `<div class="err"><b>صار مشكل في التحميل.</b><br>${esc(errMsg(e))}</div>`;
+  }
+}
+window.addEventListener("hashchange", route);
+
+/* ================= VIEWS ================= */
+const VIEWS = {};
+
+/* ---------- overview ---------- */
+VIEWS.overview = async (v) => {
+  const counters = [
+    ["questions", "أسئلة منشورة", "#/questions"], ["users_questions", "في انتظار المراجعة", "#/moderation"],
+    ["mosalsal", "مسلسلات", "#/series"], ["users", "لاعبين", "#/players"], ["challenges", "تحديات", "#/challenges"],
+    ["mousalsalatSuggestions", "اقتراحات", "#/suggestions"], ["bannedUsers", "محظورين", "#/bans"], ["banned_users", "محظورين (القائمة القديمة)", "#/bans"]
+  ];
+  v.innerHTML = `<div class="head"><div><h2>نظرة عامة</h2><p>الأرقام مباشرة من قاعدة البيانات.</p></div>
+    <button class="btn" id="reload">تحديث</button></div>
+    <div class="stats">${counters.map(([c, l, h]) => `<a class="stat" href="${h}"><b data-count="${c}">…</b><span>${l}</span></a>`).join("")}</div>
+    <div class="section-t">جودة الأسئلة المنشورة</div><div id="quality" class="stats"><div class="loading">جاري الفحص…</div></div>
+    <div class="section-t">الأسئلة حسب المسلسل</div><div id="perSeries" class="panel"></div>`;
+  $("#reload").onclick = async () => { S.questions = S.pending = S.series = null; route(); };
+
+  counters.forEach(async ([c]) => {
+    const el = v.querySelector(`[data-count="${c}"]`);
+    try { const s = await getCountFromServer(collection(db, c)); el.textContent = s.data().count.toLocaleString("ar-TN"); }
+    catch (e) { el.textContent = "—"; el.title = errMsg(e); }
+  });
+
+  await loadSeries(); const qs = await loadQuestions(); const pend = await loadPending();
+  const broken = qs.filter(q => issuesOf(q).some(i => i !== "صيغة قديمة")).length;
+  const legacy = qs.filter(q => q.legacy).length;
+  const noImg = qs.filter(q => !q.image).length;
+  const qcm = qs.filter(q => q.type === "qcm").length;
+  $("#quality").innerHTML = `
+    <a class="stat ${broken ? "warn" : ""}" href="#/questions" data-issue="broken"><b>${broken}</b><span>أسئلة فيها مشكل في التصحيح</span></a>
+    <a class="stat ${legacy ? "warn" : ""}" href="#/questions" data-issue="legacy"><b>${legacy}</b><span>صيغة قديمة (correct_answer)</span></a>
+    <a class="stat" href="#/questions" data-issue="noimage"><b>${noImg}</b><span>بدون صورة</span></a>
+    <a class="stat" href="#/questions"><b>${qcm} / ${qs.length - qcm}</b><span>اختيارات / كتابة</span></a>`;
+  $$("#quality [data-issue]").forEach(a => a.onclick = () => { S.qFilter = { series: "", type: "", issue: a.dataset.issue, image: "", text: "" }; S.qPage = 0; });
+
+  const rows = S.series.map(s => ({ s, pub: qs.filter(q => q.mousalsal === s.id).length, pen: pend.filter(q => q.mousalsal === s.id).length }))
+    .sort((a, b) => b.pub - a.pub);
+  $("#perSeries").innerHTML = `<div class="tbl-wrap"><table><thead><tr><th>المسلسل</th><th>منشورة</th><th>في الانتظار</th></tr></thead><tbody>
+    ${rows.map(r => `<tr><td>${esc(r.s.name)}</td><td>${r.pub}</td><td>${r.pen ? `<span class="tag qcm">${r.pen}</span>` : "0"}</td></tr>`).join("")}
+    </tbody></table></div>`;
+};
+
+/* ---------- questions ---------- */
+const PAGE = 50;
+VIEWS.questions = async (v) => {
+  await loadSeries(); await loadQuestions();
+  v.innerHTML = `<div class="head"><div><h2>الأسئلة المنشورة</h2><p id="qCount"></p></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn" id="qReload">تحديث</button>
+      <button class="btn danger hidden" id="qBulk">حذف المحدد</button>
+      <button class="btn primary" id="qNew">سؤال جديد</button></div></div>
+    <div class="filters">
+      <input type="search" id="fText" placeholder="ابحث في السؤال أو الإجابة…" value="${esc(S.qFilter.text)}">
+      <select id="fSeries"><option value="">كل المسلسلات</option>${S.series.map(s => `<option value="${esc(s.id)}" ${S.qFilter.series === s.id ? "selected" : ""}>${esc(s.name)}</option>`).join("")}</select>
+      <select id="fType"><option value="">كل الأنواع</option><option value="qcm" ${S.qFilter.type === "qcm" ? "selected" : ""}>اختيارات (QCM)</option><option value="kb" ${S.qFilter.type === "kb" ? "selected" : ""}>كتابة</option></select>
+      <select id="fIssue"><option value="">كل الحالات</option><option value="broken" ${S.qFilter.issue === "broken" ? "selected" : ""}>فيها مشكل</option><option value="legacy" ${S.qFilter.issue === "legacy" ? "selected" : ""}>صيغة قديمة</option><option value="noimage" ${S.qFilter.issue === "noimage" ? "selected" : ""}>بدون صورة</option><option value="ok" ${S.qFilter.issue === "ok" ? "selected" : ""}>سليمة</option></select>
+      <label class="small"><input type="checkbox" id="fEmails" ${S.showEmails ? "checked" : ""}> إظهار الإيميلات</label>
+    </div>
+    <div class="panel"><div class="tbl-wrap" id="qTable"></div><div class="pager" id="qPager"></div></div>`;
+
+  const apply = () => {
+    const f = S.qFilter, t = norm(f.text);
+    return S.questions.filter(q => {
+      if (f.series && q.mousalsal !== f.series) return false;
+      if (f.type === "qcm" && q.type !== "qcm") return false;
+      if (f.type === "kb" && q.type === "qcm") return false;
+      const iss = issuesOf(q);
+      if (f.issue === "broken" && !iss.some(i => i !== "صيغة قديمة")) return false;
+      if (f.issue === "legacy" && !q.legacy) return false;
+      if (f.issue === "noimage" && q.image) return false;
+      if (f.issue === "ok" && iss.length) return false;
+      if (t && !norm(q.question + " " + q.answer + " " + q.choices.join(" ")).includes(t)) return false;
+      return true;
+    });
+  };
+  const draw = () => {
+    const list = apply();
+    const pages = Math.max(1, Math.ceil(list.length / PAGE));
+    if (S.qPage >= pages) S.qPage = pages - 1;
+    const slice = list.slice(S.qPage * PAGE, S.qPage * PAGE + PAGE);
+    $("#qCount").textContent = `${list.length} من ${S.questions.length} سؤال`;
+    $("#qBulk").classList.toggle("hidden", !S.qSel.size);
+    $("#qBulk").textContent = `حذف المحدد (${S.qSel.size})`;
+    $("#qTable").innerHTML = slice.length ? `<table><thead><tr>
+      <th><input type="checkbox" id="selAll" aria-label="تحديد الكل"></th><th>صورة</th><th>السؤال</th><th>المسلسل</th><th>النوع</th><th>الإجابة</th><th>الحالة</th><th>المرسل</th><th></th></tr></thead><tbody>
+      ${slice.map(q => {
+        const iss = issuesOf(q);
+        return `<tr data-id="${esc(q.id)}">
+          <td><input type="checkbox" data-sel ${S.qSel.has(q.id) ? "checked" : ""} aria-label="تحديد"></td>
+          <td>${thumbHTML(q.image)}</td>
+          <td class="q">${esc(q.question)}</td>
+          <td class="small">${esc(seriesName(q.mousalsal))}</td>
+          <td>${q.type === "qcm" ? `<span class="tag qcm">اختيارات</span>` : `<span class="tag">كتابة</span>`}</td>
+          <td class="small">${esc(q.type === "qcm" ? (q.correctAnswer || "—") : q.answer)}</td>
+          <td>${iss.length ? iss.map(i => `<span class="tag bad">${esc(i)}</span>`).join(" ") : `<span class="tag good">سليم</span>`}</td>
+          <td class="small ltr">${esc(maskEmail(q.user))}</td>
+          <td class="actions"><button class="btn sm" data-edit>تعديل</button> <button class="btn sm danger" data-del>حذف</button></td></tr>`;
+      }).join("")}</tbody></table>` : `<div class="empty-state">ما فماش أسئلة تطابق الفلتر. بدّل الفلتر ولا زيد سؤال جديد.</div>`;
+    $("#qPager").innerHTML = pages > 1 ? `<button class="btn sm" id="pPrev" ${S.qPage === 0 ? "disabled" : ""}>السابق</button>
+      <span class="small muted">صفحة ${S.qPage + 1} من ${pages}</span>
+      <button class="btn sm" id="pNext" ${S.qPage >= pages - 1 ? "disabled" : ""}>التالي</button>` : "";
+    $("#pPrev")?.addEventListener("click", () => { S.qPage--; draw(); });
+    $("#pNext")?.addEventListener("click", () => { S.qPage++; draw(); });
+    $("#selAll")?.addEventListener("change", e => { slice.forEach(q => e.target.checked ? S.qSel.add(q.id) : S.qSel.delete(q.id)); draw(); });
+    $$("#qTable tr[data-id]").forEach(tr => {
+      const id = tr.dataset.id, q = S.questions.find(x => x.id === id);
+      tr.querySelector("[data-sel]").onchange = e => { e.target.checked ? S.qSel.add(id) : S.qSel.delete(id); $("#qBulk").classList.toggle("hidden", !S.qSel.size); $("#qBulk").textContent = `حذف المحدد (${S.qSel.size})`; };
+      tr.querySelector("[data-edit]").onclick = () => openEditor({ mode: "edit", q, onDone: draw });
+      tr.querySelector("[data-del]").onclick = async () => {
+        if (!await confirmBox(`حذف السؤال نهائياً؟\n«${q.question}»`, "حذف")) return;
+        try { await deleteDoc(doc(db, "questions", id)); S.questions = S.questions.filter(x => x.id !== id); S.qSel.delete(id); toast("تم الحذف", "good"); draw(); }
+        catch (e) { toast(errMsg(e), "bad"); }
+      };
+    });
+  };
+  let deb;
+  $("#fText").oninput = e => { clearTimeout(deb); deb = setTimeout(() => { S.qFilter.text = e.target.value; S.qPage = 0; draw(); }, 200); };
+  $("#fSeries").onchange = e => { S.qFilter.series = e.target.value; S.qPage = 0; draw(); };
+  $("#fType").onchange = e => { S.qFilter.type = e.target.value; S.qPage = 0; draw(); };
+  $("#fIssue").onchange = e => { S.qFilter.issue = e.target.value; S.qPage = 0; draw(); };
+  $("#fEmails").onchange = e => { S.showEmails = e.target.checked; draw(); };
+  $("#qNew").onclick = () => openEditor({ mode: "create", q: { mousalsal: S.qFilter.series }, onDone: draw });
+  $("#qReload").onclick = async () => { await loadQuestions(true); draw(); toast("تم التحديث"); };
+  $("#qBulk").onclick = async () => {
+    const ids = [...S.qSel];
+    if (!await confirmBox(`حذف ${ids.length} سؤال نهائياً؟ العملية ما ترجعش.`, "حذف الكل")) return;
+    try {
+      for (let i = 0; i < ids.length; i += 400) {
+        const b = writeBatch(db); ids.slice(i, i + 400).forEach(id => b.delete(doc(db, "questions", id))); await b.commit();
+      }
+      S.questions = S.questions.filter(q => !S.qSel.has(q.id)); S.qSel.clear(); toast("تم الحذف", "good"); draw();
+    } catch (e) { toast(errMsg(e), "bad"); }
+  };
+  draw();
+};
+
+/* ---------- question editor (create / edit / approve) ---------- */
+function openEditor({ mode, q = {}, onDone }) {
+  const titles = { create: "سؤال جديد", edit: "تعديل السؤال", approve: "مراجعة ونشر السؤال" };
+  const saveLabels = { create: "إضافة السؤال", edit: "حفظ التعديلات", approve: "نشر السؤال" };
+  const st = {
+    type: q.type === "qcm" ? "qcm" : "kb",
+    choices: q.type === "qcm" && q.choices?.length ? [...q.choices] : ["", "", "", ""],
+    correct: q.correctAnswer ?? null,
+    image: q.image || ""
+  };
+  const d = openModal(`
+    <div class="dlg-h"><h3>${titles[mode]}</h3><button class="x" data-close aria-label="إغلاق">×</button></div>
+    <div class="dlg-b">
+      ${q.legacy ? `<div class="note">هذا السؤال مخزّن بالصيغة القديمة. الحفظ يكتبه بالصيغة الصحيحة (correctAnswer + choices كقائمة).</div>` : ""}
+      ${mode === "approve" ? `<div class="note">مرسل من: <span class="ltr">${esc(maskEmail(q.user))}</span>. النشر يضيف السؤال للأسئلة ويحذفو من قائمة الانتظار في نفس العملية.</div>` : ""}
+      <label class="f" for="eSeries">المسلسل</label>
+      <select id="eSeries"><option value="">اختار مسلسل…</option>${S.series.map(s => `<option value="${esc(s.id)}" ${q.mousalsal === s.id ? "selected" : ""}>${esc(s.name)}</option>`).join("")}</select>
+      <label class="f">نوع السؤال</label>
+      <div class="seg" id="eType"><button type="button" data-t="kb">كتابة بالكلافيي</button><button type="button" data-t="qcm">اختيارات (QCM)</button></div>
+      <label class="f" for="eQ">السؤال</label>
+      <textarea id="eQ" rows="2">${esc(q.question || "")}</textarea>
+      <div id="eKb"><label class="f" for="eA">الإجابة</label><input type="text" id="eA" value="${esc(q.answer || "")}">
+        <div class="small muted" style="margin-top:4px">التصحيح يقارن الإجابة كاملة (بلا فرق بين الحروف الكبيرة والصغيرة). إجابات بديلة ما تتقبلش في التطبيق الحالي.</div></div>
+      <div id="eQcm"><label class="f">الاختيارات (اختار الصحيحة بالدائرة)</label><div id="eChoices"></div>
+        <button type="button" class="btn sm" id="eAddC">زيد اختيار</button>
+        <div class="small muted" style="margin-top:4px">مقارنة الإجابة في QCM حساسة للحروف: النص لازم يكون نفسو بالضبط.</div></div>
+      <label class="f">الصورة</label>
+      <div id="eImg"></div>
+      <input type="url" id="eImgUrl" placeholder="رابط الصورة" value="${esc(st.image)}" class="ltr" style="margin-top:8px">
+      <div class="img-tools">
+        <button type="button" class="btn sm" id="ePick">اختار من المكتبة</button>
+        <label class="btn sm">رفع صورة<input type="file" accept="image/*" id="eUp" hidden></label>
+        <button type="button" class="btn sm danger" id="eNoImg">بدون صورة</button>
+      </div>
+      <div id="eErr"></div>
+    </div>
+    <div class="dlg-f"><button class="btn ${mode === "approve" ? "ok" : "primary"}" id="eSave">${saveLabels[mode]}</button><button class="btn" data-close>إلغاء</button></div>`);
+
+  const drawType = () => {
+    $$("#eType button", d).forEach(b => b.classList.toggle("on", b.dataset.t === st.type));
+    $("#eKb", d).classList.toggle("hidden", st.type !== "kb");
+    $("#eQcm", d).classList.toggle("hidden", st.type !== "qcm");
+  };
+  const drawChoices = () => {
+    $("#eChoices", d).innerHTML = st.choices.map((c, i) => `
+      <div class="choice ${st.correct != null && c.trim() && c.trim() === String(st.correct).trim() ? "correct" : ""}">
+        <input type="radio" name="corr" data-i="${i}" ${st.correct != null && c.trim() && c.trim() === String(st.correct).trim() ? "checked" : ""} aria-label="الإجابة الصحيحة">
+        <input type="text" data-i="${i}" value="${esc(c)}" placeholder="اختيار ${i + 1}">
+        <button type="button" class="btn sm danger" data-rm="${i}" ${st.choices.length <= 2 ? "disabled" : ""} aria-label="حذف الاختيار">×</button></div>`).join("");
+    $$('#eChoices input[type=text]', d).forEach(inp => inp.oninput = e => {
+      const i = +e.target.dataset.i, wasCorrect = st.correct != null && st.choices[i].trim() === String(st.correct).trim();
+      st.choices[i] = e.target.value; if (wasCorrect) st.correct = e.target.value;
+    });
+    $$('#eChoices input[type=radio]', d).forEach(r => r.onchange = e => { st.correct = st.choices[+e.target.dataset.i]; drawChoices(); });
+    $$('#eChoices [data-rm]', d).forEach(b => b.onclick = () => { const i = +b.dataset.rm; if (st.correct === st.choices[i]) st.correct = null; st.choices.splice(i, 1); drawChoices(); });
+    $("#eAddC", d).disabled = st.choices.length >= 6;
+  };
+  const drawImg = () => { $("#eImg", d).innerHTML = screenHTML(st.image); $("#eImgUrl", d).value = st.image; };
+
+  $$("#eType button", d).forEach(b => b.onclick = () => {
+    st.type = b.dataset.t;
+    if (st.type === "qcm" && !st.choices.some(c => c.trim()) && $("#eA", d).value.trim()) { st.choices[0] = $("#eA", d).value.trim(); st.correct = st.choices[0]; drawChoices(); }
+    drawType();
+  });
+  $("#eAddC", d).onclick = () => { st.choices.push(""); drawChoices(); };
+  $("#eImgUrl", d).onchange = e => { st.image = e.target.value.trim(); drawImg(); };
+  $("#eNoImg", d).onclick = () => { st.image = ""; drawImg(); };
+  $("#ePick", d).onclick = async () => { const url = await openMediaPicker(); if (url) { st.image = url; drawImg(); } };
+  $("#eUp", d).onchange = async e => {
+    const file = e.target.files[0]; if (!file) return;
+    try { toast("جاري الرفع…"); st.image = await uploadFile(file, "images"); drawImg(); toast("تم رفع الصورة", "good"); }
+    catch (err) { toast(errMsg(err), "bad"); }
+  };
+  $("#eSave", d).onclick = async () => {
+    const { errors, data } = buildCanonical({
+      question: $("#eQ", d).value, mousalsal: $("#eSeries", d).value, type: st.type,
+      answer: $("#eA", d).value, choices: st.choices, correctAnswer: st.correct,
+      image: st.image, resolved: q.resolved ?? 0, user: q.user ?? ""
+    });
+    if (errors.length) { $("#eErr", d).innerHTML = `<div class="form-errors"><ul>${errors.map(e => `<li>${esc(e)}</li>`).join("")}</ul></div>`; return; }
+    const btn = $("#eSave", d); btn.disabled = true;
+    try {
+      if (mode === "create") {
+        const r = await addDoc(collection(db, "questions"), data);
+        S.questions?.unshift(normalizeQuestion(r.id, data));
+        toast("تمت إضافة السؤال", "good");
+      } else if (mode === "edit") {
+        await setDoc(doc(db, "questions", q.id), data); // full canonical rewrite (drops legacy snake fields)
+        const i = S.questions.findIndex(x => x.id === q.id); if (i >= 0) S.questions[i] = normalizeQuestion(q.id, data);
+        toast("تم حفظ التعديلات", "good");
+      } else if (mode === "approve") {
+        const b = writeBatch(db); const newRef = doc(collection(db, "questions"));
+        b.set(newRef, data); b.delete(doc(db, "users_questions", q.id)); await b.commit();
+        S.questions?.unshift(normalizeQuestion(newRef.id, data));
+        S.pending = S.pending.filter(x => x.id !== q.id); updateNav();
+        toast("تم نشر السؤال", "good");
+      }
+      d.close(); onDone?.();
+    } catch (e) { btn.disabled = false; toast(errMsg(e), "bad"); }
+  };
+  drawType(); drawChoices(); drawImg();
+}
+
+/* ---------- moderation ---------- */
+VIEWS.moderation = async (v) => {
+  await loadSeries(); await loadPending(true);
+  const draw = () => {
+    const filter = $("#mSeries")?.value || "";
+    const list = S.pending.filter(q => !filter || q.mousalsal === filter);
+    $("#mList").innerHTML = list.length ? list.map(q => `
+      <div class="panel mod" data-id="${esc(q.id)}">
+        ${screenHTML(q.image)}
+        <div><h4>${esc(q.question)}</h4>
+          <div class="small muted">${esc(seriesName(q.mousalsal))} · <span class="ltr">${esc(maskEmail(q.user))}</span></div>
+          <div style="margin-top:8px">الإجابة: <span class="ans">${esc(q.type === "qcm" ? (q.correctAnswer || "—") : q.answer || "—")}</span></div>
+          ${q.type === "qcm" ? `<div class="small muted" style="margin-top:4px">الاختيارات: ${q.choices.map(esc).join("، ")}</div>` : ""}
+        </div>
+        <div class="acts"><button class="btn ok" data-ap>مراجعة ونشر</button><button class="btn danger" data-rj>رفض</button></div>
+      </div>`).join("") : `<div class="panel empty-state">ما فماش أسئلة في الانتظار. كل شي تراجع.</div>`;
+    $$("#mList [data-id]").forEach(card => {
+      const q = S.pending.find(x => x.id === card.dataset.id);
+      card.querySelector("[data-ap]").onclick = () => openEditor({ mode: "approve", q, onDone: draw });
+      card.querySelector("[data-rj]").onclick = async () => {
+        if (!await confirmBox(`رفض السؤال وحذفو من قائمة الانتظار؟\n«${q.question}»`, "رفض")) return;
+        try { await deleteDoc(doc(db, "users_questions", q.id)); S.pending = S.pending.filter(x => x.id !== q.id); updateNav(); toast("تم الرفض"); draw(); }
+        catch (e) { toast(errMsg(e), "bad"); }
+      };
+    });
+  };
+  v.innerHTML = `<div class="head"><div><h2>المراجعة</h2><p>${S.pending.length} سؤال من اللاعبين في الانتظار</p></div>
+    <div style="display:flex;gap:8px"><button class="btn" id="mExport">تصدير JSON</button><button class="btn" id="mReload">تحديث</button></div></div>
+    <div class="filters"><select id="mSeries"><option value="">كل المسلسلات</option>${S.series.map(s => {
+      const n = S.pending.filter(q => q.mousalsal === s.id).length;
+      return n ? `<option value="${esc(s.id)}">${esc(s.name)} (${n})</option>` : "";
+    }).join("")}</select>
+    <label class="small"><input type="checkbox" id="mEmails" ${S.showEmails ? "checked" : ""}> إظهار الإيميلات</label></div>
+    <div class="mod-list" id="mList"></div>`;
+  $("#mSeries").onchange = draw;
+  $("#mEmails").onchange = e => { S.showEmails = e.target.checked; draw(); };
+  $("#mReload").onclick = () => route();
+  $("#mExport").onclick = () => downloadJSON(`users_questions_${new Date().toISOString().slice(0, 10)}.json`, S.pending);
+  draw();
+};
+
+/* ---------- series ---------- */
+VIEWS.series = async (v) => {
+  await loadSeries(true); await loadQuestions(); await loadPending();
+  const draw = () => {
+    $("#sTable").innerHTML = S.series.length ? `<table><thead><tr><th>الغلاف</th><th>الاسم</th><th>منشورة</th><th>في الانتظار</th><th>المعرف</th><th></th></tr></thead><tbody>
+      ${S.series.map(s => {
+        const pub = S.questions.filter(q => q.mousalsal === s.id).length, pen = S.pending.filter(q => q.mousalsal === s.id).length;
+        return `<tr data-id="${esc(s.id)}"><td>${thumbHTML(s.image)}</td><td><b>${esc(s.name)}</b></td><td>${pub}</td><td>${pen}</td>
+          <td class="small muted ltr">${esc(s.id)}</td>
+          <td class="actions"><a class="btn sm" href="#/questions" data-qs>الأسئلة</a> <button class="btn sm" data-edit>تعديل</button> <button class="btn sm danger" data-del>حذف</button></td></tr>`;
+      }).join("")}</tbody></table>` : `<div class="empty-state">ما فماش مسلسلات. زيد أول مسلسل.</div>`;
+    $$("#sTable tr[data-id]").forEach(tr => {
+      const s = S.series.find(x => x.id === tr.dataset.id);
+      tr.querySelector("[data-qs]").onclick = () => { S.qFilter = { series: s.id, type: "", issue: "", image: "", text: "" }; S.qPage = 0; };
+      tr.querySelector("[data-edit]").onclick = () => seriesEditor(s, draw);
+      tr.querySelector("[data-del]").onclick = async () => {
+        const pub = S.questions.filter(q => q.mousalsal === s.id).length, pen = S.pending.filter(q => q.mousalsal === s.id).length;
+        if (pub || pen) { toast(`ما ينجمش يتحذف: مربوط بـ ${pub} سؤال منشور و ${pen} في الانتظار. انقل ولا احذف الأسئلة قبل.`, "bad"); return; }
+        if (!await confirmBox(`حذف المسلسل «${s.name}»؟`, "حذف")) return;
+        try { await deleteDoc(doc(db, "mosalsal", s.id)); S.series = S.series.filter(x => x.id !== s.id); toast("تم الحذف", "good"); draw(); }
+        catch (e) { toast(errMsg(e), "bad"); }
+      };
+    });
+  };
+  v.innerHTML = `<div class="head"><div><h2>المسلسلات</h2><p>${S.series.length} مسلسل</p></div><button class="btn primary" id="sNew">مسلسل جديد</button></div>
+    <div class="panel"><div class="tbl-wrap" id="sTable"></div></div>`;
+  $("#sNew").onclick = () => seriesEditor(null, draw);
+  draw();
+};
+function seriesEditor(s, onDone) {
+  let image = s?.image || "";
+  const d = openModal(`<div class="dlg-h"><h3>${s ? "تعديل المسلسل" : "مسلسل جديد"}</h3><button class="x" data-close aria-label="إغلاق">×</button></div>
+    <div class="dlg-b"><label class="f" for="sName">الاسم</label><input type="text" id="sName" value="${esc(s?.name || "")}">
+      <label class="f">صورة الغلاف</label><div id="sImg"></div>
+      <input type="url" id="sUrl" class="ltr" placeholder="رابط الصورة" value="${esc(image)}" style="margin-top:8px">
+      <div class="img-tools"><button type="button" class="btn sm" id="sPick">اختار من المكتبة</button>
+        <label class="btn sm">رفع صورة<input type="file" accept="image/*" id="sUp" hidden></label></div>
+      <div id="sErr"></div></div>
+    <div class="dlg-f"><button class="btn primary" id="sSave">${s ? "حفظ التعديلات" : "إضافة المسلسل"}</button><button class="btn" data-close>إلغاء</button></div>`);
+  const drawImg = () => { $("#sImg", d).innerHTML = screenHTML(image); $("#sUrl", d).value = image; };
+  $("#sUrl", d).onchange = e => { image = e.target.value.trim(); drawImg(); };
+  $("#sPick", d).onclick = async () => { const u = await openMediaPicker(); if (u) { image = u; drawImg(); } };
+  $("#sUp", d).onchange = async e => { const f = e.target.files[0]; if (!f) return; try { toast("جاري الرفع…"); image = await uploadFile(f, "images"); drawImg(); toast("تم رفع الصورة", "good"); } catch (err) { toast(errMsg(err), "bad"); } };
+  $("#sSave", d).onclick = async () => {
+    const name = $("#sName", d).value.trim();
+    if (!name) { $("#sErr", d).innerHTML = `<div class="form-errors">الاسم فارغ.</div>`; return; }
+    if (S.series.some(x => x.id !== s?.id && norm(x.name) === norm(name))) { $("#sErr", d).innerHTML = `<div class="form-errors">فما مسلسل بنفس الاسم.</div>`; return; }
+    try {
+      if (s) { await setDoc(doc(db, "mosalsal", s.id), { name, image }, { merge: true }); Object.assign(s, { name, image }); toast("تم الحفظ", "good"); }
+      else { const r = await addDoc(collection(db, "mosalsal"), { name, image }); S.series.push({ id: r.id, name, image }); toast("تمت الإضافة", "good"); }
+      S.series.sort((a, b) => a.name.localeCompare(b.name, "ar")); d.close(); onDone?.();
+    } catch (e) { toast(errMsg(e), "bad"); }
+  };
+  drawImg();
+}
+
+/* ---------- media library ---------- */
+function mediaThumbObserver(root) {
+  const io = new IntersectionObserver(entries => entries.forEach(async en => {
+    if (!en.isIntersecting) return; io.unobserve(en.target);
+    const it = S.media.find(m => m.path === en.target.dataset.path); if (!it) return;
+    try { if (!it.url) it.url = await getDownloadURL(ref(storage, it.path)); en.target.innerHTML = `<img src="${esc(it.url)}" alt="">`; }
+    catch { en.target.textContent = "ما تحمّلتش"; }
+  }), { root: null, rootMargin: "200px" });
+  $$(".mi .img[data-path]", root).forEach(el => io.observe(el));
+}
+VIEWS.media = async (v) => {
+  await loadSeries(); await loadQuestions(); await loadPending(); await loadMedia();
+  const prefixes = [...new Set(S.media.map(m => m.prefix))].sort();
+  v.innerHTML = `<div class="head"><div><h2>مكتبة الصور</h2><p id="mdCount"></p></div><button class="btn" id="mdReload">تحديث</button></div>
+    <label class="drop" id="drop">اسحب الصور هنا ولا انقر للاختيار. كل صورة تاخذ اسم فريد باش ما تمسحش صورة أخرى.
+      <input type="file" accept="image/*" multiple hidden id="mdFiles"></label>
+    <div class="filters"><input type="search" id="mdText" placeholder="ابحث بالاسم…" value="${esc(S.mediaFilter.text)}">
+      <select id="mdPrefix"><option value="">كل المجلدات</option>${prefixes.map(p => `<option value="${esc(p)}" ${S.mediaFilter.prefix === p ? "selected" : ""}>${esc(p || "/ (الجذر)")}</option>`).join("")}</select>
+      <label class="small"><input type="checkbox" id="mdUnused" ${S.mediaFilter.unused ? "checked" : ""}> غير المستعملة فقط</label></div>
+    <div class="media-grid" id="mdGrid"></div>`;
+  const draw = () => {
+    const usage = usageMap(), f = S.mediaFilter, t = f.text.toLowerCase();
+    const list = S.media.filter(m => (!f.prefix || m.prefix === f.prefix) && (!t || m.name.toLowerCase().includes(t)) && (!f.unused || !usage.get(m.path)?.length));
+    $("#mdCount").textContent = `${list.length} من ${S.media.length} ملف`;
+    $("#mdGrid").innerHTML = list.slice(0, 400).map(m => {
+      const used = usage.get(m.path)?.length || 0;
+      return `<div class="mi" data-p="${esc(m.path)}"><div class="img" data-path="${esc(m.path)}">…</div>
+        <div class="meta"><div class="name">${esc(m.path)}</div>
+          <div>${used ? `<span class="tag">مستعملة في ${used}</span>` : `<span class="tag good">غير مستعملة</span>`}</div>
+          <div class="row"><button class="btn sm" data-copy>نسخ الرابط</button><button class="btn sm danger" data-del ${used ? "disabled title='مستعملة: الحذف يكسّر الصورة في الأسئلة'" : ""}>حذف</button></div></div></div>`;
+    }).join("") || `<div class="empty-state">ما فماش صور.</div>`;
+    if (list.length > 400) $("#mdGrid").insertAdjacentHTML("beforeend", `<div class="empty-state">يظهر أول 400. استعمل البحث باش تلقى البقية.</div>`);
+    mediaThumbObserver($("#mdGrid"));
+    $$("#mdGrid .mi").forEach(card => {
+      const m = S.media.find(x => x.path === card.dataset.p);
+      card.querySelector("[data-copy]").onclick = async () => {
+        try { if (!m.url) m.url = await getDownloadURL(ref(storage, m.path)); await navigator.clipboard.writeText(m.url); toast("تم نسخ الرابط", "good"); }
+        catch (e) { toast(errMsg(e), "bad"); }
+      };
+      card.querySelector("[data-del]").onclick = async () => {
+        if (usageMap().get(m.path)?.length) return;
+        if (!await confirmBox(`حذف الملف نهائياً من Storage؟\n${m.path}`, "حذف")) return;
+        try { await deleteObject(ref(storage, m.path)); S.media = S.media.filter(x => x.path !== m.path); toast("تم الحذف", "good"); draw(); }
+        catch (e) { toast(errMsg(e), "bad"); }
+      };
+    });
+  };
+  const upload = async files => {
+    let ok = 0;
+    for (const f of files) { try { await uploadFile(f, "images"); ok++; } catch (e) { toast(errMsg(e), "bad"); } }
+    if (ok) toast(`تم رفع ${ok} صورة`, "good"); draw();
+  };
+  const drop = $("#drop");
+  ["dragenter", "dragover"].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add("over"); }));
+  ["dragleave", "drop"].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove("over"); }));
+  drop.addEventListener("drop", e => upload([...e.dataTransfer.files]));
+  $("#mdFiles").onchange = e => upload([...e.target.files]);
+  let deb; $("#mdText").oninput = e => { clearTimeout(deb); deb = setTimeout(() => { S.mediaFilter.text = e.target.value; draw(); }, 200); };
+  $("#mdPrefix").onchange = e => { S.mediaFilter.prefix = e.target.value; draw(); };
+  $("#mdUnused").onchange = e => { S.mediaFilter.unused = e.target.checked; draw(); };
+  $("#mdReload").onclick = async () => { await loadMedia(true); route(); };
+  draw();
+};
+function openMediaPicker() {
+  return new Promise(async res => {
+    const d = $("#picker");
+    d.innerHTML = `<div class="dlg-h"><h3>اختار صورة</h3><button class="x" data-x aria-label="إغلاق">×</button></div>
+      <div class="dlg-b"><div class="filters"><input type="search" id="pkText" placeholder="ابحث بالاسم…"></div><div class="media-grid" id="pkGrid"><div class="loading">جاري التحميل…</div></div></div>`;
+    let done = false; const finish = v => { if (done) return; done = true; d.close(); res(v); };
+    d.querySelector("[data-x]").onclick = () => finish(null);
+    d.oncancel = () => finish(null);
+    d.showModal();
+    try { await loadMedia(); } catch (e) { $("#pkGrid", d).innerHTML = `<div class="err">${esc(errMsg(e))}</div>`; return; }
+    const draw = () => {
+      const t = ($("#pkText", d).value || "").toLowerCase();
+      const list = S.media.filter(m => !t || m.name.toLowerCase().includes(t)).slice(0, 200);
+      $("#pkGrid", d).innerHTML = list.map(m => `<div class="mi pick" tabindex="0" data-p="${esc(m.path)}"><div class="img" data-path="${esc(m.path)}">…</div><div class="meta"><div class="name">${esc(m.name)}</div></div></div>`).join("") || `<div class="empty-state">ما فماش نتائج.</div>`;
+      mediaThumbObserver($("#pkGrid", d));
+      $$(".mi", d).forEach(card => {
+        const pick = async () => { const m = S.media.find(x => x.path === card.dataset.p); try { if (!m.url) m.url = await getDownloadURL(ref(storage, m.path)); finish(m.url); } catch (e) { toast(errMsg(e), "bad"); } };
+        card.onclick = pick; card.onkeydown = e => { if (e.key === "Enter") pick(); };
+      });
+    };
+    $("#pkText", d).oninput = draw; draw();
+  });
+}
+
+/* ---------- suggestions ---------- */
+VIEWS.suggestions = async (v) => {
+  const snap = await getDocs(collection(db, "mousalsalatSuggestions"));
+  let list = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => tsMs(b.createdAt) - tsMs(a.createdAt));
+  const draw = () => {
+    v.innerHTML = `<div class="head"><div><h2>الاقتراحات</h2><p>${list.length} اقتراح من اللاعبين</p></div>
+      <label class="small"><input type="checkbox" id="sgE" ${S.showEmails ? "checked" : ""}> إظهار الإيميلات</label></div>
+      <div class="panel"><div class="tbl-wrap">${list.length ? `<table><thead><tr><th>الاقتراح</th><th>المرسل</th><th>التاريخ</th><th></th></tr></thead><tbody>
+      ${list.map(s => `<tr data-id="${esc(s.id)}"><td class="q">${esc(s.suggestion)}</td><td class="small ltr">${esc(maskEmail(s.email))}</td><td class="small muted">${fmtDate(s.createdAt)}</td>
+        <td class="actions"><button class="btn sm danger" data-del>حذف</button></td></tr>`).join("")}</tbody></table>` : `<div class="empty-state">ما فماش اقتراحات.</div>`}</div></div>`;
+    $("#sgE").onchange = e => { S.showEmails = e.target.checked; draw(); };
+    $$("tr[data-id]", v).forEach(tr => tr.querySelector("[data-del]").onclick = async () => {
+      if (!await confirmBox("حذف هذا الاقتراح؟", "حذف")) return;
+      try { await deleteDoc(doc(db, "mousalsalatSuggestions", tr.dataset.id)); list = list.filter(x => x.id !== tr.dataset.id); toast("تم الحذف"); draw(); }
+      catch (e) { toast(errMsg(e), "bad"); }
+    });
+  };
+  draw();
+};
+
+/* ---------- bans ---------- */
+VIEWS.bans = async (v) => {
+  const [a, b] = await Promise.all([getDocs(collection(db, "bannedUsers")), getDocs(collection(db, "banned_users"))]);
+  let active = a.docs.map(d => ({ id: d.id, ...d.data() })).sort((x, y) => tsMs(y.createdAt) - tsMs(x.createdAt));
+  const legacy = b.docs.map(d => ({ id: d.id, ...d.data() }));
+  const draw = () => {
+    v.innerHTML = `<div class="head"><div><h2>الحظر</h2><p>${active.length} محظور في القائمة النشطة (bannedUsers)</p></div></div>
+      <div class="panel" style="padding:16px;margin-bottom:16px"><label class="f" for="bEmail" style="margin-top:0">حظر بالإيميل</label>
+        <div style="display:flex;gap:8px"><input type="email" id="bEmail" class="ltr" placeholder="player@gmail.com"><button class="btn danger" id="bAdd">حظر</button></div></div>
+      <div class="panel"><div class="tbl-wrap">${active.length ? `<table><thead><tr><th>الإيميل</th><th>تاريخ الحظر</th><th></th></tr></thead><tbody>
+        ${active.map(x => `<tr data-id="${esc(x.id)}"><td class="ltr">${esc(x.email)}</td><td class="small muted">${fmtDate(x.createdAt)}</td><td class="actions"><button class="btn sm" data-un>رفع الحظر</button></td></tr>`).join("")}
+        </tbody></table>` : `<div class="empty-state">ما فماش حد محظور.</div>`}</div></div>
+      <div class="section-t">القائمة القديمة (banned_users)</div>
+      <div class="note">${legacy.length} سجل. هذي القائمة تُستعمل كان للعدد في التطبيق القديم، ومعروضة هنا للقراءة فقط. ما تتحذفش قبل ما تتأكد.</div>
+      ${legacy.length ? `<details class="panel" style="padding:10px 16px"><summary>عرض القائمة القديمة</summary><ul class="ltr small">${legacy.map(x => `<li>${esc(x.email || x.id)}${active.some(y => y.email === x.email) ? " (موجود في النشطة)" : " (غير موجود في النشطة)"}</li>`).join("")}</ul></details>` : ""}`;
+    $("#bAdd").onclick = async () => {
+      const email = $("#bEmail").value.trim().toLowerCase();
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { toast("الإيميل موش صحيح", "bad"); return; }
+      if (active.some(x => (x.email || "").toLowerCase() === email)) { toast("هذا الإيميل محظور من قبل", "bad"); return; }
+      if (!await confirmBox(`حظر ${email}؟`, "حظر")) return;
+      try { const r = await addDoc(collection(db, "bannedUsers"), { email, createdAt: serverTimestamp() }); active.unshift({ id: r.id, email, createdAt: null }); toast("تم الحظر", "good"); draw(); }
+      catch (e) { toast(errMsg(e), "bad"); }
+    };
+    $$("tr[data-id]", v).forEach(tr => tr.querySelector("[data-un]").onclick = async () => {
+      const x = active.find(y => y.id === tr.dataset.id);
+      if (!await confirmBox(`رفع الحظر على ${x.email}؟`, "رفع الحظر", false)) return;
+      try { await deleteDoc(doc(db, "bannedUsers", x.id)); active = active.filter(y => y.id !== x.id); toast("تم رفع الحظر", "good"); draw(); }
+      catch (e) { toast(errMsg(e), "bad"); }
+    });
+  };
+  draw();
+};
+
+/* ---------- players (read-only) ---------- */
+VIEWS.players = async (v) => {
+  v.innerHTML = `<div class="head"><div><h2>اللاعبين</h2><p>للعرض فقط</p></div></div>
+    <div class="filters"><input type="search" id="pS" placeholder="ابحث ببداية اسم المستخدم…"></div>
+    <div class="panel"><div class="tbl-wrap" id="pT"><div class="loading">جاري التحميل…</div></div></div>`;
+  const load = async key => {
+    const k = (key || "").trim().toLowerCase();
+    const qy = k ? query(collection(db, "users"), where("usernameLower", ">=", k), where("usernameLower", "<=", k + "\uf8ff"), limit(50))
+                 : query(collection(db, "users"), limit(50));
+    try {
+      const snap = await getDocs(qy);
+      const list = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      $("#pT").innerHTML = list.length ? `<table><thead><tr><th></th><th>اسم المستخدم</th><th>الاسم الظاهر</th><th>تاريخ التسجيل</th><th></th></tr></thead><tbody>
+        ${list.map(u => `<tr data-id="${esc(u.id)}"><td>${u.photoUrl ? `<img src="${esc(u.photoUrl)}" alt="" style="width:32px;height:32px;border-radius:50%">` : ""}</td>
+          <td class="ltr"><b>${esc(u.username)}</b></td><td>${esc(u.displayName)}</td><td class="small muted">${fmtDate(u.createdAt)}</td>
+          <td class="actions"><button class="btn sm" data-v>التفاصيل</button></td></tr>`).join("")}</tbody></table>
+        ${!k && list.length === 50 ? `<div class="empty-state small">يظهر أول 50 لاعب. استعمل البحث.</div>` : ""}` : `<div class="empty-state">ما لقيت حتى لاعب.</div>`;
+      $$("#pT tr[data-id]").forEach(tr => tr.querySelector("[data-v]").onclick = () => playerDetails(list.find(u => u.id === tr.dataset.id)));
+    } catch (e) { $("#pT").innerHTML = `<div class="err">${esc(errMsg(e))}</div>`; }
+  };
+  let deb; $("#pS").oninput = e => { clearTimeout(deb); deb = setTimeout(() => load(e.target.value), 300); };
+  load("");
+};
+async function playerDetails(u) {
+  const d = openModal(`<div class="dlg-h"><h3>${esc(u.username)}</h3><button class="x" data-close aria-label="إغلاق">×</button></div>
+    <div class="dlg-b"><dl class="kv" id="pd"><dt>UID</dt><dd class="ltr small">${esc(u.id)}</dd><dt>الاسم الظاهر</dt><dd>${esc(u.displayName)}</dd>
+    <dt>التسجيل</dt><dd>${fmtDate(u.createdAt)}</dd><dt>الحالة</dt><dd id="pdPres">…</dd><dt>الأصدقاء</dt><dd id="pdFr">…</dd><dt>التحديات</dt><dd id="pdCh">…</dd></dl></div>`);
+  getDoc(doc(db, "presence", u.id)).then(s => {
+    const p = s.data(); const recent = p?.online && (Date.now() - tsMs(p.lastSeenAt) < 2 * 60 * 1000);
+    $("#pdPres", d).innerHTML = p ? `${recent ? `<span class="tag good">متصل</span>` : `<span class="tag">غير متصل</span>`} <span class="small muted">آخر ظهور: ${fmtDate(p.lastSeenAt)}</span>` : "ما فماش بيانات";
+  }).catch(e => $("#pdPres", d).textContent = errMsg(e));
+  getDocs(query(collection(db, "friendships"), where("users", "array-contains", u.id))).then(s => {
+    const all = s.docs.map(x => x.data());
+    $("#pdFr", d).textContent = `${all.filter(f => f.status === "accepted").length} صديق، ${all.filter(f => f.status === "pending").length} طلب معلّق`;
+  }).catch(e => $("#pdFr", d).textContent = errMsg(e));
+  Promise.all([getCountFromServer(query(collection(db, "challenges"), where("player1Id", "==", u.id))), getCountFromServer(query(collection(db, "challenges"), where("player2Id", "==", u.id)))])
+    .then(([x, y]) => $("#pdCh", d).textContent = String(x.data().count + y.data().count))
+    .catch(e => $("#pdCh", d).textContent = errMsg(e));
+}
+
+/* ---------- challenges (read-only) ---------- */
+const CH_STATUS = { waiting: "في الانتظار", in_progress: "جاري", finished: "منتهي", cancelled: "ملغى" };
+VIEWS.challenges = async (v) => {
+  await loadSeries();
+  const snap = await getDocs(query(collection(db, "challenges"), limit(300)));
+  const list = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => tsMs(b.createdAt) - tsMs(a.createdAt));
+  const by = k => list.filter(c => c.status === k).length;
+  const pname = (c, id) => id ? (c.players?.[id]?.displayName || id.slice(0, 6)) : "—";
+  let fs = "";
+  const draw = () => {
+    const rows = list.filter(c => !fs || c.status === fs);
+    $("#chT").innerHTML = rows.length ? `<table><thead><tr><th>الكود</th><th>النوع</th><th>اللاعب 1</th><th>اللاعب 2</th><th>الحالة</th><th>الفائز</th><th>التاريخ</th><th></th></tr></thead><tbody>
+      ${rows.map(c => {
+        const w = c.result ? (c.result.winnerId ? pname(c, c.result.winnerId) : "تعادل") : "—";
+        return `<tr data-id="${esc(c.id)}"><td class="ltr small">${esc(c.id.length <= 6 ? c.id : c.id.slice(0, 8) + "…")}</td>
+          <td class="small">${c.type === "mousalsal" ? esc(seriesName(c.mousalsalId)) : "عام"}</td>
+          <td>${esc(pname(c, c.player1Id))}</td><td>${esc(pname(c, c.player2Id))}</td>
+          <td><span class="tag ${c.status === "finished" ? "good" : c.status === "cancelled" ? "bad" : ""}">${esc(CH_STATUS[c.status] || c.status)}</span></td>
+          <td>${esc(w)}</td><td class="small muted">${fmtDate(c.createdAt)}</td><td class="actions"><button class="btn sm" data-v>عرض</button></td></tr>`;
+      }).join("")}</tbody></table>` : `<div class="empty-state">ما فماش تحديات.</div>`;
+    $$("#chT tr[data-id]").forEach(tr => tr.querySelector("[data-v]").onclick = () => {
+      const c = list.find(x => x.id === tr.dataset.id);
+      const ps = Object.entries(c.players || {});
+      openModal(`<div class="dlg-h"><h3>تحدي ${esc(c.id)}</h3><button class="x" data-close aria-label="إغلاق">×</button></div>
+        <div class="dlg-b"><div class="note">للعرض فقط. التحديات محمية بقواعد صارمة وأي تعديل خارجي ينجم يوقّف اللعبة على اللاعبين.</div>
+        <dl class="kv"><dt>النوع</dt><dd>${c.type === "mousalsal" ? esc(seriesName(c.mousalsalId)) : "عام"}</dd><dt>الحالة</dt><dd>${esc(CH_STATUS[c.status] || c.status)}</dd>
+        <dt>الإنشاء</dt><dd>${fmtDate(c.createdAt)}</dd><dt>البداية</dt><dd>${fmtDate(c.startedAt)}</dd><dt>النهاية</dt><dd>${fmtDate(c.finishedAt)}</dd>
+        <dt>عدد الأسئلة</dt><dd>${(c.questionIds || []).length}</dd></dl>
+        <div class="section-t">النتائج</div>
+        <div class="tbl-wrap"><table><thead><tr><th>اللاعب</th><th>السؤال</th><th>صحيح</th><th>غالط</th><th>النقاط</th><th>كمّل</th></tr></thead><tbody>
+        ${ps.map(([id, p]) => `<tr><td>${esc(p.displayName || id)}</td><td>${p.index ?? 0}/10</td><td>${p.correct ?? 0}</td><td>${p.wrong ?? 0}</td><td><b>${p.score ?? 0}</b></td><td>${p.completed ? "نعم" : "لا"}</td></tr>`).join("")}
+        </tbody></table></div></div>`, true);
+    });
+  };
+  v.innerHTML = `<div class="head"><div><h2>التحديات</h2><p>آخر ${list.length} تحدي. للعرض فقط.</p></div><button class="btn" id="chR">تحديث</button></div>
+    <div class="stats">${Object.entries(CH_STATUS).map(([k, l]) => `<a class="stat" href="javascript:void 0" data-st="${k}"><b>${by(k)}</b><span>${l}</span></a>`).join("")}
+      <a class="stat" href="javascript:void 0" data-st=""><b>${list.length}</b><span>الكل</span></a></div>
+    <div class="panel"><div class="tbl-wrap" id="chT"></div></div>`;
+  $$("[data-st]", v).forEach(a => a.onclick = () => { fs = a.dataset.st; draw(); });
+  $("#chR").onclick = () => route();
+  draw();
+};
+
+/* ================= auth gate ================= */
+function renderAuth(state, user) {
+  const c = $("#authCard");
+  if (state === "signin") {
+    c.innerHTML = `<h1>لوحة التحكم</h1><p>مسلسلات تونسية QUIZ. الدخول مخصص للمشرفين.</p>
+      <button class="btn primary" id="gIn" style="width:100%;padding:10px">الدخول بحساب Google</button>`;
+    $("#gIn").onclick = async () => { try { await signInWithPopup(auth, new GoogleAuthProvider()); } catch (e) { toast(errMsg(e), "bad"); } };
+  } else if (state === "denied") {
+    c.innerHTML = `<h1>ما عندكش صلاحية</h1>
+      <p>الحساب <span class="ltr">${esc(user.email)}</span> ما عندوش الصلاحية <code>fireCMSUser</code>.</p>
+      <p class="small">مالك المشروع يعطيها مرة وحدة من سيرفر فيه Admin SDK:</p>
+      <pre>admin.auth().setCustomUserClaims(
+  "${esc(user.uid)}", { fireCMSUser: true });</pre>
+      <p class="small">بعدها اخرج وادخل من جديد.</p>
+      <button class="btn" id="out">خروج</button>`;
+    $("#out").onclick = () => signOut(auth);
+  }
+}
+onAuthStateChanged(auth, async user => {
+  if (!user) { $("#app").classList.add("hidden"); $("#auth").classList.remove("hidden"); renderAuth("signin"); return; }
+  try {
+    const tok = await user.getIdTokenResult(true);
+    if (tok.claims.fireCMSUser !== true) { renderAuth("denied", user); return; }
+  } catch (e) { toast(errMsg(e), "bad"); renderAuth("signin"); return; }
+  $("#auth").classList.add("hidden"); $("#app").classList.remove("hidden");
+  $("#who").innerHTML = `${user.photoURL ? `<img src="${esc(user.photoURL)}" alt="">` : ""}<span>${esc(user.displayName || user.email)}</span><br><button id="logout">خروج</button>`;
+  $("#logout").onclick = () => signOut(auth);
+  loadPending().catch(() => {});
+  route();
+});
+</script>
+</body>
+</html>
