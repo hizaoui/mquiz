@@ -1,0 +1,1919 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#123A63">
+<title>لوحة التحكم | مسلسلات تونسية QUIZ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#123A63; --blue-2:#1F5A93; --blue-soft:#E7EEF6;
+  --wall:#F4F6F9; --paper:#FFFFFF; --ink:#18212C; --muted:#5D6B7A; --line:#DCE2EA;
+  --jasmine:#E3A72F; --jasmine-soft:#FBF1DA;
+  --red:#B42318; --red-soft:#FDECEA; --green:#1E7B4F; --green-soft:#E5F4EC;
+  --r-sm:8px; --r-md:12px; --r-lg:16px;
+  --font:"Readex Pro","Segoe UI",Tahoma,Arial,sans-serif;
+  --safe-b:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{font-family:var(--font);background:var(--wall);color:var(--ink);font-size:15px;line-height:1.6;-webkit-text-size-adjust:100%}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--jasmine);outline-offset:2px}
+.hidden{display:none!important}
+a{color:var(--blue-2)}
+
+/* ---------- auth ---------- */
+#auth{min-height:100vh;display:grid;place-items:center;padding:24px;background:var(--blue)}
+.auth-card{background:var(--paper);border-radius:var(--r-lg);padding:32px 26px;max-width:440px;width:100%}
+.auth-card h1{margin:0 0 4px;font-size:26px;font-weight:700;color:var(--blue)}
+.auth-card p{color:var(--muted);margin:0 0 22px}
+.auth-card code{background:var(--wall);padding:2px 6px;border-radius:4px;font-size:13px;direction:ltr;display:inline-block}
+.auth-card pre{background:var(--wall);padding:12px;border-radius:var(--r-sm);direction:ltr;text-align:left;overflow:auto;font-size:12.5px}
+
+/* ---------- layout ---------- */
+#app{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
+aside{background:var(--blue);color:#fff;padding:20px 0;position:sticky;top:0;height:100vh;display:flex;flex-direction:column}
+.brand{padding:0 20px 18px;border-bottom:1px solid rgba(255,255,255,.12);margin-bottom:10px}
+.brand b{display:block;font-size:18px}
+.brand span{font-size:12.5px;opacity:.7}
+nav a{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 20px;color:#fff;text-decoration:none;opacity:.82;border-inline-start:4px solid transparent}
+nav a:hover{opacity:1;background:rgba(255,255,255,.06)}
+nav a.active{opacity:1;background:rgba(255,255,255,.1);border-inline-start-color:var(--jasmine);font-weight:600}
+nav .pill{background:var(--jasmine);color:var(--ink);font-size:12px;font-weight:700;border-radius:999px;padding:0 8px;min-width:22px;text-align:center}
+.who{margin-top:auto;padding:14px 20px;border-top:1px solid rgba(255,255,255,.12);font-size:13px}
+.who img{width:30px;height:30px;border-radius:50%;vertical-align:middle;margin-inline-end:8px}
+.who button{background:none;border:1px solid rgba(255,255,255,.35);color:#fff;border-radius:var(--r-sm);padding:4px 10px;margin-top:8px;cursor:pointer;font-size:13px}
+main{padding:0 32px 60px;min-width:0}
+.head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin:24px 0 18px;flex-wrap:wrap}
+.head h2{margin:0;font-size:24px;font-weight:600}
+.head p{margin:2px 0 0;color:var(--muted);font-size:14px}
+.head .tools{display:flex;gap:8px;flex-wrap:wrap}
+
+/* ---------- publish bar ---------- */
+.pubbar{position:sticky;top:0;z-index:20;margin:0 -32px;padding:10px 32px;background:var(--jasmine-soft);border-bottom:1px solid #EBD49A;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.pubbar .txt{flex:1;min-width:180px;font-size:14px}
+.pubbar b{color:#7A5410}
+.ver{font-size:12.5px;color:var(--muted)}
+
+/* ---------- controls ---------- */
+.btn{border:1px solid var(--line);background:var(--paper);border-radius:var(--r-sm);padding:7px 14px;cursor:pointer;white-space:nowrap;min-height:38px;display:inline-flex;align-items:center;justify-content:center;gap:6px;text-decoration:none;color:var(--ink)}
+.btn:hover{border-color:var(--blue-2)}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+.btn.primary:hover{background:var(--blue-2)}
+.btn.pub{background:var(--jasmine);border-color:var(--jasmine);color:var(--ink);font-weight:600}
+.btn.danger{color:var(--red);border-color:#F1C4BF}
+.btn.danger:hover{background:var(--red-soft)}
+.btn.ok{background:var(--green);border-color:var(--green);color:#fff}
+.btn.sm{padding:3px 10px;font-size:13px;min-height:32px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+input[type=text],input[type=email],input[type=url],input[type=search],select,textarea{border:1px solid var(--line);border-radius:var(--r-sm);padding:8px 10px;background:var(--paper);width:100%;min-height:40px}
+textarea{resize:vertical;min-height:70px}
+label.f{display:block;font-size:13px;color:var(--muted);margin:14px 0 4px}
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
+.filters>*{width:auto}
+.filters input[type=search]{min-width:220px;flex:1}
+.chk{display:inline-flex;gap:6px;align-items:center;font-size:13.5px;min-height:38px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:var(--r-sm);overflow:hidden}
+.seg button{border:0;background:var(--paper);padding:8px 14px;cursor:pointer;min-height:38px}
+.seg button.on{background:var(--blue);color:#fff}
+
+/* ---------- surfaces ---------- */
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:var(--r-md)}
+.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin-bottom:24px}
+.stat{background:var(--paper);border:1px solid var(--line);border-radius:var(--r-md);padding:14px 16px;text-decoration:none;color:inherit;display:block;cursor:pointer;text-align:start;font:inherit}
+.stat:hover{border-color:var(--blue-2)}
+.stat b{display:block;font-size:26px;font-weight:600;color:var(--blue)}
+.stat span{font-size:13.5px;color:var(--muted)}
+.stat.warn b{color:var(--red)}
+.section-t{font-size:16px;font-weight:600;margin:28px 0 10px}
+
+table{width:100%;border-collapse:collapse}
+.tbl-wrap{overflow-x:auto}
+th{font-weight:500;font-size:13px;color:var(--muted);text-align:start;padding:10px 12px;border-bottom:1px solid var(--line);background:#FAFBFD;white-space:nowrap}
+td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+tbody tr:hover{background:#FAFBFD}
+td.q{max-width:380px}
+td.actions{white-space:nowrap;text-align:end}
+.thumb{width:64px;height:36px;object-fit:cover;border-radius:4px;background:var(--wall);display:block}
+.thumb.empty{display:grid;place-items:center;font-size:11px;color:var(--muted)}
+.tag{display:inline-block;font-size:12px;border-radius:999px;padding:1px 9px;background:var(--blue-soft);color:var(--blue);white-space:nowrap}
+.tag.qcm{background:var(--jasmine-soft);color:#7A5410}
+.tag.bad{background:var(--red-soft);color:var(--red)}
+.tag.good{background:var(--green-soft);color:var(--green)}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+.ltr{direction:ltr;unicode-bidi:isolate}
+.pager{display:flex;gap:8px;align-items:center;justify-content:center;padding:14px;flex-wrap:wrap}
+.empty-state{padding:36px 20px;text-align:center;color:var(--muted)}
+.err{background:var(--red-soft);border:1px solid #F1C4BF;color:var(--red);border-radius:var(--r-md);padding:14px 16px;margin-top:16px}
+.note{background:var(--jasmine-soft);border-radius:var(--r-md);padding:10px 14px;font-size:13.5px;margin-bottom:14px}
+.loading{padding:40px;text-align:center;color:var(--muted)}
+.src{font-size:12px;color:var(--muted)}
+
+/* the "screen": question image framed like a TV */
+.screen{background:#1B2430;padding:8px 8px 14px;border-radius:14px;position:relative;max-width:360px}
+.screen::after{content:"";position:absolute;bottom:4px;left:50%;width:28px;height:4px;margin-left:-14px;border-radius:2px;background:#3A4656}
+.screen .glass{aspect-ratio:16/9;border-radius:8px;overflow:hidden;background:#0F151D;display:grid;place-items:center;color:#7C8796;font-size:13px}
+.screen img{width:100%;height:100%;object-fit:cover;display:block}
+
+/* moderation cards */
+.mod-list{display:grid;gap:12px}
+.mod{display:grid;grid-template-columns:220px 1fr auto;gap:18px;padding:16px;align-items:start}
+.mod .screen{max-width:220px}
+.mod h4{margin:0 0 6px;font-size:16px;font-weight:600}
+.mod .ans{background:var(--green-soft);color:var(--green);border-radius:var(--r-sm);padding:2px 8px;display:inline-block}
+.mod .acts{display:flex;flex-direction:column;gap:8px}
+
+/* media */
+.media-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+.mi{background:var(--paper);border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden;display:flex;flex-direction:column}
+.mi .img{aspect-ratio:16/9;background:var(--wall);display:grid;place-items:center;color:var(--muted);font-size:12px}
+.mi .img img{width:100%;height:100%;object-fit:cover}
+.mi .meta{padding:8px 10px;font-size:12px;display:flex;flex-direction:column;gap:6px;flex:1}
+.mi .name{direction:ltr;text-align:left;word-break:break-all;color:var(--muted)}
+.mi .row{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto}
+.mi.pick{cursor:pointer}
+.mi.pick:hover{border-color:var(--blue-2)}
+.drop{display:block;border:2px dashed var(--line);border-radius:var(--r-md);padding:18px;text-align:center;color:var(--muted);margin-bottom:16px;background:var(--paper);cursor:pointer}
+.drop.over{border-color:var(--jasmine);background:var(--jasmine-soft)}
+
+/* dialogs */
+dialog{border:0;border-radius:var(--r-lg);padding:0;width:min(720px,94vw);max-height:92vh;color:var(--ink);display:none;flex-direction:column}
+dialog[open]{display:flex}
+dialog::backdrop{background:rgba(18,34,52,.55)}
+dialog.wide{width:min(1000px,96vw)}
+.dlg-h{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 20px;border-bottom:1px solid var(--line);background:var(--paper);flex:none}
+.dlg-h h3{margin:0;font-size:18px;font-weight:600}
+.dlg-b{padding:6px 20px 20px;overflow:auto;flex:1;min-height:0}
+.dlg-f{display:flex;gap:8px;justify-content:flex-start;padding:12px 20px calc(12px + var(--safe-b));border-top:1px solid var(--line);background:var(--paper);flex:none}
+.x{background:none;border:0;font-size:26px;cursor:pointer;color:var(--muted);line-height:1;min-width:40px;min-height:40px}
+.choice{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+.choice input[type=radio]{width:22px;height:22px;accent-color:var(--green);flex:none}
+.choice.correct input[type=text]{border-color:var(--green);background:var(--green-soft)}
+.form-errors{background:var(--red-soft);color:var(--red);border-radius:var(--r-sm);padding:8px 12px;margin-top:14px;font-size:13.5px}
+.form-errors ul{margin:0;padding-inline-start:18px}
+.img-tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.kv{display:grid;grid-template-columns:140px 1fr;gap:6px 14px;font-size:14px;margin-top:10px}
+.kv dt{color:var(--muted)}
+.kv dd{margin:0;word-break:break-word}
+
+#toasts{position:fixed;bottom:calc(20px + var(--safe-b));left:20px;right:auto;display:flex;flex-direction:column;gap:8px;z-index:100;pointer-events:none}
+.toast{background:var(--ink);color:#fff;padding:10px 16px;border-radius:var(--r-sm);font-size:14px;max-width:360px}
+.toast.bad{background:var(--red)}
+.toast.good{background:var(--green)}
+
+/* ---------- tablet / phone ---------- */
+@media (max-width:860px){
+  #app{grid-template-columns:1fr;grid-template-rows:auto 1fr}
+  aside{position:sticky;top:0;z-index:30;height:auto;padding:0}
+  .brand{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;margin:0;border-bottom:0}
+  .brand b{font-size:16px}
+  .brand span{display:none}
+  .who{display:none}
+  nav{display:flex;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:0 6px}
+  nav::-webkit-scrollbar{display:none}
+  nav a{border-inline-start:0;border-bottom:3px solid transparent;white-space:nowrap;padding:10px 12px}
+  nav a.active{border-bottom-color:var(--jasmine);background:none}
+  .m-out{display:inline-flex!important}
+  main{padding:0 14px calc(90px + var(--safe-b))}
+  .head{margin:16px 0 14px}
+  .head h2{font-size:20px}
+  .pubbar{position:fixed;top:auto;bottom:0;left:0;right:0;margin:0;padding:10px 14px calc(10px + var(--safe-b));border-top:1px solid #EBD49A;border-bottom:0;box-shadow:0 -4px 16px rgba(0,0,0,.08)}
+  .pubbar .btn{flex:1}
+  #toasts{left:12px;right:12px;bottom:calc(80px + var(--safe-b))}
+  .toast{max-width:none}
+  .mod{grid-template-columns:1fr}
+  .mod .screen{max-width:100%}
+  .mod .acts{flex-direction:row}
+  .mod .acts .btn{flex:1}
+  .filters>*{flex:1 1 140px}
+  .filters input[type=search]{flex:1 1 100%;min-width:0}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .stat b{font-size:22px}
+  /* inputs at 16px prevent iOS auto-zoom */
+  input[type=text],input[type=email],input[type=url],input[type=search],select,textarea{font-size:16px}
+  /* full-screen dialogs */
+  dialog,dialog.wide{width:100vw;max-width:100vw;height:100dvh;max-height:100dvh;border-radius:0;margin:0}
+  .kv{grid-template-columns:110px 1fr}
+  .media-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:700px){
+  /* tables become cards */
+  table.resp thead{display:none}
+  table.resp,table.resp tbody,table.resp tr,table.resp td{display:block;width:100%}
+  table.resp tr{padding:12px 14px;border-bottom:1px solid var(--line);position:relative}
+  table.resp tr:last-child{border-bottom:0}
+  table.resp td{border:0;padding:2px 0;display:flex;gap:10px;align-items:baseline;max-width:none}
+  table.resp td[data-label]::before{content:attr(data-label);color:var(--muted);font-size:12px;min-width:74px;flex:none}
+  table.resp td.q{font-weight:500;font-size:15px}
+  table.resp td.actions{justify-content:flex-start;padding-top:8px;gap:8px}
+  table.resp td.actions .btn{flex:1}
+  table.resp td.sel{position:absolute;top:10px;left:12px;width:auto}
+  table.resp td.img{margin-bottom:6px}
+  table.resp td.img .thumb{width:100%;height:auto;aspect-ratio:16/9}
+}
+.m-out{display:none!important;background:none;border:1px solid rgba(255,255,255,.35);color:#fff;border-radius:var(--r-sm);padding:3px 10px;font-size:13px;cursor:pointer}
+/* ---------- question generator ---------- */
+.steps{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 16px;padding:0;list-style:none;counter-reset:st}
+.steps li{counter-increment:st;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:4px 14px 4px 12px;font-size:13.5px}
+.steps li::before{content:counter(st);display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--blue);color:#fff;font-size:12px;margin-inline-end:6px}
+.gen-photos{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin-top:6px}
+.gen-photo{position:relative}
+.gen-photo img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:6px;display:block;background:var(--wall)}
+.gen-photo button{position:absolute;top:4px;left:4px;width:28px;height:28px;border-radius:50%;border:0;background:rgba(24,33,44,.78);color:#fff;cursor:pointer;font-size:16px;line-height:1}
+.tpl{display:grid;grid-template-columns:minmax(210px,1.1fr) 1fr 1fr;gap:10px;align-items:end;padding:12px 16px;border-bottom:1px solid var(--line)}
+.tpl:last-child{border-bottom:0}
+.tpl small{display:block;color:var(--muted);font-size:12px;margin-bottom:2px}
+.tpl .chk{font-weight:500}
+.tpl.off input[type=text]{opacity:.5}
+.gen-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:14px 0}
+.gen-bar .grow{flex:1}
+.gen-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.gq{background:var(--paper);border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden;display:flex;flex-direction:column}
+.gq.off{opacity:.5}
+.gq .img{aspect-ratio:16/9;background:#0F151D;display:grid;place-items:center;color:#7C8796;font-size:12px}
+.gq .img img{width:100%;height:100%;object-fit:cover;display:block}
+.gq .body{padding:10px 12px;display:flex;flex-direction:column;gap:6px;flex:1}
+.gq h4{margin:0;font-size:15px;font-weight:600}
+.gq ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:4px}
+.gq li{font-size:13px;border:1px solid var(--line);border-radius:6px;padding:2px 8px}
+.gq li.ok{background:var(--green-soft);border-color:#BFE3CF;color:var(--green);font-weight:600}
+.gq .warn{font-size:12.5px;color:#7A5410;background:var(--jasmine-soft);border-radius:6px;padding:3px 8px}
+.gq .warn.bad{color:var(--red);background:var(--red-soft)}
+.gq .foot{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 12px;border-top:1px solid var(--line);font-size:13px}
+details.skip{margin:4px 0 12px;font-size:13.5px}
+details.skip summary{cursor:pointer;color:var(--muted)}
+details.skip ul{margin:6px 0 0;padding-inline-start:18px}
+@media (max-width:860px){.tpl{grid-template-columns:1fr}.gen-grid{grid-template-columns:1fr}}
+/* ---------- quick tray: drag & drop ---------- */
+dialog.tray-on{width:min(1120px,96vw)}
+.ed-grid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:20px;align-items:start}
+.tray{position:sticky;top:6px;margin-top:14px;background:var(--wall);border:1px solid var(--line);border-radius:var(--r-md);padding:10px;max-height:calc(92vh - 160px);overflow:auto;overscroll-behavior:contain}
+.tray-h{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.tray-h b{font-size:14px;flex:1}
+.tray-fold{display:none;border:0;background:none;cursor:pointer;color:var(--muted);font-size:13px;min-height:32px}
+.tray-hint{font-size:12px;color:var(--muted);margin:0 0 8px}
+.tray-hint .touch{display:none}
+@media (hover:none){.tray-hint .mouse{display:none}.tray-hint .touch{display:inline}}
+.tray-tabs{display:flex;gap:3px;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:3px;margin-bottom:6px}
+.tray-tabs button{flex:1;border:0;background:none;border-radius:999px;padding:3px 8px;font-size:13px;cursor:pointer;min-height:32px;color:var(--muted)}
+.tray-tabs button.on{background:var(--blue);color:#fff}
+.tray-sec{font-size:12px;color:var(--muted);margin:12px 2px 6px;display:flex;justify-content:space-between;gap:6px}
+.tray-imgs{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
+.tray-img{position:relative;aspect-ratio:16/9;border-radius:7px;overflow:hidden;background:#0F151D;cursor:grab;border:2px solid transparent;padding:0;display:block;width:100%}
+.tray-img img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+.tray-img:hover,.tray-img:focus-visible{border-color:var(--jasmine)}
+.tray-img .n{position:absolute;bottom:3px;inset-inline-start:3px;background:rgba(24,33,44,.82);color:#fff;font-size:10.5px;border-radius:999px;padding:0 6px;line-height:1.6}
+.tray-img.used{border-color:var(--green)}
+.tray-img.used::after{content:"✓";position:absolute;top:3px;inset-inline-end:3px;width:18px;height:18px;border-radius:50%;background:var(--green);color:#fff;font-size:11px;display:grid;place-items:center}
+.tray-list{display:flex;flex-direction:column;gap:6px}
+.tray-chip{display:flex;align-items:center;gap:6px;width:100%;background:var(--paper);border:1px solid var(--line);border-radius:var(--r-sm);padding:5px 8px;cursor:grab;font-size:13.5px;text-align:start;min-height:38px}
+.tray-chip:hover,.tray-chip:focus-visible{border-color:var(--jasmine)}
+.tray-chip .t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.tray-chip .c{font-size:11px;color:var(--muted);white-space:nowrap}
+.tray-chip .pin{border:0;background:none;cursor:pointer;color:#A9B3BF;font-size:16px;min-width:30px;min-height:30px;padding:0}
+.tray-chip .pin.on{color:var(--jasmine)}
+.tray-empty{font-size:12.5px;color:var(--muted);padding:6px 2px}
+.dragging{opacity:.35}
+/* drop zones light up while something droppable is being dragged */
+.dz{border-radius:14px;transition:box-shadow .15s ease,transform .15s ease}
+body.drag-img .dz-img,body.drag-file .dz-img,body.drag-txt .dz-txt,body.drag-name .dz-name{box-shadow:0 0 0 2px var(--paper),0 0 0 4px var(--jasmine)}
+.dz.over{box-shadow:0 0 0 3px var(--jasmine),0 0 0 9px rgba(227,167,47,.28)!important;transform:scale(1.012)}
+.choice input.dz{border-radius:var(--r-sm)}
+.pop{animation:pop .38s ease}
+@keyframes pop{0%{transform:scale(.97)}55%{transform:scale(1.02)}100%{transform:scale(1)}}
+.dz-note{font-size:12px;color:var(--muted);margin-top:6px}
+/* character photos: reorder by dragging, first = main */
+.gen-photo{cursor:grab;border-radius:8px}
+.gen-photo.first img{outline:2px solid var(--jasmine);outline-offset:-2px}
+.gen-photo .main{position:absolute;bottom:4px;right:4px;background:var(--jasmine);color:var(--ink);font-size:10.5px;border-radius:999px;padding:0 7px;line-height:1.7}
+.gen-photo.drop-before{box-shadow:inset 4px 0 0 var(--jasmine)}
+.gen-photos.dz{min-height:70px;padding:4px}
+.stale{color:var(--blue);font-size:13.5px}
+@media (max-width:860px){
+  .ed-grid{display:flex;flex-direction:column;gap:0}
+  /* phone: series first, then the tray (it depends on the series), then the rest of the form */
+  .ed-form{display:contents}
+  .ed-form>*{order:2}
+  .ed-form>.note{order:0}
+  .ed-form>.ed-top{order:0}
+  .tray{position:static;order:1;max-height:none;margin-top:12px}
+  .tray-fold{display:inline-flex;align-items:center}
+  .tray.folded .tray-body{display:none}
+  .tray-imgs{display:flex;overflow-x:auto;scroll-snap-type:x proximity;padding-bottom:4px}
+  .tray-img{flex:0 0 124px;scroll-snap-align:start}
+  .tray-list{flex-direction:row;overflow-x:auto;padding-bottom:4px}
+  .tray-chip{flex:0 0 auto;width:auto;max-width:250px}
+}
+@media (prefers-reduced-motion:reduce){.dz.over{transform:none}.pop{animation:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<div id="auth">
+  <div class="auth-card" id="authCard">
+    <h1>لوحة التحكم</h1>
+    <p>مسلسلات تونسية QUIZ</p>
+    <div class="loading">جاري التحقق…</div>
+  </div>
+</div>
+
+<div id="app" class="hidden">
+  <aside>
+    <div class="brand"><div><b>مسلسلات QUIZ</b><span>لوحة الإدارة</span></div><button class="m-out" id="mOut">خروج</button></div>
+    <nav id="nav"></nav>
+    <div class="who" id="who"></div>
+  </aside>
+  <main>
+    <div id="pubbar" class="pubbar hidden"></div>
+    <div id="view"></div>
+  </main>
+</div>
+
+<dialog id="modal"></dialog>
+<dialog id="picker" class="wide"></dialog>
+<dialog id="confirm"></dialog>
+<div id="toasts" aria-live="polite"></div>
+
+<script type="module">
+/* ==================================================================
+   CONFIGURATION
+   appId: paste the WEB app id from Firebase console if you registered
+   one (Project settings → Your apps → Web). Never the Android id.
+   ================================================================== */
+const firebaseConfig = {
+  apiKey: "AIzaSyA2SziyIfYV-ZWdyyeVwjf62dF2yyBrlx0",
+  authDomain: "mosalsalat-quiz.firebaseapp.com",
+  projectId: "mosalsalat-quiz",
+  storageBucket: "mosalsalat-quiz.appspot.com",
+  messagingSenderId: "266806267610",
+  appId: "" // TODO: web appId
+};
+/* The document the app checks to know when to re-download questions. */
+const CATALOG = { collection: "meta", doc: "catalog" }; // fields: version (int), updatedAt (timestamp)
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {
+  initializeFirestore, persistentLocalCache, persistentMultipleTabManager,
+  collection, doc, getDocs, getDocsFromCache, getDocsFromServer, getDocFromServer,
+  addDoc, setDoc, deleteDoc, query, where, limit, startAfter, writeBatch, runTransaction,
+  serverTimestamp, getCountFromServer, onSnapshot, increment
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getStorage, ref, listAll, getDownloadURL, uploadBytes, deleteObject } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+
+const cfg = { ...firebaseConfig }; if (!cfg.appId) delete cfg.appId;
+const fbApp = initializeApp(cfg);
+const auth = getAuth(fbApp);
+/* Persistent IndexedDB cache: questions are re-used between visits instead of re-read. */
+let db;
+try { db = initializeFirestore(fbApp, { localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() }) }); }
+catch { db = initializeFirestore(fbApp, {}); }
+const storage = getStorage(fbApp);
+
+/* localStorage keys (scoped to the project) */
+const K = {
+  cacheVer: "mq:" + firebaseConfig.projectId + ":qcacheVer", // catalog version the local questions cache matches
+  dirty: "mq:" + firebaseConfig.projectId + ":dirty",         // unpublished changes made from this browser
+  counts: "mq:" + firebaseConfig.projectId + ":counts"         // short-lived overview counters
+};
+
+/* ================= helpers ================= */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const fmtDate = ts => { try { const d = ts?.toDate ? ts.toDate() : (ts ? new Date(ts) : null); return d ? new Intl.DateTimeFormat("ar-TN", { dateStyle: "medium", timeStyle: "short" }).format(d) : "—"; } catch { return "—"; } };
+const tsMs = ts => ts?.toMillis ? ts.toMillis() : (ts instanceof Date ? ts.getTime() : 0);
+const norm = s => String(s ?? "").toLowerCase().replace(/[\u064B-\u0652\u0640]/g, "").replace(/[أإآ]/g, "ا").replace(/ى/g, "ي").replace(/ة/g, "ه").trim();
+const lsGet = (k, def) => { try { const v = localStorage.getItem(k); return v == null ? def : JSON.parse(v); } catch { return def; } };
+const lsSet = (k, v) => { try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, JSON.stringify(v)); } catch {} };
+
+function toast(msg, kind = "") {
+  const t = document.createElement("div");
+  t.className = "toast " + kind; t.textContent = msg;
+  $("#toasts").append(t); setTimeout(() => t.remove(), kind === "bad" ? 7000 : 3500);
+}
+function errMsg(e) {
+  console.error("[admin]", e?.code, e?.message, e);
+  const code = e?.code || "";
+  const msg = String(e?.message || e || "");
+  const tag = code ? ` [${code}]` : "";
+  if (code === "auth/unauthorized-domain") return "هذا العنوان موش مسموح للدخول بـ Google. زيد الدومين في Authentication ← Settings ← Authorized domains." + tag;
+  if (code === "auth/popup-blocked" || code === "auth/popup-closed-by-user") return "نافذة Google تسكّرت ولا تحجبت. اسمح بالنوافذ المنبثقة وعاود." + tag;
+  if (/api.?key|referer|android client application/i.test(msg)) return "مفتاح الـ API رافض الطلب. شوف Google Cloud ← Credentials." + tag + " " + msg;
+  if (/app.?check/i.test(msg)) return "App Check رافض الطلب." + tag;
+  if (code === "permission-denied" || code === "storage/unauthorized") return "Firebase رفض العملية." + tag + " " + msg;
+  if (code === "unavailable") return "ما فماش اتصال بالسيرفر. ثبّت في الإنترنت وعاود." + tag;
+  return msg + tag;
+}
+function maskEmail(e) {
+  if (!e) return "—";
+  if (S.showEmails) return e;
+  const [u, d] = String(e).split("@");
+  return d ? (u.slice(0, 2) + "•••@" + d) : "•••";
+}
+function confirmBox(text, okLabel = "تأكيد", danger = true) {
+  return new Promise(res => {
+    const d = $("#confirm");
+    d.innerHTML = `<div class="dlg-h"><h3>تأكيد</h3></div><div class="dlg-b"><p style="white-space:pre-line">${esc(text)}</p></div>
+      <div class="dlg-f"><button class="btn ${danger ? "danger" : "primary"}" data-ok>${esc(okLabel)}</button><button class="btn" data-no>إلغاء</button></div>`;
+    let done = false; const fin = v => { if (done) return; done = true; if (d.open) d.close(); res(v); };
+    d.querySelector("[data-ok]").onclick = () => fin(true);
+    d.querySelector("[data-no]").onclick = () => fin(false);
+    d.oncancel = e => { e.preventDefault(); fin(false); };
+    d.showModal();
+  });
+}
+function openModal(html, wide = false) {
+  const d = $("#modal");
+  d.className = wide ? "wide" : ""; d.onpaste = null;
+  d.innerHTML = html;
+  $$("[data-close]", d).forEach(b => b.onclick = () => d.close());
+  if (!d.open) d.showModal();
+  return d;
+}
+function screenHTML(url) {
+  return `<div class="screen"><div class="glass">${url ? `<img src="${esc(url)}" alt="" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'الصورة ما تحمّلتش'}))">` : "بدون صورة"}</div></div>`;
+}
+function thumbHTML(url) {
+  return url ? `<img class="thumb" src="${esc(url)}" alt="" loading="lazy">` : `<div class="thumb empty">—</div>`;
+}
+function downloadJSON(name, data) {
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+  const a = Object.assign(document.createElement("a"), { href: URL.createObjectURL(blob), download: name });
+  a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+}
+
+/* ================= state ================= */
+const S = {
+  catalog: null,            // { version, updatedAt } from meta/catalog (1 read per session)
+  series: null, questions: null, qSource: "", pending: null, pendingCount: null, media: null,
+  showEmails: false, qFilter: { series: "", type: "", issue: "", text: "" }, qPage: 0, qSel: new Set(),
+  mediaFilter: { prefix: "", text: "", unused: false },
+  suggestions: null, bans: null,
+  chars: null, gen: null,    // question generator: characters + preview state
+  shared: { ok: null, count: 0, rev: null, lastAt: null, lastBy: "", err: "" }, myUnacked: 0, qStale: false
+};
+
+/* ================= publish workflow =================
+   Question changes are written immediately but players only re-download
+   when meta/catalog.version changes. "Publish" bumps it once for a whole
+   editing session, instead of once per edit.
+
+   Unpublished-changes counter, shared by every admin device (meta/adminPending):
+     count = changes since the last publish (publish resets it to 0)
+     rev   = goes up on every question change. Each browser keeps a local copy of the
+             questions; when rev moves because of ANOTHER device, that copy is outdated
+             even though the catalog version did not change, so it is re-read.
+   The game never reads this document. If Firestore rules block it, the dashboard
+   falls back to the old per-browser counter and says so in the bar. */
+const PENDING = { collection: "meta", doc: "adminPending" };
+const pendingRef = () => doc(db, PENDING.collection, PENDING.doc);
+const getDirty = () => lsGet(K.dirty, { count: 0, since: 0 }); // this browser only (fallback)
+const pendingCount = () => S.shared.ok ? S.shared.count : getDirty().count;
+const adminName = () => { const u = auth.currentUser; return u?.displayName || u?.email || ""; };
+function markDirty(n = 1) {
+  const d = getDirty(); d.count += n; if (!d.since) d.since = Date.now(); lsSet(K.dirty, d);
+  if (S.shared.ok !== false) {
+    S.myUnacked++;
+    setDoc(pendingRef(), { count: increment(n), rev: increment(1), lastAt: serverTimestamp(), lastBy: adminName() }, { merge: true })
+      .catch(e => { S.myUnacked = Math.max(0, S.myUnacked - 1); S.shared = { ...S.shared, ok: false, err: errMsg(e) }; renderPubBar(); });
+  }
+  renderPubBar();
+}
+function clearDirty() { lsSet(K.dirty, null); renderPubBar(); }
+
+let sharedReady = Promise.resolve(), unwatch = [];
+function watchShared() {
+  unwatch.forEach(f => f()); unwatch = [];
+  let resolve; sharedReady = new Promise(r => resolve = r);
+  const done = () => { if (resolve) { resolve(); resolve = null; } };
+  setTimeout(done, 6000); // offline: don't block the dashboard
+  unwatch.push(onSnapshot(pendingRef(), { includeMetadataChanges: false }, snap => {
+    const fromCache = snap.metadata.fromCache && !snap.metadata.hasPendingWrites;
+    const d = snap.exists() ? snap.data() : {};
+    const rev = Number.isInteger(d.rev) ? d.rev : 0;
+    const prev = S.shared.rev;
+    S.shared = { ok: true, count: Number.isInteger(d.count) ? Math.max(0, d.count) : 0, rev, lastAt: d.lastAt || null, lastBy: d.lastBy || "", err: "", fromCache };
+    if (prev != null && rev !== prev) {
+      const delta = rev - prev, mine = Math.min(Math.max(delta, 0), S.myUnacked);
+      S.myUnacked -= mine;
+      if (delta !== mine) S.qStale = true; // someone else changed questions
+      else { const c = lsGet(K.cacheVer, null); if (c && typeof c === "object" && c.r === prev) lsSet(K.cacheVer, { ...c, r: rev }); }
+    }
+    if (!S.shared.count && getDirty().count) lsSet(K.dirty, null); // published from another device
+    renderPubBar();
+    if (!fromCache) done();
+  }, err => { S.shared = { ...S.shared, ok: false, err: errMsg(err) }; renderPubBar(); done(); }));
+  unwatch.push(onSnapshot(doc(db, CATALOG.collection, CATALOG.doc), snap => {
+    if (snap.metadata.fromCache) return;
+    S.catalog = snap.exists() ? { version: snap.data().version, updatedAt: snap.data().updatedAt, exists: true } : { version: null, updatedAt: null, exists: false };
+    renderPubBar();
+  }, () => {}));
+}
+
+async function loadCatalog(force) {
+  if (S.catalog && !force) return S.catalog;
+  const snap = await getDocFromServer(doc(db, CATALOG.collection, CATALOG.doc));
+  S.catalog = snap.exists() ? { version: snap.data().version, updatedAt: snap.data().updatedAt, exists: true } : { version: null, updatedAt: null, exists: false };
+  return S.catalog;
+}
+function renderPubBar() {
+  const bar = $("#pubbar"); if (!bar) return;
+  const n = pendingCount(), stale = S.qStale;
+  if (!n && !stale) { bar.classList.add("hidden"); return; }
+  bar.classList.remove("hidden");
+  const ver = `النسخة الحالية: ${S.catalog?.version ?? "—"}`;
+  const meta = S.shared.ok
+    ? `${S.shared.lastAt ? `آخر تغيير ${fmtDate(S.shared.lastAt)}${S.shared.lastBy ? " · " + esc(S.shared.lastBy) : ""} · ` : ""}${ver}`
+    : `${ver}${S.shared.ok === false ? ` · <span title="${esc(S.shared.err)}">العدّاد يحسب تغييرات المتصفح هذا برك</span>` : ""}`;
+  bar.innerHTML = `<div class="txt">${n ? `<b>${n} تغيير غير منشور</b> · اللاعبين ما يشوفوهمش حتى تنشر.` : ""}
+      ${stale ? `<div class="stale">فما تغييرات جديدة على الأسئلة من جهاز آخر.</div>` : ""}<div class="ver">${meta}</div></div>
+    ${stale ? `<button class="btn" id="staleBtn">حدّث الأسئلة</button>` : ""}${n ? `<button class="btn pub" id="pubBtn">نشر التغييرات</button>` : ""}`;
+  $("#pubBtn")?.addEventListener("click", publishChanges);
+  $("#staleBtn")?.addEventListener("click", async e => {
+    e.target.disabled = true;
+    try { await loadQuestions(true); toast("تم التحديث", "good"); route(); } catch (err) { e.target.disabled = false; toast(errMsg(err), "bad"); }
+  });
+}
+async function publishChanges() {
+  const n = pendingCount();
+  if (!await confirmBox(`نشر ${n} تغيير؟\nكل لاعب باش يعاود يحمّل الأسئلة مرة وحدة عند فتح اللعبة.`, "نشر", false)) return;
+  const btn = $("#pubBtn"); if (btn) btn.disabled = true;
+  const cref = doc(db, CATALOG.collection, CATALOG.doc);
+  // The counter reset is inside the same transaction: a change saved on another device
+  // during the publish makes the transaction retry instead of being silently zeroed.
+  const run = withPending => runTransaction(db, async tx => {
+    const s = await tx.get(cref);
+    if (withPending) await tx.get(pendingRef());
+    const v = s.exists() ? s.data().version : 0;
+    if (s.exists() && v != null && !Number.isInteger(v)) throw new Error("الحقل version موش رقم صحيح في meta/catalog. ما بدّلتش شي باش ما نكسّرش التطبيق.");
+    tx.set(cref, { version: (v ?? 0) + 1, updatedAt: serverTimestamp() }, { merge: true });
+    if (withPending) tx.set(pendingRef(), { count: 0, publishedAt: serverTimestamp(), publishedBy: adminName() }, { merge: true });
+    return v ?? 0;
+  });
+  try {
+    let old;
+    try { old = await run(S.shared.ok === true); }
+    catch (e) {
+      if (S.shared.ok === true && /permission/i.test(String(e?.code || e?.message || ""))) { S.shared = { ...S.shared, ok: false, err: errMsg(e) }; old = await run(false); }
+      else throw e;
+    }
+    const nv = old + 1;
+    // Local cache stays valid only if nobody else published in the meantime.
+    const c = lsGet(K.cacheVer, null);
+    if (c && typeof c === "object" && c.v === old) lsSet(K.cacheVer, { ...c, v: nv }); else lsSet(K.cacheVer, null);
+    S.catalog = { version: nv, updatedAt: new Date(), exists: true };
+    if (S.shared.ok) S.shared = { ...S.shared, count: 0 };
+    clearDirty();
+    toast(`تم النشر. النسخة الجديدة: ${nv}`, "good");
+    if ((location.hash || "").includes("overview") || !location.hash) route();
+  } catch (e) { if (btn) btn.disabled = false; toast(errMsg(e), "bad"); }
+}
+// Changes are already saved on the server; only warn when nothing else can remind you to publish.
+window.addEventListener("beforeunload", e => { if (S.shared.ok === false && getDirty().count) { e.preventDefault(); e.returnValue = ""; } });
+
+/* ================= loaders (read-efficient) ================= */
+async function loadSeries(force) {
+  if (S.series && !force) return S.series;
+  const snap = await getDocs(collection(db, "mosalsal"));
+  S.series = snap.docs.map(d => ({ id: d.id, name: d.data().name || "", image: d.data().image || "" }))
+    .sort((a, b) => a.name.localeCompare(b.name, "ar"));
+  return S.series;
+}
+const seriesName = id => S.series?.find(s => s.id === id)?.name || (id ? "مسلسل غير موجود" : "—");
+
+/* Legacy docs may have correct_answer (snake) or choices as a JSON string. */
+function normalizeQuestion(id, d) {
+  let choices = d.choices, legacy = false;
+  if (typeof choices === "string") { legacy = true; try { choices = JSON.parse(choices); } catch { choices = []; } }
+  if (!Array.isArray(choices)) choices = [];
+  let correctAnswer = d.correctAnswer ?? null;
+  if (correctAnswer == null && d.correct_answer != null) { correctAnswer = d.correct_answer; legacy = true; }
+  if ("correct_answer" in d) legacy = true;
+  return {
+    id, question: d.question || "", answer: d.answer || "", mousalsal: d.mousalsal || "",
+    image: d.image || "", resolved: typeof d.resolved === "number" ? d.resolved : 0, user: d.user || "",
+    type: d.type ?? null, choices: choices.map(c => String(c)), correctAnswer: correctAnswer == null ? null : String(correctAnswer), legacy
+  };
+}
+/* Questions: 1 read (catalog) when the local cache matches the published version,
+   otherwise a full read of the collection. */
+async function loadQuestions(force) {
+  if (S.questions && !force) return S.questions;
+  const cat = await loadCatalog(force);
+  await sharedReady;
+  const cached = lsGet(K.cacheVer, null), rev = S.shared.ok ? S.shared.rev : null;
+  const cacheOk = cached && typeof cached === "object" && cached.v === cat.version && (rev == null || cached.r === rev) && !S.qStale;
+  let snap = null;
+  if (!force && cat.version != null && cacheOk) {
+    try { const c = await getDocsFromCache(collection(db, "questions")); if (!c.empty) { snap = c; S.qSource = "cache"; } } catch {}
+  }
+  if (!snap) {
+    snap = await getDocsFromServer(collection(db, "questions"));
+    S.qSource = "server";
+    lsSet(K.cacheVer, { v: cat.version ?? null, r: rev });
+    S.qStale = false;
+  }
+  S.questions = snap.docs.map(d => normalizeQuestion(d.id, d.data()));
+  return S.questions;
+}
+/* Pending queue: count only (cheap aggregation) until the moderation page needs the list. */
+async function loadPendingCount(force) {
+  if (S.pendingCount != null && !force) return S.pendingCount;
+  try { const c = await getCountFromServer(collection(db, "users_questions")); S.pendingCount = c.data().count; }
+  catch { S.pendingCount = null; }
+  updateNav(); return S.pendingCount;
+}
+async function loadPending(force) {
+  if (S.pending && !force) return S.pending;
+  const snap = await getDocsFromServer(collection(db, "users_questions"));
+  S.pending = snap.docs.map(d => normalizeQuestion(d.id, d.data()));
+  S.pendingCount = S.pending.length; updateNav();
+  return S.pending;
+}
+/* Overview counters: aggregation queries, cached 10 minutes. */
+async function cachedCount(name) {
+  const all = lsGet(K.counts, {});
+  const hit = all[name];
+  if (hit && Date.now() - hit.t < 10 * 60 * 1000) return hit.n;
+  const s = await getCountFromServer(collection(db, name));
+  all[name] = { n: s.data().count, t: Date.now() }; lsSet(K.counts, all);
+  return s.data().count;
+}
+
+function issuesOf(q) {
+  const out = [];
+  if (q.type === "qcm") {
+    const ch = q.choices.map(c => c.trim()).filter(Boolean);
+    if (ch.length < 2) out.push("اختيارات ناقصة");
+    if (!q.correctAnswer || !q.correctAnswer.trim()) out.push("ما فماش إجابة صحيحة");
+    else if (!ch.includes(q.correctAnswer.trim())) out.push("الإجابة الصحيحة موش من الاختيارات");
+  } else if (!q.answer.trim()) out.push("إجابة فارغة");
+  if (S.series && !S.series.some(s => s.id === q.mousalsal)) out.push("مسلسل غير موجود");
+  if (q.legacy) out.push("صيغة قديمة");
+  return out;
+}
+
+/* ---------- storage ---------- */
+function pathFromUrl(url) {
+  if (!url) return null;
+  const m = String(url).match(/\/o\/([^?#]+)/);
+  if (m) { try { return decodeURIComponent(m[1]); } catch { return m[1]; } }
+  const g = String(url).match(/^gs:\/\/[^/]+\/(.+)$/);
+  return g ? g[1] : null;
+}
+/* path → { labels, url }. The URL from Firestore already carries the token,
+   so thumbnails of used images need no getDownloadURL call. */
+function usageMap() {
+  const map = new Map();
+  const add = (url, label) => { const p = pathFromUrl(url); if (!p) return; if (!map.has(p)) map.set(p, { labels: [], url }); map.get(p).labels.push(label); };
+  (S.questions || []).forEach(q => add(q.image, "سؤال"));
+  (S.pending || []).forEach(q => add(q.image, "سؤال في الانتظار"));
+  (S.series || []).forEach(s => add(s.image, "غلاف مسلسل"));
+  return map;
+}
+async function loadMedia(force) {
+  if (S.media && !force) return S.media;
+  const items = [];
+  async function walk(r, depth) {
+    const res = await listAll(r);
+    res.items.forEach(it => items.push({ path: it.fullPath, name: it.name, prefix: it.parent?.fullPath || "", url: null }));
+    if (depth < 4) for (const p of res.prefixes) await walk(p, depth + 1);
+  }
+  await walk(ref(storage, ""), 0);
+  S.media = items.sort((a, b) => b.name.localeCompare(a.name));
+  return S.media;
+}
+async function mediaUrl(m) {
+  if (m.url) return m.url;
+  const u = usageMap().get(m.path)?.url;
+  m.url = u || await getDownloadURL(ref(storage, m.path));
+  return m.url;
+}
+async function uploadFile(file, prefix = "images") {
+  if (!file.type.startsWith("image/")) throw new Error("الملف موش صورة: " + file.name);
+  const safe = file.name.replace(/[^\w.\-]+/g, "_").slice(-60);
+  const uid = (crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2)).slice(0, 8);
+  const path = `${prefix}/${Date.now()}_${uid}_${safe}`; // unique: never overwrites an existing object
+  const r = ref(storage, path);
+  await uploadBytes(r, file, { contentType: file.type, cacheControl: "public, max-age=31536000" });
+  const url = await getDownloadURL(r);
+  if (S.media) S.media.unshift({ path, name: r.name, prefix, url });
+  rememberImage(url);
+  return url;
+}
+
+/* ================= validation / canonical write shape ================= */
+function buildCanonical(f) {
+  const errors = [];
+  const question = (f.question || "").trim();
+  if (!question) errors.push("نص السؤال فارغ.");
+  if (!f.mousalsal) errors.push("اختار المسلسل.");
+  const isQcm = f.type === "qcm";
+  let answer, choices, correctAnswer;
+  if (isQcm) {
+    choices = (f.choices || []).map(c => (c || "").trim()).filter(Boolean);
+    if (choices.length < 2) errors.push("لازم على الأقل زوز اختيارات.");
+    if (new Set(choices).size !== choices.length) errors.push("فما اختيارات مكررة.");
+    correctAnswer = (f.correctAnswer || "").trim();
+    if (!correctAnswer) errors.push("حدد الإجابة الصحيحة.");
+    else if (!choices.includes(correctAnswer)) errors.push("الإجابة الصحيحة لازم تكون واحدة من الاختيارات.");
+    answer = correctAnswer;
+  } else {
+    answer = (f.answer || "").trim();
+    if (!answer) errors.push("الإجابة فارغة.");
+    choices = []; correctAnswer = null;
+  }
+  return {
+    errors,
+    data: {
+      question, answer, mousalsal: f.mousalsal || "", image: (f.image || "").trim(),
+      resolved: Number(f.resolved) || 0, user: f.user || "",
+      type: isQcm ? "qcm" : null, choices, correctAnswer
+    }
+  };
+}
+const sameCanonical = (q, data) => !q.legacy && JSON.stringify({
+  question: q.question, answer: q.answer, mousalsal: q.mousalsal, image: q.image, resolved: q.resolved, user: q.user,
+  type: q.type === "qcm" ? "qcm" : null, choices: q.type === "qcm" ? q.choices : [], correctAnswer: q.type === "qcm" ? q.correctAnswer : null
+}) === JSON.stringify(data);
+
+/* ================= navigation ================= */
+const ROUTES = [
+  ["overview", "نظرة عامة"], ["questions", "الأسئلة"], ["moderation", "المراجعة"], ["series", "المسلسلات"], ["generator", "مولّد الأسئلة"],
+  ["media", "مكتبة الصور"], ["suggestions", "الاقتراحات"], ["bans", "الحظر"], ["players", "اللاعبين"], ["challenges", "التحديات"]
+];
+function updateNav() {
+  const cur = (location.hash.replace("#/", "") || "overview").split("?")[0];
+  $("#nav").innerHTML = ROUTES.map(([k, l]) => {
+    const pill = k === "moderation" && S.pendingCount ? `<span class="pill">${S.pendingCount}</span>` : "";
+    return `<a href="#/${k}" class="${k === cur ? "active" : ""}"><span>${l}</span>${pill}</a>`;
+  }).join("");
+  $("#nav a.active")?.scrollIntoView({ block: "nearest", inline: "center" });
+}
+async function route() {
+  updateNav();
+  const name = (location.hash.replace("#/", "") || "overview").split("?")[0];
+  const view = $("#view");
+  view.innerHTML = `<div class="loading">جاري التحميل…</div>`;
+  try { await (VIEWS[name] || VIEWS.overview)(view); }
+  catch (e) { view.innerHTML = `<div class="err"><b>صار مشكل في التحميل.</b><br>${esc(errMsg(e))}</div>`; }
+  renderPubBar();
+}
+window.addEventListener("hashchange", () => { window.scrollTo(0, 0); route(); });
+
+const srcBadge = () => S.qSource === "cache" ? `<span class="src">الأسئلة من الذاكرة المحلية (بدون قراءات)</span>` : `<span class="src">الأسئلة محمّلة من السيرفر</span>`;
+
+/* ================= VIEWS ================= */
+const VIEWS = {};
+
+/* ---------- overview ---------- */
+VIEWS.overview = async (v) => {
+  await loadSeries(); const qs = await loadQuestions();
+  const cat = S.catalog;
+  const counters = [
+    ["users_questions", "في انتظار المراجعة", "#/moderation"], ["mosalsal", "مسلسلات", "#/series"], ["users", "لاعبين", "#/players"],
+    ["challenges", "تحديات", "#/challenges"], ["mousalsalatSuggestions", "اقتراحات", "#/suggestions"], ["bannedUsers", "محظورين", "#/bans"]
+  ];
+  const broken = qs.filter(q => issuesOf(q).some(i => i !== "صيغة قديمة")).length;
+  const legacy = qs.filter(q => q.legacy).length;
+  const noImg = qs.filter(q => !q.image).length;
+  const qcm = qs.filter(q => q.type === "qcm").length;
+  v.innerHTML = `<div class="head"><div><h2>نظرة عامة</h2><p>${srcBadge()}</p></div>
+    <div class="tools"><button class="btn" id="reload">تحديث من السيرفر</button></div></div>
+    ${!cat.exists ? `<div class="err" style="margin-top:0;margin-bottom:16px">الوثيقة meta/catalog ما لقيتهاش. أول نشر باش يصنعها (version = 1).</div>` : ""}
+    <div class="stats">
+      <div class="stat"><b>${cat.version ?? "—"}</b><span>النسخة المنشورة · ${cat.updatedAt ? fmtDate(cat.updatedAt) : "—"}</span></div>
+      <a class="stat" href="#/questions"><b>${qs.length}</b><span>أسئلة منشورة</span></a>
+      ${counters.map(([c, l, h]) => `<a class="stat" href="${h}"><b data-count="${c}">…</b><span>${l}</span></a>`).join("")}
+    </div>
+    <div class="section-t">جودة الأسئلة</div>
+    <div class="stats">
+      <a class="stat ${broken ? "warn" : ""}" href="#/questions" data-issue="broken"><b>${broken}</b><span>فيها مشكل في التصحيح</span></a>
+      <a class="stat ${legacy ? "warn" : ""}" href="#/questions" data-issue="legacy"><b>${legacy}</b><span>صيغة قديمة</span></a>
+      <a class="stat" href="#/questions" data-issue="noimage"><b>${noImg}</b><span>بدون صورة</span></a>
+      <a class="stat" href="#/questions"><b>${qcm} / ${qs.length - qcm}</b><span>اختيارات / كتابة</span></a>
+    </div>
+    <div class="section-t">الأسئلة حسب المسلسل</div><div class="panel"><div class="tbl-wrap"><table class="resp"><thead><tr><th>المسلسل</th><th>أسئلة منشورة</th></tr></thead><tbody>
+      ${S.series.map(s => ({ s, n: qs.filter(q => q.mousalsal === s.id).length })).sort((a, b) => b.n - a.n)
+        .map(r => `<tr><td data-label="المسلسل">${esc(r.s.name)}</td><td data-label="منشورة">${r.n}</td></tr>`).join("")}
+    </tbody></table></div></div>`;
+  $("#reload").onclick = async () => {
+    lsSet(K.counts, null); S.series = null; S.pendingCount = null;
+    try { await loadQuestions(true); await loadSeries(true); loadPendingCount(true); toast("تم التحديث"); } catch (e) { toast(errMsg(e), "bad"); }
+    route();
+  };
+  $$("[data-issue]", v).forEach(a => a.onclick = () => { S.qFilter = { series: "", type: "", issue: a.dataset.issue, text: "" }; S.qPage = 0; });
+  counters.forEach(async ([c]) => {
+    const el = v.querySelector(`[data-count="${c}"]`);
+    try { el.textContent = (await cachedCount(c)).toLocaleString("ar-TN"); }
+    catch (e) { el.textContent = "—"; el.title = errMsg(e); }
+  });
+};
+
+/* ---------- questions ---------- */
+const PAGE = 30;
+VIEWS.questions = async (v) => {
+  await loadSeries(); await loadQuestions();
+  v.innerHTML = `<div class="head"><div><h2>الأسئلة</h2><p id="qCount"></p><p>${srcBadge()}</p></div>
+    <div class="tools">
+      <button class="btn danger hidden" id="qBulk">حذف المحدد</button>
+      <button class="btn primary" id="qNew">+ سؤال جديد</button></div></div>
+    <div class="filters">
+      <input type="search" id="fText" placeholder="ابحث في السؤال أو الإجابة…" value="${esc(S.qFilter.text)}">
+      <select id="fSeries"><option value="">كل المسلسلات</option>${S.series.map(s => `<option value="${esc(s.id)}" ${S.qFilter.series === s.id ? "selected" : ""}>${esc(s.name)}</option>`).join("")}</select>
+      <select id="fType"><option value="">كل الأنواع</option><option value="qcm" ${S.qFilter.type === "qcm" ? "selected" : ""}>اختيارات</option><option value="kb" ${S.qFilter.type === "kb" ? "selected" : ""}>كتابة</option></select>
+      <select id="fIssue"><option value="">كل الحالات</option><option value="broken" ${S.qFilter.issue === "broken" ? "selected" : ""}>فيها مشكل</option><option value="legacy" ${S.qFilter.issue === "legacy" ? "selected" : ""}>صيغة قديمة</option><option value="noimage" ${S.qFilter.issue === "noimage" ? "selected" : ""}>بدون صورة</option><option value="ok" ${S.qFilter.issue === "ok" ? "selected" : ""}>سليمة</option></select>
+      <label class="chk"><input type="checkbox" id="fEmails" ${S.showEmails ? "checked" : ""}> الإيميلات</label>
+    </div>
+    <div class="panel"><div class="tbl-wrap" id="qTable"></div><div class="pager" id="qPager"></div></div>`;
+
+  const apply = () => {
+    const f = S.qFilter, t = norm(f.text);
+    return S.questions.filter(q => {
+      if (f.series && q.mousalsal !== f.series) return false;
+      if (f.type === "qcm" && q.type !== "qcm") return false;
+      if (f.type === "kb" && q.type === "qcm") return false;
+      if (f.issue) {
+        const iss = issuesOf(q);
+        if (f.issue === "broken" && !iss.some(i => i !== "صيغة قديمة")) return false;
+        if (f.issue === "legacy" && !q.legacy) return false;
+        if (f.issue === "noimage" && q.image) return false;
+        if (f.issue === "ok" && iss.length) return false;
+      }
+      if (t && !norm(q.question + " " + q.answer + " " + q.choices.join(" ")).includes(t)) return false;
+      return true;
+    });
+  };
+  const syncBulk = () => { const b = $("#qBulk"); if (!b) return; b.classList.toggle("hidden", !S.qSel.size); b.textContent = `حذف المحدد (${S.qSel.size})`; };
+  const draw = () => {
+    const list = apply();
+    const pages = Math.max(1, Math.ceil(list.length / PAGE));
+    if (S.qPage >= pages) S.qPage = pages - 1;
+    const slice = list.slice(S.qPage * PAGE, S.qPage * PAGE + PAGE);
+    $("#qCount").textContent = `${list.length} من ${S.questions.length} سؤال`;
+    syncBulk();
+    $("#qTable").innerHTML = slice.length ? `<table class="resp"><thead><tr>
+      <th><input type="checkbox" id="selAll" aria-label="تحديد الكل"></th><th>صورة</th><th>السؤال</th><th>المسلسل</th><th>النوع</th><th>الإجابة</th><th>الحالة</th><th>المرسل</th><th></th></tr></thead><tbody>
+      ${slice.map(q => {
+        const iss = issuesOf(q);
+        return `<tr data-id="${esc(q.id)}">
+          <td class="sel"><input type="checkbox" data-sel ${S.qSel.has(q.id) ? "checked" : ""} aria-label="تحديد"></td>
+          <td class="img">${thumbHTML(q.image)}</td>
+          <td class="q">${esc(q.question)}</td>
+          <td class="small" data-label="المسلسل">${esc(seriesName(q.mousalsal))}</td>
+          <td data-label="النوع">${q.type === "qcm" ? `<span class="tag qcm">اختيارات</span>` : `<span class="tag">كتابة</span>`}</td>
+          <td class="small" data-label="الإجابة">${esc(q.type === "qcm" ? (q.correctAnswer || "—") : q.answer)}</td>
+          <td data-label="الحالة"><span>${iss.length ? iss.map(i => `<span class="tag bad">${esc(i)}</span>`).join(" ") : `<span class="tag good">سليم</span>`}</span></td>
+          <td class="small ltr" data-label="المرسل">${esc(maskEmail(q.user))}</td>
+          <td class="actions"><button class="btn sm" data-edit>تعديل</button> <button class="btn sm danger" data-del>حذف</button></td></tr>`;
+      }).join("")}</tbody></table>` : `<div class="empty-state">ما فماش أسئلة تطابق الفلتر.</div>`;
+    $("#qPager").innerHTML = pages > 1 ? `<button class="btn sm" id="pPrev" ${S.qPage === 0 ? "disabled" : ""}>السابق</button>
+      <span class="small muted">صفحة ${S.qPage + 1} من ${pages}</span>
+      <button class="btn sm" id="pNext" ${S.qPage >= pages - 1 ? "disabled" : ""}>التالي</button>` : "";
+    $("#pPrev")?.addEventListener("click", () => { S.qPage--; draw(); $("#qTable").scrollIntoView({ block: "start" }); });
+    $("#pNext")?.addEventListener("click", () => { S.qPage++; draw(); $("#qTable").scrollIntoView({ block: "start" }); });
+    $("#selAll")?.addEventListener("change", e => { slice.forEach(q => e.target.checked ? S.qSel.add(q.id) : S.qSel.delete(q.id)); draw(); });
+    $$("#qTable tr[data-id]").forEach(tr => {
+      const id = tr.dataset.id, q = S.questions.find(x => x.id === id);
+      tr.querySelector("[data-sel]").onchange = e => { e.target.checked ? S.qSel.add(id) : S.qSel.delete(id); syncBulk(); };
+      tr.querySelector("[data-edit]").onclick = () => openEditor({ mode: "edit", q, onDone: draw });
+      tr.querySelector("[data-del]").onclick = async () => {
+        if (!await confirmBox(`حذف السؤال نهائياً؟\n«${q.question}»`, "حذف")) return;
+        try { await deleteDoc(doc(db, "questions", id)); S.questions = S.questions.filter(x => x.id !== id); S.qSel.delete(id); markDirty(); toast("تم الحذف", "good"); draw(); }
+        catch (e) { toast(errMsg(e), "bad"); }
+      };
+    });
+  };
+  let deb;
+  $("#fText").oninput = e => { clearTimeout(deb); deb = setTimeout(() => { S.qFilter.text = e.target.value; S.qPage = 0; draw(); }, 200); };
+  $("#fSeries").onchange = e => { S.qFilter.series = e.target.value; S.qPage = 0; draw(); };
+  $("#fType").onchange = e => { S.qFilter.type = e.target.value; S.qPage = 0; draw(); };
+  $("#fIssue").onchange = e => { S.qFilter.issue = e.target.value; S.qPage = 0; draw(); };
+  $("#fEmails").onchange = e => { S.showEmails = e.target.checked; draw(); };
+  $("#qNew").onclick = () => openEditor({ mode: "create", q: { mousalsal: S.qFilter.series }, onDone: draw });
+  $("#qBulk").onclick = async () => {
+    const ids = [...S.qSel];
+    if (!await confirmBox(`حذف ${ids.length} سؤال نهائياً؟ العملية ما ترجعش.`, "حذف الكل")) return;
+    try {
+      for (let i = 0; i < ids.length; i += 400) {
+        const b = writeBatch(db); ids.slice(i, i + 400).forEach(id => b.delete(doc(db, "questions", id))); await b.commit();
+      }
+      S.questions = S.questions.filter(q => !S.qSel.has(q.id)); S.qSel.clear(); markDirty(ids.length); toast("تم الحذف", "good"); draw();
+    } catch (e) { toast(errMsg(e), "bad"); }
+  };
+  draw();
+};
+
+/* ---------- question editor (create / edit / approve) ---------- */
+/* ================= quick tray: drag & drop =================
+   Computer: drag an image, a question or a name onto the zone that lights up,
+   or drop image files straight from the computer. Ctrl+V pastes a copied image.
+   Phone: tap an item and it goes to the right place (touch screens have no reliable drag). */
+const TRAY_KEYS = { recent: "mq:" + firebaseConfig.projectId + ":recentImgs", pins: "mq:" + firebaseConfig.projectId + ":pinnedTexts", tab: "mq:" + firebaseConfig.projectId + ":trayTab" };
+const MQ_IMG = "application/x-mq-image", MQ_TXT = "application/x-mq-text", MQ_NAME = "application/x-mq-name", MQ_PHOTO = "application/x-mq-photo";
+function rememberImage(url) {
+  if (!url) return;
+  lsSet(TRAY_KEYS.recent, [url, ...lsGet(TRAY_KEYS.recent, []).filter(u => u !== url)].slice(0, 24));
+}
+const imgUseCount = () => { const m = new Map(); (S.questions || []).forEach(q => q.image && m.set(q.image, (m.get(q.image) || 0) + 1)); return m; };
+function trayImages(seriesId) {
+  const uses = imgUseCount(), seen = new Set(), series = [], recent = [];
+  if (seriesId) {
+    const m = new Map();
+    (S.questions || []).forEach(q => { if (q.mousalsal === seriesId && q.image) m.set(q.image, uses.get(q.image) || 0); });
+    (S.chars || []).forEach(c => { if (c.mousalsal === seriesId) c.photos.forEach(u => { if (!m.has(u)) m.set(u, uses.get(u) || 0); }); });
+    const cover = S.series.find(s => s.id === seriesId)?.image; if (cover && !m.has(cover)) m.set(cover, uses.get(cover) || 0);
+    [...m.entries()].sort((a, b) => b[1] - a[1]).slice(0, 30).forEach(([url, n]) => { seen.add(url); series.push({ url, n }); });
+  }
+  lsGet(TRAY_KEYS.recent, []).forEach(url => { if (!seen.has(url)) recent.push({ url, n: uses.get(url) || 0 }); });
+  return { series, recent: recent.slice(0, 16) };
+}
+function trayTexts() {
+  const pins = lsGet(TRAY_KEYS.pins, []), pinK = new Set(pins.map(norm)), m = new Map();
+  (S.questions || []).forEach(q => {
+    const t = q.question.trim(); if (!t || t.length > 90) return;
+    const k = norm(t); const e = m.get(k) || { text: t, n: 0 }; e.n++; m.set(k, e);
+  });
+  const freq = [...m.values()].filter(e => e.n >= 2 && !pinK.has(norm(e.text))).sort((a, b) => b.n - a.n).slice(0, 15);
+  return { pins: pins.map(t => ({ text: t, n: m.get(norm(t))?.n || 0 })), freq };
+}
+function trayNames(seriesId) {
+  if (!seriesId) return { chars: [], answers: [] };
+  const chars = (S.chars || []).filter(c => c.mousalsal === seriesId).map(c => ({ text: c.name, sub: c.actor }));
+  const known = new Set(chars.map(c => norm(c.text))), m = new Map();
+  (S.questions || []).forEach(q => {
+    if (q.mousalsal !== seriesId) return;
+    const vals = q.type === "qcm" ? q.choices : [q.answer];
+    vals.forEach(v => { v = String(v || "").trim(); if (!v || v.length > 40) return; const k = norm(v); if (known.has(k)) return; const e = m.get(k) || { text: v, n: 0 }; e.n++; m.set(k, e); });
+  });
+  return { chars, answers: [...m.values()].sort((a, b) => b.n - a.n).slice(0, 24) };
+}
+
+/* body classes light up matching drop zones while something is dragged */
+function beginDrag(kind) { document.body.classList.add("drag-" + kind); }
+function endDrag() { document.body.classList.remove("drag-img", "drag-txt", "drag-name", "drag-file"); $$(".dz.over").forEach(z => z.classList.remove("over")); }
+(() => {
+  let depth = 0; const hasFiles = e => [...(e.dataTransfer?.types || [])].includes("Files");
+  window.addEventListener("dragenter", e => { if (hasFiles(e)) { depth++; beginDrag("file"); } });
+  window.addEventListener("dragleave", e => { if (hasFiles(e) && --depth <= 0) { depth = 0; endDrag(); } });
+  window.addEventListener("dragover", e => { if (hasFiles(e)) e.preventDefault(); });
+  // a file dropped outside any zone must not make the browser open it (and lose the open form)
+  window.addEventListener("drop", e => { depth = 0; endDrag(); if (hasFiles(e) && !e.defaultPrevented) e.preventDefault(); });
+  window.addEventListener("dragend", endDrag);
+})();
+function pulse(el) { el.classList.remove("pop"); void el.offsetWidth; el.classList.add("pop"); }
+/* h: { onImage(url), onFiles(files), onText(text), onName(text) } */
+function dropZone(el, h) {
+  el.classList.add("dz");
+  if (h.onImage || h.onFiles) el.classList.add("dz-img");
+  if (h.onText) el.classList.add("dz-txt");
+  if (h.onName) el.classList.add("dz-name");
+  const kind = e => {
+    const t = [...(e.dataTransfer?.types || [])];
+    if (h.onImage && t.includes(MQ_IMG)) return "img";
+    if (h.onText && t.includes(MQ_TXT)) return "txt";
+    if (h.onName && t.includes(MQ_NAME)) return "name";
+    if (h.onFiles && t.includes("Files")) return "file";
+    return null;
+  };
+  let depth = 0;
+  el.addEventListener("dragenter", e => { if (!kind(e)) return; e.preventDefault(); depth++; el.classList.add("over"); });
+  el.addEventListener("dragover", e => { if (!kind(e)) return; e.preventDefault(); e.dataTransfer.dropEffect = "copy"; });
+  el.addEventListener("dragleave", () => { if (--depth <= 0) { depth = 0; el.classList.remove("over"); } });
+  el.addEventListener("drop", e => {
+    const k = kind(e); if (!k) return;
+    e.preventDefault(); e.stopPropagation(); depth = 0; endDrag();
+    const dt = e.dataTransfer;
+    if (k === "img") h.onImage(dt.getData(MQ_IMG));
+    else if (k === "txt") h.onText(dt.getData(MQ_TXT));
+    else if (k === "name") h.onName(dt.getData(MQ_NAME));
+    else { const files = [...dt.files].filter(f => f.type.startsWith("image/")); if (files.length) h.onFiles(files); else toast("الملف موش صورة.", "bad"); }
+    pulse(el);
+  });
+}
+function draggableItem(el, type, value, kind) {
+  el.draggable = true;
+  el.addEventListener("dragstart", e => { e.dataTransfer.setData(type, value); e.dataTransfer.effectAllowed = "copy"; el.classList.add("dragging"); beginDrag(kind); });
+  el.addEventListener("dragend", () => { el.classList.remove("dragging"); endDrag(); });
+}
+/* Ctrl+V of a copied image inside a dialog → upload */
+function pasteImages(d, onFiles) {
+  d.onpaste = e => { // property, not addEventListener: the same <dialog> is reused by every modal
+    const files = [...(e.clipboardData?.files || [])].filter(f => f.type.startsWith("image/"));
+    if (!files.length) return;
+    e.preventDefault(); onFiles(files);
+  };
+}
+
+/* opts: { getSeries(), getUsed() → [urls], onImage(url), onText?(text), onName?(text) } */
+function mountTray(host, opts) {
+  const tabs = [["img", "صور"], ...(opts.onText ? [["txt", "أسئلة"]] : []), ...(opts.onName ? [["name", "أسماء"]] : [])];
+  let tab = lsGet(TRAY_KEYS.tab, "img"); if (!tabs.some(([k]) => k === tab)) tab = "img";
+  host.classList.add("tray");
+  if (matchMedia("(max-width:860px)").matches && lsGet(TRAY_KEYS.tab + ":folded", false)) host.classList.add("folded");
+  const imgHTML = it => `<button type="button" class="tray-img ${opts.getUsed().includes(it.url) ? "used" : ""}" data-img="${esc(it.url)}" title="${it.n ? `مستعملة في ${it.n} سؤال` : "موش مستعملة في حتى سؤال"}"><img src="${esc(it.url)}" alt="" loading="lazy" draggable="false">${it.n ? `<span class="n">${it.n}</span>` : ""}</button>`;
+  const chipHTML = (it, attr, pin) => `<div class="tray-chip" tabindex="0" role="button" ${attr}="${esc(it.text)}"><span class="t">${esc(it.text)}</span>${it.sub ? `<span class="c">${esc(it.sub)}</span>` : it.n ? `<span class="c">×${it.n}</span>` : ""}${pin != null ? `<button type="button" class="pin ${pin ? "on" : ""}" data-pin="${esc(it.text)}" aria-label="${pin ? "نحّي من المفضّلة" : "زيد للمفضّلة"}">${pin ? "★" : "☆"}</button>` : ""}</div>`;
+  const draw = () => {
+    const sid = opts.getSeries();
+    let body = "";
+    if (tab === "img") {
+      const { series, recent } = trayImages(sid);
+      body = (sid ? `<div class="tray-sec"><span>صور المسلسل هذا</span><span>${series.length}</span></div>${series.length ? `<div class="tray-imgs">${series.map(imgHTML).join("")}</div>` : `<div class="tray-empty">ما فماش صور مستعملة في المسلسل هذا.</div>`}`
+        : `<div class="tray-empty">اختار المسلسل باش تظهر صورو.</div>`)
+        + `<div class="tray-sec"><span>آخر الصور</span><span>${recent.length}</span></div>${recent.length ? `<div class="tray-imgs">${recent.map(imgHTML).join("")}</div>` : `<div class="tray-empty">الصور إلّي ترفعها ولا تستعملها تظهر هنا.</div>`}`;
+    } else if (tab === "txt") {
+      const { pins, freq } = trayTexts();
+      body = `<div class="tray-sec"><span>المفضّلة</span></div>${pins.length ? `<div class="tray-list">${pins.map(p => chipHTML(p, "data-txt", true)).join("")}</div>` : `<div class="tray-empty">انقر ☆ على سؤال باش تثبتو هنا.</div>`}
+        <div class="tray-sec"><span>الأكثر استعمالاً</span></div>${freq.length ? `<div class="tray-list">${freq.map(p => chipHTML(p, "data-txt", false)).join("")}</div>` : `<div class="tray-empty">ما فماش أسئلة متكررة بعد.</div>`}`;
+    } else {
+      const { chars, answers } = trayNames(sid);
+      body = !sid ? `<div class="tray-empty">اختار المسلسل باش تظهر أسماء شخصياتو.</div>`
+        : `<div class="tray-sec"><span>شخصيات المسلسل</span><span>${chars.length}</span></div>${chars.length ? `<div class="tray-list">${chars.map(p => chipHTML(p, "data-name")).join("")}</div>` : `<div class="tray-empty">زيد شخصيات من «مولّد الأسئلة».</div>`}
+          <div class="tray-sec"><span>إجابات مستعملة</span><span>${answers.length}</span></div>${answers.length ? `<div class="tray-list">${answers.map(p => chipHTML(p, "data-name")).join("")}</div>` : `<div class="tray-empty">ما فماش.</div>`}`;
+    }
+    host.innerHTML = `<div class="tray-h"><b>صندوق سريع</b><button type="button" class="tray-fold" data-fold>${host.classList.contains("folded") ? "افتح ▾" : "سكّر ▴"}</button></div>
+      <div class="tray-body"><p class="tray-hint"><span class="mouse">اسحب للبلاصة إلّي تضوي، ولا انقر.</span><span class="touch">انقر على أي حاجة باش تتحط في بلاصتها.</span></p>
+      ${tabs.length > 1 ? `<div class="tray-tabs" role="tablist">${tabs.map(([k, l]) => `<button type="button" role="tab" aria-selected="${k === tab}" class="${k === tab ? "on" : ""}" data-tab="${k}">${l}</button>`).join("")}</div>` : ""}
+      ${body}</div>`;
+    $("[data-fold]", host).onclick = () => { host.classList.toggle("folded"); lsSet(TRAY_KEYS.tab + ":folded", host.classList.contains("folded")); draw(); };
+    $$("[data-tab]", host).forEach(b => b.onclick = () => { tab = b.dataset.tab; lsSet(TRAY_KEYS.tab, tab); draw(); });
+    $$("[data-img]", host).forEach(b => { draggableItem(b, MQ_IMG, b.dataset.img, "img"); b.onclick = () => opts.onImage(b.dataset.img); });
+    $$("[data-txt]", host).forEach(c => {
+      draggableItem(c, MQ_TXT, c.dataset.txt, "txt");
+      const go = e => { if (!e.target.closest("[data-pin]")) opts.onText(c.dataset.txt); };
+      c.onclick = go; c.onkeydown = e => { if (e.key === "Enter") go(e); };
+    });
+    $$("[data-pin]", host).forEach(b => b.onclick = e => {
+      e.stopPropagation(); const t = b.dataset.pin, pins = lsGet(TRAY_KEYS.pins, []);
+      lsSet(TRAY_KEYS.pins, pins.some(p => norm(p) === norm(t)) ? pins.filter(p => norm(p) !== norm(t)) : [t, ...pins].slice(0, 20)); draw();
+    });
+    $$("[data-name]", host).forEach(c => {
+      draggableItem(c, MQ_NAME, c.dataset.name, "name");
+      c.onclick = () => opts.onName(c.dataset.name); c.onkeydown = e => { if (e.key === "Enter") opts.onName(c.dataset.name); };
+    });
+  };
+  draw();
+  return { refresh: draw };
+}
+/* upload several files one by one, reporting progress */
+async function uploadMany(files, onEach) {
+  const ok = [];
+  for (let i = 0; i < files.length; i++) {
+    toast(files.length > 1 ? `جاري الرفع ${i + 1}/${files.length}…` : "جاري الرفع…");
+    try { const u = await uploadFile(files[i], "images"); ok.push(u); onEach?.(u); } catch (e) { toast(errMsg(e), "bad"); }
+  }
+  if (ok.length) toast(ok.length > 1 ? `تم رفع ${ok.length} صور` : "تم رفع الصورة", "good");
+  return ok;
+}
+
+function openEditor({ mode, q = {}, onDone }) {
+  const titles = { create: "سؤال جديد", edit: "تعديل السؤال", approve: "مراجعة وقبول السؤال" };
+  const saveLabels = { create: "إضافة", edit: "حفظ", approve: "قبول" };
+  const st = {
+    type: q.type === "qcm" ? "qcm" : "kb",
+    choices: q.type === "qcm" && q.choices?.length ? [...q.choices] : ["", "", "", ""],
+    correct: q.correctAnswer ?? null,
+    image: q.image || ""
+  };
+  const d = openModal(`
+    <div class="dlg-h"><h3>${titles[mode]}</h3><button class="x" data-close aria-label="إغلاق">×</button></div>
+    <div class="dlg-b"><div class="ed-grid"><div class="ed-form">
+      ${q.legacy ? `<div class="note">هذا السؤال بالصيغة القديمة. الحفظ يكتبه بالصيغة الصحيحة.</div>` : ""}
+      ${mode === "approve" ? `<div class="note">مرسل من: <span class="ltr">${esc(maskEmail(q.user))}</span>. القبول يضيفو للأسئلة ويحذفو من الانتظار في نفس العملية. اللاعبين يشوفوه بعد النشر.</div>` : ""}
+      <label class="f ed-top" for="eSeries">المسلسل</label>
+      <select id="eSeries" class="ed-top"><option value="">اختار مسلسل…</option>${S.series.map(s => `<option value="${esc(s.id)}" ${q.mousalsal === s.id ? "selected" : ""}>${esc(s.name)}</option>`).join("")}</select>
+      <label class="f">نوع السؤال</label>
+      <div class="seg" id="eType"><button type="button" data-t="kb">كتابة</button><button type="button" data-t="qcm">اختيارات (QCM)</button></div>
+      <label class="f" for="eQ">السؤال</label>
+      <textarea id="eQ" rows="2">${esc(q.question || "")}</textarea>
+      <div id="eKb"><label class="f" for="eA">الإجابة</label><input type="text" id="eA" value="${esc(q.answer || "")}">
+        <div class="small muted" style="margin-top:4px">التصحيح يقارن الإجابة كاملة (بلا فرق بين الحروف الكبيرة والصغيرة).</div></div>
+      <div id="eQcm"><label class="f">الاختيارات (اختار الصحيحة بالدائرة)</label><div id="eChoices"></div>
+        <button type="button" class="btn sm" id="eAddC">+ اختيار</button>
+        <div class="small muted" style="margin-top:4px">في QCM النص لازم يكون نفسو بالضبط.</div></div>
+      <label class="f">الصورة</label>
+      <div id="eImg"></div>
+      <input type="url" id="eImgUrl" placeholder="رابط الصورة" value="${esc(st.image)}" class="ltr" style="margin-top:8px">
+      <div class="img-tools">
+        <button type="button" class="btn sm" id="ePick">من المكتبة</button>
+        <label class="btn sm">رفع صورة<input type="file" accept="image/*" id="eUp" hidden></label>
+        <button type="button" class="btn sm danger" id="eNoImg">بدون صورة</button>
+      </div>
+      <div class="dz-note">تنجم تسحب صورة من الجهاز ولا من الصندوق للشاشة، ولا تلصقها بـ Ctrl+V.</div>
+      <div id="eErr"></div>
+    </div><div id="eTray" role="complementary" aria-label="صندوق سريع"></div></div></div>
+    <div class="dlg-f"><button class="btn ${mode === "approve" ? "ok" : "primary"}" id="eSave">${saveLabels[mode]}</button><button class="btn" data-close>إلغاء</button></div>`);
+
+  d.classList.add("tray-on");
+  const isCorrect = c => st.correct != null && c.trim() && c.trim() === String(st.correct).trim();
+  const drawType = () => {
+    $$("#eType button", d).forEach(b => b.classList.toggle("on", b.dataset.t === st.type));
+    $("#eKb", d).classList.toggle("hidden", st.type !== "kb");
+    $("#eQcm", d).classList.toggle("hidden", st.type !== "qcm");
+  };
+  const drawChoices = () => {
+    $("#eChoices", d).innerHTML = st.choices.map((c, i) => `
+      <div class="choice ${isCorrect(c) ? "correct" : ""}">
+        <input type="radio" name="corr" data-i="${i}" ${isCorrect(c) ? "checked" : ""} aria-label="الإجابة الصحيحة">
+        <input type="text" data-i="${i}" value="${esc(c)}" placeholder="اختيار ${i + 1}">
+        <button type="button" class="btn sm danger" data-rm="${i}" ${st.choices.length <= 2 ? "disabled" : ""} aria-label="حذف الاختيار">×</button></div>`).join("");
+    $$('#eChoices input[type=text]', d).forEach(inp => inp.oninput = e => {
+      const i = +e.target.dataset.i, was = isCorrect(st.choices[i]);
+      st.choices[i] = e.target.value; if (was) st.correct = e.target.value;
+    });
+    $$('#eChoices input[type=radio]', d).forEach(r => r.onchange = e => { st.correct = st.choices[+e.target.dataset.i]; drawChoices(); });
+    $$('#eChoices [data-rm]', d).forEach(b => b.onclick = () => { const i = +b.dataset.rm; if (isCorrect(st.choices[i])) st.correct = null; st.choices.splice(i, 1); drawChoices(); });
+    $$('#eChoices input[type=text]', d).forEach(inp => dropZone(inp, { onName: t => setChoice(+inp.dataset.i, t) }));
+    $("#eAddC", d).disabled = st.choices.length >= 6;
+  };
+  const drawImg = () => { $("#eImg", d).innerHTML = screenHTML(st.image); $("#eImgUrl", d).value = st.image; tray?.refresh(); };
+  const setImage = url => { st.image = url; drawImg(); pulse($("#eImg", d)); };
+  const setChoice = (i, t) => {
+    if (st.choices.some((c, j) => j !== i && norm(c) === norm(t))) { toast("الاختيار هذا موجود.", "bad"); return; }
+    const was = isCorrect(st.choices[i]); st.choices[i] = t; if (was) st.correct = t; drawChoices();
+  };
+  const placeName = t => { // tap: first empty choice, or the typed answer
+    if (st.type === "kb") { $("#eA", d).value = t; pulse($("#eA", d)); return; }
+    let i = st.choices.findIndex(c => !c.trim());
+    if (i < 0) { if (st.choices.length >= 6) { toast("الاختيارات كاملين. اسحب الاسم على اختيار باش تبدّلو.", "bad"); return; } st.choices.push(""); i = st.choices.length - 1; }
+    setChoice(i, t); pulse($$("#eChoices input[type=text]", d)[i]);
+  };
+  const setText = t => { const ta = $("#eQ", d); ta.value = t; ta.focus(); pulse(ta); };
+  const uploadTo = async files => { const [u] = await uploadMany(files.slice(0, 1)); if (u) setImage(u); if (files.length > 1) toast("أخذت أول صورة برك.", ""); };
+  let tray = null;
+
+  $$("#eType button", d).forEach(b => b.onclick = () => {
+    st.type = b.dataset.t;
+    if (st.type === "qcm" && !st.choices.some(c => c.trim()) && $("#eA", d).value.trim()) { st.choices[0] = $("#eA", d).value.trim(); st.correct = st.choices[0]; drawChoices(); }
+    drawType();
+  });
+  $("#eAddC", d).onclick = () => { st.choices.push(""); drawChoices(); };
+  $("#eImgUrl", d).onchange = e => { st.image = e.target.value.trim(); drawImg(); };
+  $("#eNoImg", d).onclick = () => { st.image = ""; drawImg(); };
+  $("#ePick", d).onclick = async () => { const url = await openMediaPicker(); if (url) { rememberImage(url); setImage(url); } };
+  $("#eUp", d).onchange = async e => { const files = [...e.target.files]; e.target.value = ""; if (files.length) uploadTo(files); };
+  dropZone($("#eImg", d), { onImage: setImage, onFiles: uploadTo });
+  dropZone($("#eQ", d), { onText: setText });
+  dropZone($("#eA", d), { onName: t => { $("#eA", d).value = t; } });
+  pasteImages(d, uploadTo);
+  tray = mountTray($("#eTray", d), { getSeries: () => $("#eSeries", d).value, getUsed: () => [st.image], onImage: setImage, onText: setText, onName: placeName });
+  $("#eSeries", d).addEventListener("change", () => tray.refresh());
+  if (!S.chars) loadChars().then(() => tray.refresh()).catch(() => { S.chars = S.chars || []; });
+  $("#eSave", d).onclick = async () => {
+    const { errors, data } = buildCanonical({
+      question: $("#eQ", d).value, mousalsal: $("#eSeries", d).value, type: st.type,
+      answer: $("#eA", d).value, choices: st.choices, correctAnswer: st.correct,
+      image: st.image, resolved: q.resolved ?? 0, user: q.user ?? ""
+    });
+    if (errors.length) { $("#eErr", d).innerHTML = `<div class="form-errors"><ul>${errors.map(e => `<li>${esc(e)}</li>`).join("")}</ul></div>`; return; }
+    if (mode === "edit" && sameCanonical(q, data)) { d.close(); toast("ما تبدّل شي، ما تكتبش حتى حاجة."); return; } // no wasted write
+    rememberImage(data.image);
+    const btn = $("#eSave", d); btn.disabled = true;
+    try {
+      if (mode === "create") {
+        const r = await addDoc(collection(db, "questions"), data);
+        S.questions?.unshift(normalizeQuestion(r.id, data));
+        toast("تمت الإضافة. ما تنساش النشر.", "good");
+      } else if (mode === "edit") {
+        await setDoc(doc(db, "questions", q.id), data); // full canonical rewrite (drops legacy snake fields)
+        const i = S.questions.findIndex(x => x.id === q.id); if (i >= 0) S.questions[i] = normalizeQuestion(q.id, data);
+        toast("تم الحفظ. ما تنساش النشر.", "good");
+      } else if (mode === "approve") {
+        const b = writeBatch(db); const newRef = doc(collection(db, "questions"));
+        b.set(newRef, data); b.delete(doc(db, "users_questions", q.id)); await b.commit();
+        S.questions?.unshift(normalizeQuestion(newRef.id, data));
+        S.pending = S.pending.filter(x => x.id !== q.id); S.pendingCount = S.pending.length; updateNav();
+        toast("تم القبول. ما تنساش النشر.", "good");
+      }
+      markDirty();
+      d.close(); onDone?.();
+    } catch (e) { btn.disabled = false; toast(errMsg(e), "bad"); }
+  };
+  drawType(); drawChoices(); drawImg();
+}
+
+/* ---------- moderation ---------- */
+VIEWS.moderation = async (v) => {
+  await loadSeries(); await loadPending();
+  const draw = () => {
+    const filter = $("#mSeries")?.value || "";
+    const list = S.pending.filter(q => !filter || q.mousalsal === filter);
+    $("#mHead").textContent = `${S.pending.length} سؤال من اللاعبين في الانتظار`;
+    $("#mList").innerHTML = list.length ? list.map(q => `
+      <div class="panel mod" data-id="${esc(q.id)}">
+        ${screenHTML(q.image)}
+        <div><h4>${esc(q.question)}</h4>
+          <div class="small muted">${esc(seriesName(q.mousalsal))} · <span class="ltr">${esc(maskEmail(q.user))}</span></div>
+          <div style="margin-top:8px">الإجابة: <span class="ans">${esc(q.type === "qcm" ? (q.correctAnswer || "—") : q.answer || "—")}</span></div>
+          ${q.type === "qcm" ? `<div class="small muted" style="margin-top:4px">الاختيارات: ${q.choices.map(esc).join("، ")}</div>` : ""}
+        </div>
+        <div class="acts"><button class="btn ok" data-ap>مراجعة وقبول</button><button class="btn danger" data-rj>رفض</button></div>
+      </div>`).join("") : `<div class="panel empty-state">ما فماش أسئلة في الانتظار.</div>`;
+    $$("#mList [data-id]").forEach(card => {
+      const q = S.pending.find(x => x.id === card.dataset.id);
+      card.querySelector("[data-ap]").onclick = () => openEditor({ mode: "approve", q, onDone: draw });
+      card.querySelector("[data-rj]").onclick = async () => {
+        if (!await confirmBox(`رفض السؤال وحذفو من الانتظار؟\n«${q.question}»`, "رفض")) return;
+        try { await deleteDoc(doc(db, "users_questions", q.id)); S.pending = S.pending.filter(x => x.id !== q.id); S.pendingCount = S.pending.length; updateNav(); toast("تم الرفض"); draw(); }
+        catch (e) { toast(errMsg(e), "bad"); }
+      };
+    });
+  };
+  v.innerHTML = `<div class="head"><div><h2>المراجعة</h2><p id="mHead"></p><p class="src">الرفض ما يحتاجش نشر. القبول يحتاج.</p></div>
+    <div class="tools"><button class="btn" id="mExport">تصدير JSON</button><button class="btn" id="mReload">تحديث</button></div></div>
+    <div class="filters"><select id="mSeries"><option value="">كل المسلسلات</option>${S.series.map(s => {
+      const n = S.pending.filter(q => q.mousalsal === s.id).length;
+      return n ? `<option value="${esc(s.id)}">${esc(s.name)} (${n})</option>` : "";
+    }).join("")}</select>
+    <label class="chk"><input type="checkbox" id="mEmails" ${S.showEmails ? "checked" : ""}> الإيميلات</label></div>
+    <div class="mod-list" id="mList"></div>`;
+  $("#mSeries").onchange = draw;
+  $("#mEmails").onchange = e => { S.showEmails = e.target.checked; draw(); };
+  $("#mReload").onclick = async () => { try { await loadPending(true); } catch (e) { toast(errMsg(e), "bad"); } route(); };
+  $("#mExport").onclick = () => downloadJSON(`users_questions_${new Date().toISOString().slice(0, 10)}.json`, S.pending);
+  draw();
+};
+
+/* ---------- series ---------- */
+VIEWS.series = async (v) => {
+  await loadSeries(); await loadQuestions();
+  const draw = () => {
+    $("#sCount").textContent = `${S.series.length} مسلسل`;
+    $("#sTable").innerHTML = S.series.length ? `<table class="resp"><thead><tr><th>الغلاف</th><th>الاسم</th><th>أسئلة منشورة</th><th>المعرف</th><th></th></tr></thead><tbody>
+      ${S.series.map(s => {
+        const pub = S.questions.filter(q => q.mousalsal === s.id).length;
+        return `<tr data-id="${esc(s.id)}"><td class="img">${thumbHTML(s.image)}</td><td class="q"><b>${esc(s.name)}</b></td><td data-label="منشورة">${pub}</td>
+          <td class="small muted ltr" data-label="المعرف">${esc(s.id)}</td>
+          <td class="actions"><a class="btn sm" href="#/questions" data-qs>الأسئلة</a> <button class="btn sm" data-edit>تعديل</button> <button class="btn sm danger" data-del>حذف</button></td></tr>`;
+      }).join("")}</tbody></table>` : `<div class="empty-state">ما فماش مسلسلات.</div>`;
+    $$("#sTable tr[data-id]").forEach(tr => {
+      const s = S.series.find(x => x.id === tr.dataset.id);
+      tr.querySelector("[data-qs]").onclick = () => { S.qFilter = { series: s.id, type: "", issue: "", text: "" }; S.qPage = 0; };
+      tr.querySelector("[data-edit]").onclick = () => seriesEditor(s, draw);
+      tr.querySelector("[data-del]").onclick = async () => {
+        const pub = S.questions.filter(q => q.mousalsal === s.id).length;
+        let pen = 0;
+        try { pen = (await getCountFromServer(query(collection(db, "users_questions"), where("mousalsal", "==", s.id)))).data().count; }
+        catch (e) { toast(errMsg(e), "bad"); return; }
+        if (pub || pen) { toast(`ما ينجمش يتحذف: مربوط بـ ${pub} سؤال منشور و ${pen} في الانتظار.`, "bad"); return; }
+        if (!await confirmBox(`حذف المسلسل «${s.name}»؟`, "حذف")) return;
+        try { await deleteDoc(doc(db, "mosalsal", s.id)); S.series = S.series.filter(x => x.id !== s.id); toast("تم الحذف", "good"); draw(); }
+        catch (e) { toast(errMsg(e), "bad"); }
+      };
+    });
+  };
+  v.innerHTML = `<div class="head"><div><h2>المسلسلات</h2><p id="sCount"></p></div>
+    <div class="tools"><button class="btn" id="sReload">تحديث</button><button class="btn primary" id="sNew">+ مسلسل جديد</button></div></div>
+    <div class="note">تغيير اسم ولا غلاف مسلسل يوصل للاعبين حسب طريقة التطبيق في تخزين المسلسلات. إذا التطبيق يخزّنهم مع الأسئلة، انشر بعد التعديل.</div>
+    <div class="panel"><div class="tbl-wrap" id="sTable"></div></div>`;
+  $("#sNew").onclick = () => seriesEditor(null, draw);
+  $("#sReload").onclick = async () => { try { await loadSeries(true); } catch (e) { toast(errMsg(e), "bad"); } draw(); };
+  draw();
+};
+function seriesEditor(s, onDone) {
+  let image = s?.image || "";
+  const d = openModal(`<div class="dlg-h"><h3>${s ? "تعديل المسلسل" : "مسلسل جديد"}</h3><button class="x" data-close aria-label="إغلاق">×</button></div>
+    <div class="dlg-b"><label class="f" for="sName">الاسم</label><input type="text" id="sName" value="${esc(s?.name || "")}">
+      <label class="f">صورة الغلاف</label><div id="sImg"></div>
+      <input type="url" id="sUrl" class="ltr" placeholder="رابط الصورة" value="${esc(image)}" style="margin-top:8px">
+      <div class="img-tools"><button type="button" class="btn sm" id="sPick">من المكتبة</button>
+        <label class="btn sm">رفع صورة<input type="file" accept="image/*" id="sUp" hidden></label></div>
+      <div id="sErr"></div></div>
+    <div class="dlg-f"><button class="btn primary" id="sSave">${s ? "حفظ" : "إضافة"}</button><button class="btn" data-close>إلغاء</button></div>`);
+  const drawImg = () => { $("#sImg", d).innerHTML = screenHTML(image); $("#sUrl", d).value = image; };
+  $("#sUrl", d).onchange = e => { image = e.target.value.trim(); drawImg(); };
+  $("#sPick", d).onclick = async () => { const u = await openMediaPicker(); if (u) { image = u; drawImg(); } };
+  $("#sUp", d).onchange = async e => { const f = e.target.files[0]; if (!f) return; try { toast("جاري الرفع…"); image = await uploadFile(f, "images"); drawImg(); toast("تم رفع الصورة", "good"); } catch (err) { toast(errMsg(err), "bad"); } };
+  $("#sSave", d).onclick = async () => {
+    const name = $("#sName", d).value.trim();
+    if (!name) { $("#sErr", d).innerHTML = `<div class="form-errors">الاسم فارغ.</div>`; return; }
+    if (S.series.some(x => x.id !== s?.id && norm(x.name) === norm(name))) { $("#sErr", d).innerHTML = `<div class="form-errors">فما مسلسل بنفس الاسم.</div>`; return; }
+    if (s && s.name === name && s.image === image) { d.close(); return; }
+    try {
+      if (s) { await setDoc(doc(db, "mosalsal", s.id), { name, image }, { merge: true }); Object.assign(s, { name, image }); toast("تم الحفظ", "good"); }
+      else { const r = await addDoc(collection(db, "mosalsal"), { name, image }); S.series.push({ id: r.id, name, image }); toast("تمت الإضافة", "good"); }
+      S.series.sort((a, b) => a.name.localeCompare(b.name, "ar")); d.close(); onDone?.();
+    } catch (e) { toast(errMsg(e), "bad"); }
+  };
+  drawImg();
+}
+
+/* ---------- media library ---------- */
+function mediaThumbObserver(root) {
+  const io = new IntersectionObserver(entries => entries.forEach(async en => {
+    if (!en.isIntersecting) return; io.unobserve(en.target);
+    const it = S.media.find(m => m.path === en.target.dataset.path); if (!it) return;
+    try { const u = await mediaUrl(it); en.target.innerHTML = `<img src="${esc(u)}" alt="" loading="lazy">`; }
+    catch { en.target.textContent = "ما تحمّلتش"; }
+  }), { rootMargin: "200px" });
+  $$(".mi .img[data-path]", root).forEach(el => io.observe(el));
+}
+VIEWS.media = async (v) => {
+  await loadSeries(); await loadQuestions(); await loadMedia();
+  const prefixes = [...new Set(S.media.map(m => m.prefix))].sort();
+  v.innerHTML = `<div class="head"><div><h2>مكتبة الصور</h2><p id="mdCount"></p></div><div class="tools"><button class="btn" id="mdReload">تحديث</button></div></div>
+    <label class="drop" id="drop">اسحب الصور هنا ولا انقر للاختيار. كل صورة تاخذ اسم فريد.
+      <input type="file" accept="image/*" multiple hidden id="mdFiles"></label>
+    <div class="filters"><input type="search" id="mdText" placeholder="ابحث بالاسم…" value="${esc(S.mediaFilter.text)}">
+      <select id="mdPrefix"><option value="">كل المجلدات</option>${prefixes.map(p => `<option value="${esc(p)}" ${S.mediaFilter.prefix === p ? "selected" : ""}>${esc(p || "/ (الجذر)")}</option>`).join("")}</select>
+      <label class="chk"><input type="checkbox" id="mdUnused" ${S.mediaFilter.unused ? "checked" : ""}> غير المستعملة</label></div>
+    <div class="media-grid" id="mdGrid"></div>`;
+  const draw = () => {
+    const usage = usageMap(), f = S.mediaFilter, t = f.text.toLowerCase();
+    const list = S.media.filter(m => (!f.prefix || m.prefix === f.prefix) && (!t || m.name.toLowerCase().includes(t)) && (!f.unused || !usage.get(m.path)));
+    $("#mdCount").textContent = `${list.length} من ${S.media.length} ملف`;
+    $("#mdGrid").innerHTML = list.slice(0, 200).map(m => {
+      const used = usage.get(m.path)?.labels.length || 0;
+      return `<div class="mi" data-p="${esc(m.path)}"><div class="img" data-path="${esc(m.path)}">…</div>
+        <div class="meta"><div class="name">${esc(m.name)}</div>
+          <div>${used ? `<span class="tag">مستعملة في ${used}</span>` : `<span class="tag good">غير مستعملة</span>`}</div>
+          <div class="row"><button class="btn sm" data-copy>نسخ الرابط</button><button class="btn sm danger" data-del ${used ? "disabled" : ""}>حذف</button></div></div></div>`;
+    }).join("") || `<div class="empty-state">ما فماش صور.</div>`;
+    if (list.length > 200) $("#mdGrid").insertAdjacentHTML("beforeend", `<div class="empty-state">يظهر أول 200. استعمل البحث.</div>`);
+    mediaThumbObserver($("#mdGrid"));
+    $$("#mdGrid .mi").forEach(card => {
+      const m = S.media.find(x => x.path === card.dataset.p);
+      card.querySelector("[data-copy]").onclick = async () => {
+        try { await navigator.clipboard.writeText(await mediaUrl(m)); toast("تم نسخ الرابط", "good"); }
+        catch (e) { toast(errMsg(e), "bad"); }
+      };
+      card.querySelector("[data-del]").onclick = async () => {
+        if (usageMap().get(m.path)) return;
+        // pending questions are not loaded here: check them with one cheap aggregation
+        try {
+          const u = await mediaUrl(m);
+          const c = (await getCountFromServer(query(collection(db, "users_questions"), where("image", "==", u)))).data().count;
+          if (c) { toast(`مستعملة في ${c} سؤال في الانتظار. ما تتحذفش.`, "bad"); return; }
+        } catch (e) { toast(errMsg(e), "bad"); return; }
+        if (!await confirmBox(`حذف الملف نهائياً؟\n${m.path}`, "حذف")) return;
+        try { await deleteObject(ref(storage, m.path)); S.media = S.media.filter(x => x.path !== m.path); toast("تم الحذف", "good"); draw(); }
+        catch (e) { toast(errMsg(e), "bad"); }
+      };
+    });
+  };
+  const upload = async files => {
+    let ok = 0;
+    for (const f of files) { try { await uploadFile(f, "images"); ok++; } catch (e) { toast(errMsg(e), "bad"); } }
+    if (ok) toast(`تم رفع ${ok} صورة`, "good"); draw();
+  };
+  const drop = $("#drop");
+  ["dragenter", "dragover"].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add("over"); }));
+  ["dragleave", "drop"].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove("over"); }));
+  drop.addEventListener("drop", e => upload([...e.dataTransfer.files]));
+  $("#mdFiles").onchange = e => upload([...e.target.files]);
+  let deb; $("#mdText").oninput = e => { clearTimeout(deb); deb = setTimeout(() => { S.mediaFilter.text = e.target.value; draw(); }, 200); };
+  $("#mdPrefix").onchange = e => { S.mediaFilter.prefix = e.target.value; draw(); };
+  $("#mdUnused").onchange = e => { S.mediaFilter.unused = e.target.checked; draw(); };
+  $("#mdReload").onclick = async () => { try { await loadMedia(true); } catch (e) { toast(errMsg(e), "bad"); } route(); };
+  draw();
+};
+function openMediaPicker() {
+  return new Promise(async res => {
+    const d = $("#picker");
+    d.innerHTML = `<div class="dlg-h"><h3>اختار صورة</h3><button class="x" data-x aria-label="إغلاق">×</button></div>
+      <div class="dlg-b"><div class="filters"><input type="search" id="pkText" placeholder="ابحث بالاسم…"></div><div class="media-grid" id="pkGrid"><div class="loading">جاري التحميل…</div></div></div>`;
+    let done = false; const finish = v => { if (done) return; done = true; if (d.open) d.close(); res(v); };
+    d.querySelector("[data-x]").onclick = () => finish(null);
+    d.oncancel = e => { e.preventDefault(); finish(null); };
+    d.showModal();
+    try { await loadMedia(); } catch (e) { $("#pkGrid", d).innerHTML = `<div class="err">${esc(errMsg(e))}</div>`; return; }
+    const draw = () => {
+      const t = ($("#pkText", d).value || "").toLowerCase();
+      const list = S.media.filter(m => !t || m.name.toLowerCase().includes(t)).slice(0, 120);
+      $("#pkGrid", d).innerHTML = list.map(m => `<div class="mi pick" tabindex="0" data-p="${esc(m.path)}"><div class="img" data-path="${esc(m.path)}">…</div><div class="meta"><div class="name">${esc(m.name)}</div></div></div>`).join("") || `<div class="empty-state">ما فماش نتائج.</div>`;
+      mediaThumbObserver($("#pkGrid", d));
+      $$(".mi", d).forEach(card => {
+        const pick = async () => { const m = S.media.find(x => x.path === card.dataset.p); try { finish(await mediaUrl(m)); } catch (e) { toast(errMsg(e), "bad"); } };
+        card.onclick = pick; card.onkeydown = e => { if (e.key === "Enter") pick(); };
+      });
+    };
+    let deb; $("#pkText", d).oninput = () => { clearTimeout(deb); deb = setTimeout(draw, 200); }; draw();
+  });
+}
+
+/* ---------- suggestions ---------- */
+VIEWS.suggestions = async (v) => {
+  if (!S.suggestions) {
+    const snap = await getDocs(collection(db, "mousalsalatSuggestions"));
+    S.suggestions = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => tsMs(b.createdAt) - tsMs(a.createdAt));
+  }
+  const draw = () => {
+    const list = S.suggestions;
+    v.innerHTML = `<div class="head"><div><h2>الاقتراحات</h2><p>${list.length} اقتراح</p></div>
+      <div class="tools"><label class="chk"><input type="checkbox" id="sgE" ${S.showEmails ? "checked" : ""}> الإيميلات</label><button class="btn" id="sgR">تحديث</button></div></div>
+      <div class="panel"><div class="tbl-wrap">${list.length ? `<table class="resp"><thead><tr><th>الاقتراح</th><th>المرسل</th><th>التاريخ</th><th></th></tr></thead><tbody>
+      ${list.map(s => `<tr data-id="${esc(s.id)}"><td class="q">${esc(s.suggestion)}</td><td class="small ltr" data-label="المرسل">${esc(maskEmail(s.email))}</td><td class="small muted" data-label="التاريخ">${fmtDate(s.createdAt)}</td>
+        <td class="actions"><button class="btn sm danger" data-del>حذف</button></td></tr>`).join("")}</tbody></table>` : `<div class="empty-state">ما فماش اقتراحات.</div>`}</div></div>`;
+    $("#sgE").onchange = e => { S.showEmails = e.target.checked; draw(); };
+    $("#sgR").onclick = () => { S.suggestions = null; route(); };
+    $$("tr[data-id]", v).forEach(tr => tr.querySelector("[data-del]").onclick = async () => {
+      if (!await confirmBox("حذف هذا الاقتراح؟", "حذف")) return;
+      try { await deleteDoc(doc(db, "mousalsalatSuggestions", tr.dataset.id)); S.suggestions = S.suggestions.filter(x => x.id !== tr.dataset.id); toast("تم الحذف"); draw(); }
+      catch (e) { toast(errMsg(e), "bad"); }
+    });
+  };
+  draw();
+};
+
+/* ---------- bans ---------- */
+VIEWS.bans = async (v) => {
+  if (!S.bans) {
+    const a = await getDocs(collection(db, "bannedUsers"));
+    S.bans = a.docs.map(d => ({ id: d.id, ...d.data() })).sort((x, y) => tsMs(y.createdAt) - tsMs(x.createdAt));
+  }
+  let legacyN = null;
+  try { legacyN = await cachedCount("banned_users"); } catch {}
+  const draw = () => {
+    const active = S.bans;
+    v.innerHTML = `<div class="head"><div><h2>الحظر</h2><p>${active.length} محظور (bannedUsers)</p></div><div class="tools"><button class="btn" id="bR">تحديث</button></div></div>
+      <div class="panel" style="padding:16px;margin-bottom:16px"><label class="f" for="bEmail" style="margin-top:0">حظر بالإيميل</label>
+        <div style="display:flex;gap:8px"><input type="email" id="bEmail" class="ltr" placeholder="player@gmail.com" autocomplete="off"><button class="btn danger" id="bAdd">حظر</button></div></div>
+      <div class="panel"><div class="tbl-wrap">${active.length ? `<table class="resp"><thead><tr><th>الإيميل</th><th>تاريخ الحظر</th><th></th></tr></thead><tbody>
+        ${active.map(x => `<tr data-id="${esc(x.id)}"><td class="ltr q">${esc(x.email)}</td><td class="small muted" data-label="التاريخ">${fmtDate(x.createdAt)}</td><td class="actions"><button class="btn sm" data-un>رفع الحظر</button></td></tr>`).join("")}
+        </tbody></table>` : `<div class="empty-state">ما فماش حد محظور.</div>`}</div></div>
+      <div class="note" style="margin-top:16px">القائمة القديمة (banned_users): ${legacyN ?? "—"} سجل. للقراءة فقط، ما تتحذفش قبل التأكد.</div>`;
+    $("#bR").onclick = () => { S.bans = null; route(); };
+    $("#bAdd").onclick = async () => {
+      const email = $("#bEmail").value.trim().toLowerCase();
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { toast("الإيميل موش صحيح", "bad"); return; }
+      if (active.some(x => (x.email || "").toLowerCase() === email)) { toast("محظور من قبل", "bad"); return; }
+      if (!await confirmBox(`حظر ${email}؟`, "حظر")) return;
+      try { const r = await addDoc(collection(db, "bannedUsers"), { email, createdAt: serverTimestamp() }); S.bans.unshift({ id: r.id, email, createdAt: new Date() }); toast("تم الحظر", "good"); draw(); }
+      catch (e) { toast(errMsg(e), "bad"); }
+    };
+    $$("tr[data-id]", v).forEach(tr => tr.querySelector("[data-un]").onclick = async () => {
+      const x = active.find(y => y.id === tr.dataset.id);
+      if (!await confirmBox(`رفع الحظر على ${x.email}؟`, "رفع الحظر", false)) return;
+      try { await deleteDoc(doc(db, "bannedUsers", x.id)); S.bans = S.bans.filter(y => y.id !== x.id); toast("تم رفع الحظر", "good"); draw(); }
+      catch (e) { toast(errMsg(e), "bad"); }
+    });
+  };
+  draw();
+};
+
+/* ---------- players (read-only, paged) ---------- */
+const PLAYERS_PAGE = 20;
+VIEWS.players = async (v) => {
+  v.innerHTML = `<div class="head"><div><h2>اللاعبين</h2><p>للعرض فقط</p></div></div>
+    <div class="filters"><input type="search" id="pS" placeholder="ابحث ببداية اسم المستخدم…" autocomplete="off"></div>
+    <div class="panel"><div class="tbl-wrap" id="pT"><div class="loading">جاري التحميل…</div></div><div class="pager" id="pMore"></div></div>`;
+  let rows = [], last = null, key = "";
+  const render = () => {
+    $("#pT").innerHTML = rows.length ? `<table class="resp"><thead><tr><th></th><th>اسم المستخدم</th><th>الاسم الظاهر</th><th>التسجيل</th><th></th></tr></thead><tbody>
+      ${rows.map(u => `<tr data-id="${esc(u.id)}"><td class="sel">${u.photoUrl ? `<img src="${esc(u.photoUrl)}" alt="" style="width:32px;height:32px;border-radius:50%" loading="lazy">` : ""}</td>
+        <td class="ltr q"><b>${esc(u.username)}</b></td><td data-label="الاسم">${esc(u.displayName)}</td><td class="small muted" data-label="التسجيل">${fmtDate(u.createdAt)}</td>
+        <td class="actions"><button class="btn sm" data-v>التفاصيل</button></td></tr>`).join("")}</tbody></table>` : `<div class="empty-state">ما لقيت حتى لاعب.</div>`;
+    $$("#pT tr[data-id]").forEach(tr => tr.querySelector("[data-v]").onclick = () => playerDetails(rows.find(u => u.id === tr.dataset.id)));
+  };
+  const load = async (more) => {
+    const k = key.trim().toLowerCase();
+    const parts = [collection(db, "users")];
+    if (k) parts.push(where("usernameLower", ">=", k), where("usernameLower", "<=", k + "\uf8ff"));
+    if (more && last) parts.push(startAfter(last));
+    parts.push(limit(PLAYERS_PAGE));
+    try {
+      const snap = await getDocs(query(...parts));
+      const got = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      rows = more ? rows.concat(got) : got;
+      last = snap.docs[snap.docs.length - 1] || last;
+      render();
+      $("#pMore").innerHTML = snap.size === PLAYERS_PAGE ? `<button class="btn" id="pMoreBtn">عرض المزيد</button>` : "";
+      $("#pMoreBtn")?.addEventListener("click", () => load(true));
+    } catch (e) { $("#pT").innerHTML = `<div class="err">${esc(errMsg(e))}</div>`; }
+  };
+  let deb; $("#pS").oninput = e => { clearTimeout(deb); deb = setTimeout(() => { key = e.target.value; last = null; load(false); }, 400); };
+  load(false);
+};
+async function playerDetails(u) {
+  const d = openModal(`<div class="dlg-h"><h3>${esc(u.username)}</h3><button class="x" data-close aria-label="إغلاق">×</button></div>
+    <div class="dlg-b"><dl class="kv"><dt>UID</dt><dd class="ltr small">${esc(u.id)}</dd><dt>الاسم الظاهر</dt><dd>${esc(u.displayName)}</dd>
+    <dt>التسجيل</dt><dd>${fmtDate(u.createdAt)}</dd><dt>الحالة</dt><dd id="pdPres">…</dd><dt>الأصدقاء</dt><dd id="pdFr">…</dd><dt>التحديات</dt><dd id="pdCh">…</dd></dl></div>`);
+  getDocFromServer(doc(db, "presence", u.id)).then(s => {
+    const p = s.data(); const recent = p?.online && (Date.now() - tsMs(p.lastSeenAt) < 2 * 60 * 1000);
+    $("#pdPres", d).innerHTML = p ? `${recent ? `<span class="tag good">متصل</span>` : `<span class="tag">غير متصل</span>`} <span class="small muted">آخر ظهور: ${fmtDate(p.lastSeenAt)}</span>` : "ما فماش بيانات";
+  }).catch(e => $("#pdPres", d).textContent = errMsg(e));
+  getDocs(query(collection(db, "friendships"), where("users", "array-contains", u.id))).then(s => {
+    const all = s.docs.map(x => x.data());
+    $("#pdFr", d).textContent = `${all.filter(f => f.status === "accepted").length} صديق، ${all.filter(f => f.status === "pending").length} طلب معلّق`;
+  }).catch(e => $("#pdFr", d).textContent = errMsg(e));
+  Promise.all([getCountFromServer(query(collection(db, "challenges"), where("player1Id", "==", u.id))), getCountFromServer(query(collection(db, "challenges"), where("player2Id", "==", u.id)))])
+    .then(([x, y]) => $("#pdCh", d).textContent = String(x.data().count + y.data().count))
+    .catch(e => $("#pdCh", d).textContent = errMsg(e));
+}
+
+/* ---------- challenges (read-only, paged) ---------- */
+const CH_STATUS = { waiting: "في الانتظار", in_progress: "جاري", finished: "منتهي", cancelled: "ملغى" };
+const CH_PAGE = 30;
+VIEWS.challenges = async (v) => {
+  await loadSeries();
+  let rows = [], last = null, fs = "";
+  const pname = (c, id) => id ? (c.players?.[id]?.displayName || id.slice(0, 6)) : "—";
+  v.innerHTML = `<div class="head"><div><h2>التحديات</h2><p>للعرض فقط</p></div></div>
+    <div class="stats">${Object.entries(CH_STATUS).map(([k, l]) => `<button class="stat" data-st="${k}"><b data-cnt="${k}">…</b><span>${l}</span></button>`).join("")}
+      <button class="stat" data-st=""><b data-cnt="all">…</b><span>الكل</span></button></div>
+    <div class="panel"><div class="tbl-wrap" id="chT"><div class="loading">جاري التحميل…</div></div><div class="pager" id="chMore"></div></div>`;
+  // status counters: 5 cheap aggregations instead of downloading every challenge
+  const col = collection(db, "challenges");
+  [...Object.keys(CH_STATUS), "all"].forEach(async k => {
+    const el = v.querySelector(`[data-cnt="${k}"]`);
+    try { el.textContent = (await getCountFromServer(k === "all" ? col : query(col, where("status", "==", k)))).data().count; }
+    catch { el.textContent = "—"; }
+  });
+  const render = () => {
+    $("#chT").innerHTML = rows.length ? `<table class="resp"><thead><tr><th>الكود</th><th>النوع</th><th>اللاعب 1</th><th>اللاعب 2</th><th>الحالة</th><th>الفائز</th><th>التاريخ</th><th></th></tr></thead><tbody>
+      ${rows.map(c => {
+        const w = c.result ? (c.result.winnerId ? pname(c, c.result.winnerId) : "تعادل") : "—";
+        return `<tr data-id="${esc(c.id)}"><td class="ltr small q">${esc(c.id.length <= 6 ? c.id : c.id.slice(0, 8) + "…")}</td>
+          <td class="small" data-label="النوع">${c.type === "mousalsal" ? esc(seriesName(c.mousalsalId)) : "عام"}</td>
+          <td data-label="اللاعب 1">${esc(pname(c, c.player1Id))}</td><td data-label="اللاعب 2">${esc(pname(c, c.player2Id))}</td>
+          <td data-label="الحالة"><span class="tag ${c.status === "finished" ? "good" : c.status === "cancelled" ? "bad" : ""}">${esc(CH_STATUS[c.status] || c.status)}</span></td>
+          <td data-label="الفائز">${esc(w)}</td><td class="small muted" data-label="التاريخ">${fmtDate(c.createdAt)}</td><td class="actions"><button class="btn sm" data-v>عرض</button></td></tr>`;
+      }).join("")}</tbody></table>` : `<div class="empty-state">ما فماش تحديات.</div>`;
+    $$("#chT tr[data-id]").forEach(tr => tr.querySelector("[data-v]").onclick = () => {
+      const c = rows.find(x => x.id === tr.dataset.id);
+      const ps = Object.entries(c.players || {});
+      openModal(`<div class="dlg-h"><h3>تحدي ${esc(c.id)}</h3><button class="x" data-close aria-label="إغلاق">×</button></div>
+        <div class="dlg-b"><div class="note">للعرض فقط. أي تعديل خارجي ينجم يوقّف اللعبة على اللاعبين.</div>
+        <dl class="kv"><dt>النوع</dt><dd>${c.type === "mousalsal" ? esc(seriesName(c.mousalsalId)) : "عام"}</dd><dt>الحالة</dt><dd>${esc(CH_STATUS[c.status] || c.status)}</dd>
+        <dt>الإنشاء</dt><dd>${fmtDate(c.createdAt)}</dd><dt>البداية</dt><dd>${fmtDate(c.startedAt)}</dd><dt>النهاية</dt><dd>${fmtDate(c.finishedAt)}</dd>
+        <dt>عدد الأسئلة</dt><dd>${(c.questionIds || []).length}</dd></dl>
+        <div class="section-t">النتائج</div>
+        <div class="tbl-wrap"><table class="resp"><thead><tr><th>اللاعب</th><th>السؤال</th><th>صحيح</th><th>غالط</th><th>النقاط</th><th>كمّل</th></tr></thead><tbody>
+        ${ps.map(([id, p]) => `<tr><td class="q">${esc(p.displayName || id)}</td><td data-label="السؤال">${p.index ?? 0}/10</td><td data-label="صحيح">${p.correct ?? 0}</td><td data-label="غالط">${p.wrong ?? 0}</td><td data-label="النقاط"><b>${p.score ?? 0}</b></td><td data-label="كمّل">${p.completed ? "نعم" : "لا"}</td></tr>`).join("")}
+        </tbody></table></div></div>`, true);
+    });
+  };
+  const load = async (more) => {
+    const parts = [col];
+    if (fs) parts.push(where("status", "==", fs));
+    if (more && last) parts.push(startAfter(last));
+    parts.push(limit(CH_PAGE));
+    try {
+      const snap = await getDocs(query(...parts));
+      const got = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      rows = more ? rows.concat(got) : got;
+      last = snap.docs[snap.docs.length - 1] || last;
+      render();
+      $("#chMore").innerHTML = snap.size === CH_PAGE ? `<button class="btn" id="chMoreBtn">عرض المزيد</button>` : "";
+      $("#chMoreBtn")?.addEventListener("click", () => load(true));
+    } catch (e) { $("#chT").innerHTML = `<div class="err">${esc(errMsg(e))}</div>`; }
+  };
+  $$("[data-st]", v).forEach(b => b.onclick = () => { fs = b.dataset.st; last = null; load(false); });
+  load(false);
+};
+
+/* ---------- question generator ----------
+   Characters live in their own collection "characters" (the game never reads it).
+   Generated questions go through buildCanonical, the same write shape as the
+   question editor, so the game needs no change. Players see them only after "publish". */
+const GEN_TPL_KEY = "mq:" + firebaseConfig.projectId + ":genTpl";
+const GEN_DEFAULTS = {
+  who:    { on: true,  label: "صورة ← شكون الشخصية؟", kind: "اختيارات", m: "شكون هذا؟", f: "شكون هذي؟" },
+  series: { on: true,  label: "صورة ← من أنا مسلسل؟", kind: "اختيارات", m: "هذا من أنا مسلسل؟", f: "هذي من أنا مسلسل؟" },
+  actor:  { on: true,  label: "اسم ← شكون يلعب الدور؟", kind: "اختيارات", m: "شكون يلعب دور {name} في {series}؟", f: "شكون تلعب دور {name} في {series}؟" },
+  type:   { on: false, label: "صورة ← اكتب اسم الشخصية", kind: "كتابة", m: "شنوّة اسمو؟", f: "شنوّة اسمها؟" }
+};
+const GEN_TAG = { who: "شكون؟", series: "أنا مسلسل؟", actor: "الممثل", type: "كتابة" };
+function genTemplates() {
+  const saved = lsGet(GEN_TPL_KEY, {}) || {};
+  const out = {};
+  for (const k of Object.keys(GEN_DEFAULTS)) out[k] = { ...GEN_DEFAULTS[k], ...(saved[k] || {}), label: GEN_DEFAULTS[k].label, kind: GEN_DEFAULTS[k].kind };
+  return out;
+}
+const saveTemplates = t => lsSet(GEN_TPL_KEY, Object.fromEntries(Object.entries(t).map(([k, v]) => [k, { on: v.on, m: v.m, f: v.f }])));
+
+const normChar = (id, d) => ({
+  id, mousalsal: d.mousalsal || "", name: String(d.name || "").trim(), actor: String(d.actor || "").trim(),
+  gender: d.gender === "f" ? "f" : "m", photos: Array.isArray(d.photos) ? d.photos.filter(Boolean).map(String) : []
+});
+async function loadChars(force) {
+  if (S.chars && !force) return S.chars;
+  const snap = await getDocs(collection(db, "characters"));
+  S.chars = snap.docs.map(d => normChar(d.id, d.data()));
+  sortChars();
+  return S.chars;
+}
+const sortChars = () => S.chars.sort((a, b) => seriesName(a.mousalsal).localeCompare(seriesName(b.mousalsal), "ar") || a.name.localeCompare(b.name, "ar"));
+
+const shuffle = arr => { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+/* Up to n distinct wrong options, taken first from `primary`, then from `fallback`. */
+function wrongOptions(correct, primary, fallback, n = 3) {
+  const seen = new Set([norm(correct)]), out = []; let fromFallback = 0;
+  for (const [pool, isFb] of [[shuffle(primary), false], [shuffle(fallback), true]])
+    for (const v of pool) {
+      const k = norm(v); if (!v || !k || seen.has(k)) continue;
+      seen.add(k); out.push(v); if (isFb) fromFallback++;
+      if (out.length === n) return { out, fromFallback };
+    }
+  return { out, fromFallback };
+}
+const qKey = (question, image, answer) => norm(question) + "|" + String(image || "").trim() + "|" + norm(answer);
+const fillTpl = (t, c) => String(t || "").replaceAll("{name}", c.name).replaceAll("{series}", seriesName(c.mousalsal));
+
+function generateQuestions(chars, tpl) {
+  const existing = new Set((S.questions || []).map(q => qKey(q.question, q.image, q.type === "qcm" ? (q.correctAnswer || "") : q.answer)));
+  const items = [], skipped = [], seenNow = new Set(); let dup = 0;
+  const push = (c, kind, f, warns = []) => {
+    const { errors, data } = buildCanonical({ ...f, mousalsal: c.mousalsal, resolved: 0, user: "" });
+    const k = qKey(data.question, data.image, data.answer);
+    if (existing.has(k) || seenNow.has(k)) { dup++; return; }
+    seenNow.add(k);
+    items.push({ id: items.length, kind, char: c, data, errors, warns, sel: !errors.length });
+  };
+  const text = (t, c) => fillTpl(tpl[t][c.gender] || tpl[t].m, c);
+  for (const c of chars) {
+    if (!S.series.some(s => s.id === c.mousalsal)) { skipped.push([c, "المسلسل متاعها موش موجود"]); continue; }
+    if (!c.name) { skipped.push([c, "الاسم فارغ"]); continue; }
+    const sameG = S.chars.filter(x => x.id !== c.id && x.gender === c.gender);
+    const sameS = sameG.filter(x => x.mousalsal === c.mousalsal), otherS = sameG.filter(x => x.mousalsal !== c.mousalsal);
+
+    if (tpl.who.on) {
+      if (!c.photos.length) skipped.push([c, "«شكون؟»: ما فماش صور"]);
+      else for (const img of c.photos) {
+        const { out, fromFallback } = wrongOptions(c.name, sameS.map(x => x.name), otherS.map(x => x.name));
+        if (out.length < 3) { skipped.push([c, "«شكون؟»: لازم على الأقل 3 شخصيات أخرى من نفس الجنس"]); break; }
+        push(c, "who", { type: "qcm", question: text("who", c), image: img, choices: shuffle([c.name, ...out]), correctAnswer: c.name },
+          fromFallback ? [`${fromFallback} اختيار من مسلسل آخر (السؤال يولّي أسهل)`] : []);
+      }
+    }
+    if (tpl.series.on) {
+      const sName = seriesName(c.mousalsal);
+      if (!c.photos.length) skipped.push([c, "«أنا مسلسل؟»: ما فماش صور"]);
+      else for (const img of c.photos) {
+        const { out } = wrongOptions(sName, S.series.filter(s => s.id !== c.mousalsal).map(s => s.name), []);
+        if (out.length < 3) { skipped.push([c, "«أنا مسلسل؟»: لازم على الأقل 4 مسلسلات"]); break; }
+        push(c, "series", { type: "qcm", question: text("series", c), image: img, choices: shuffle([sName, ...out]), correctAnswer: sName });
+      }
+    }
+    if (tpl.actor.on) {
+      if (!c.actor) skipped.push([c, "«الممثل»: اسم الممثل فارغ"]);
+      else {
+        const { out, fromFallback } = wrongOptions(c.actor, sameS.map(x => x.actor), otherS.map(x => x.actor));
+        if (out.length < 3) skipped.push([c, "«الممثل»: لازم على الأقل 3 ممثلين آخرين من نفس الجنس"]);
+        else push(c, "actor", { type: "qcm", question: text("actor", c), image: c.photos[0] || "", choices: shuffle([c.actor, ...out]), correctAnswer: c.actor },
+          fromFallback ? [`${fromFallback} ممثل من مسلسل آخر`] : []);
+      }
+    }
+    if (tpl.type.on) {
+      if (!c.photos.length) skipped.push([c, "«كتابة»: ما فماش صور"]);
+      else for (const img of c.photos)
+        push(c, "type", { type: "kb", question: text("type", c), image: img, answer: c.name },
+          /\s/.test(c.name) ? ["الإجابة فيها فراغ: ثبّت إلّي اللعبة تقبلها في نوع الكتابة"] : []);
+    }
+  }
+  return { items, skipped, dup };
+}
+
+VIEWS.generator = async (v) => {
+  await loadSeries(); await loadQuestions(); await loadChars();
+  const tpl = genTemplates();
+  S.gen = S.gen || { filter: "", text: "", preview: null };
+  const g = S.gen;
+
+  const visibleChars = () => S.chars.filter(c => (!g.filter || c.mousalsal === g.filter) && (!g.text || norm(c.name + " " + c.actor).includes(norm(g.text))));
+  const seriesOptions = () => S.series.map(s => {
+    const nc = S.chars.filter(c => c.mousalsal === s.id).length, nq = S.questions.filter(q => q.mousalsal === s.id).length;
+    return `<option value="${esc(s.id)}" ${g.filter === s.id ? "selected" : ""}>${esc(s.name)} · ${nc} شخصية · ${nq} سؤال</option>`;
+  }).join("");
+
+  const drawChars = () => {
+    const list = visibleChars();
+    $("#gCount").textContent = `${S.chars.length} شخصية · ${S.chars.reduce((n, c) => n + c.photos.length, 0)} صورة`;
+    $("#gTable").innerHTML = list.length ? `<table class="resp"><thead><tr><th>صورة</th><th>الشخصية</th><th>الممثل</th><th>المسلسل</th><th>الجنس</th><th>صور</th><th></th></tr></thead><tbody>
+      ${list.map(c => `<tr data-id="${esc(c.id)}"><td class="img">${thumbHTML(c.photos[0])}</td><td class="q"><b>${esc(c.name)}</b></td>
+        <td data-label="الممثل">${esc(c.actor) || `<span class="tag bad">فارغ</span>`}</td><td data-label="المسلسل" class="small">${esc(seriesName(c.mousalsal))}</td>
+        <td data-label="الجنس">${c.gender === "f" ? "مرا" : "راجل"}</td><td data-label="صور">${c.photos.length || `<span class="tag bad">0</span>`}</td>
+        <td class="actions"><button class="btn sm" data-edit>تعديل</button> <button class="btn sm danger" data-del>حذف</button></td></tr>`).join("")}</tbody></table>`
+      : `<div class="empty-state">${S.chars.length ? "ما فماش نتائج." : "ما فماش شخصيات. ابدا بزيد شخصيات لأكثر مسلسل يحبوه اللاعبين."}</div>`;
+    $$("#gTable tr[data-id]").forEach(tr => {
+      const c = S.chars.find(x => x.id === tr.dataset.id);
+      tr.querySelector("[data-edit]").onclick = () => charEditor(c, afterChange);
+      tr.querySelector("[data-del]").onclick = async () => {
+        if (!await confirmBox(`حذف الشخصية «${c.name}»؟\nالأسئلة إلّي تولّدت منها قبل تبقى كيما هي.`, "حذف")) return;
+        try { await deleteDoc(doc(db, "characters", c.id)); S.chars = S.chars.filter(x => x.id !== c.id); toast("تم الحذف", "good"); afterChange(); }
+        catch (e) { toast(errMsg(e), "bad"); }
+      };
+    });
+    $("#gGenBtn").textContent = g.filter ? `توليد معاينة لـ «${seriesName(g.filter)}»` : "توليد معاينة لكل المسلسلات";
+  };
+  const afterChange = () => { $("#gSeries").innerHTML = `<option value="">كل المسلسلات</option>${seriesOptions()}`; g.preview = null; drawChars(); drawPreview(); };
+
+  const drawTemplates = () => {
+    $("#gTpl").innerHTML = Object.entries(tpl).map(([k, t]) => `
+      <div class="tpl ${t.on ? "" : "off"}" data-k="${k}">
+        <label class="chk"><input type="checkbox" data-on ${t.on ? "checked" : ""}> ${esc(t.label)} <span class="tag ${t.kind === "اختيارات" ? "qcm" : ""}">${esc(t.kind)}</span></label>
+        <div><small>راجل</small><input type="text" data-g="m" value="${esc(t.m)}"></div>
+        <div><small>مرا</small><input type="text" data-g="f" value="${esc(t.f)}"></div>
+      </div>`).join("");
+    $$("#gTpl .tpl").forEach(row => {
+      const k = row.dataset.k;
+      row.querySelector("[data-on]").onchange = e => { tpl[k].on = e.target.checked; row.classList.toggle("off", !tpl[k].on); saveTemplates(tpl); };
+      $$("input[data-g]", row).forEach(inp => inp.onchange = e => { tpl[k][e.target.dataset.g] = e.target.value.trim() || GEN_DEFAULTS[k][e.target.dataset.g]; e.target.value = tpl[k][e.target.dataset.g]; saveTemplates(tpl); });
+    });
+  };
+
+  const drawPreview = () => {
+    const box = $("#gPrev"); const p = g.preview;
+    if (!p) { box.innerHTML = ""; return; }
+    const sel = p.items.filter(i => i.sel).length, bad = p.items.filter(i => i.errors.length).length;
+    const skipList = p.skipped.map(([c, why]) => `<li><b>${esc(c.name || "—")}</b> (${esc(seriesName(c.mousalsal))}): ${esc(why)}</li>`).join("");
+    const actions = (pos) => `<div class="gen-bar"><span class="grow small muted">${sel} محدد من ${p.items.length}</span>
+      <button class="btn sm" data-all>تحديد الكل</button><button class="btn sm" data-none>إلغاء التحديد</button>
+      <button class="btn ok" data-add ${sel ? "" : "disabled"}>إضافة ${sel} سؤال ونشر</button></div>`;
+    box.innerHTML = `<div class="section-t">المعاينة</div>
+      <div class="gen-bar"><span class="tag good">${p.items.length} سؤال جديد</span><span class="tag">${p.dup} موجود من قبل (تنحّى)</span>
+        ${p.skipped.length ? `<span class="tag bad">${p.skipped.length} ما تولّدش</span>` : ""}${bad ? `<span class="tag bad">${bad} فيه مشكل</span>` : ""}
+        <button class="btn sm" id="gRe">عاود التوليد (اختيارات أخرى)</button></div>
+      ${p.skipped.length ? `<details class="skip"><summary>علاش البعض ما تولّدش؟</summary><ul>${skipList}</ul></details>` : ""}
+      ${p.items.length ? actions() + `<div class="gen-grid">${p.items.map(i => `
+        <div class="gq ${i.sel ? "" : "off"}" data-i="${i.id}">
+          <div class="img">${i.data.image ? `<img src="${esc(i.data.image)}" alt="" loading="lazy">` : "بدون صورة"}</div>
+          <div class="body"><h4>${esc(i.data.question)}</h4>
+            ${i.data.type === "qcm" ? `<ul>${i.data.choices.map(c => `<li class="${c === i.data.correctAnswer ? "ok" : ""}">${esc(c)}</li>`).join("")}</ul>`
+              : `<div class="small">الإجابة: <span class="tag good">${esc(i.data.answer)}</span></div>`}
+            ${i.errors.map(e => `<div class="warn bad">${esc(e)}</div>`).join("")}${i.warns.map(w => `<div class="warn">${esc(w)}</div>`).join("")}
+          </div>
+          <div class="foot"><span class="small muted">${esc(seriesName(i.data.mousalsal))} · ${GEN_TAG[i.kind]}</span>
+            <label class="chk"><input type="checkbox" data-sel ${i.sel ? "checked" : ""} ${i.errors.length ? "disabled" : ""}> نضيفو</label></div>
+        </div>`).join("")}</div>` + actions() : `<div class="panel empty-state">ما فماش أسئلة جديدة باش تتولّد.</div>`}`;
+    $$("#gPrev .gq").forEach(card => {
+      const it = p.items[+card.dataset.i];
+      card.querySelector("[data-sel]").onchange = e => { it.sel = e.target.checked; drawPreview(); };
+    });
+    $$("#gPrev [data-all]").forEach(b => b.onclick = () => { p.items.forEach(i => i.sel = !i.errors.length); drawPreview(); });
+    $$("#gPrev [data-none]").forEach(b => b.onclick = () => { p.items.forEach(i => i.sel = false); drawPreview(); });
+    $$("#gPrev [data-add]").forEach(b => b.onclick = addSelected);
+    $("#gRe").onclick = runGenerate;
+  };
+
+  const runGenerate = () => {
+    if (!Object.values(tpl).some(t => t.on)) { toast("فعّل على الأقل قالب واحد.", "bad"); return; }
+    const chars = S.chars.filter(c => !g.filter || c.mousalsal === g.filter);
+    if (!chars.length) { toast("ما فماش شخصيات في الاختيار هذا.", "bad"); return; }
+    g.preview = generateQuestions(chars, tpl);
+    drawPreview();
+    $("#gPrev").scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  const addSelected = async () => {
+    const p = g.preview; const list = p.items.filter(i => i.sel && !i.errors.length);
+    if (!list.length) return;
+    if (!await confirmBox(`إضافة ${list.length} سؤال لقاعدة الأسئلة؟\nبعدها نطلب منك النشر باش يوصلو للاعبين.`, "إضافة", false)) return;
+    $$("#gPrev [data-add]").forEach(b => b.disabled = true);
+    let done = 0;
+    try {
+      for (let i = 0; i < list.length; i += 400) { // Firestore batch limit is 500 writes
+        const b = writeBatch(db); const chunk = list.slice(i, i + 400); const refs = [];
+        chunk.forEach(it => { const r = doc(collection(db, "questions")); refs.push(r); b.set(r, it.data); });
+        await b.commit();
+        chunk.forEach((it, j) => S.questions?.unshift(normalizeQuestion(refs[j].id, it.data)));
+        done += chunk.length; markDirty(chunk.length);
+      }
+      toast(`تمت إضافة ${done} سؤال.`, "good");
+      g.preview = null; afterChange();
+      await publishChanges();
+    } catch (e) {
+      toast(`${done ? `تزادو ${done} سؤال قبل المشكل. ` : ""}${errMsg(e)}`, "bad");
+      if (done) { g.preview = null; afterChange(); } else $$("#gPrev [data-add]").forEach(b => b.disabled = false);
+    }
+  };
+
+  v.innerHTML = `<div class="head"><div><h2>مولّد الأسئلة</h2><p id="gCount"></p></div>
+      <div class="tools"><button class="btn" id="gReload">تحديث</button><button class="btn primary" id="gNew">+ شخصية جديدة</button></div></div>
+    <ol class="steps"><li>زيد الشخصيات والصور</li><li>اختار القوالب</li><li>عاين الأسئلة</li><li>أضف وانشر</li></ol>
+    <div class="filters"><select id="gSeries"><option value="">كل المسلسلات</option>${seriesOptions()}</select>
+      <input type="search" id="gText" placeholder="ابحث باسم الشخصية ولا الممثل…" value="${esc(g.text)}"></div>
+    <div class="panel"><div class="tbl-wrap" id="gTable"></div></div>
+    <div class="section-t">القوالب</div>
+    <div class="note">{name} = اسم الشخصية، {series} = اسم المسلسل. التعديلات تتحفظ في المتصفح هذا.</div>
+    <div class="panel" id="gTpl"></div>
+    <div class="gen-bar"><button class="btn sm" id="gTplReset">رجّع القوالب الأصلية</button><span class="grow"></span><button class="btn primary" id="gGenBtn"></button></div>
+    <div id="gPrev"></div>`;
+  $("#gSeries").onchange = e => { g.filter = e.target.value; g.preview = null; drawChars(); drawPreview(); };
+  let deb; $("#gText").oninput = e => { clearTimeout(deb); deb = setTimeout(() => { g.text = e.target.value; drawChars(); }, 200); };
+  $("#gNew").onclick = () => charEditor({ mousalsal: g.filter, gender: "m", photos: [] }, afterChange);
+  $("#gReload").onclick = async () => { try { await loadChars(true); } catch (e) { toast(errMsg(e), "bad"); } afterChange(); };
+  $("#gTplReset").onclick = () => { Object.keys(GEN_DEFAULTS).forEach(k => Object.assign(tpl[k], GEN_DEFAULTS[k])); saveTemplates(tpl); drawTemplates(); };
+  $("#gGenBtn").onclick = runGenerate;
+  drawChars(); drawTemplates(); drawPreview();
+};
+
+function charEditor(c, onDone) {
+  const isNew = !c.id;
+  const st = { photos: [...(c.photos || [])], gender: c.gender === "f" ? "f" : "m" };
+  const d = openModal(`<div class="dlg-h"><h3>${isNew ? "شخصية جديدة" : "تعديل الشخصية"}</h3><button class="x" data-close aria-label="إغلاق">×</button></div>
+    <div class="dlg-b"><div class="ed-grid"><div class="ed-form">
+      <label class="f ed-top" for="cSeries">المسلسل</label>
+      <select id="cSeries" class="ed-top"><option value="">اختار مسلسل…</option>${S.series.map(s => `<option value="${esc(s.id)}" ${c.mousalsal === s.id ? "selected" : ""}>${esc(s.name)}</option>`).join("")}</select>
+      <label class="f" for="cName">اسم الشخصية (كيما يعرفوها اللاعبين)</label><input type="text" id="cName" value="${esc(c.name || "")}">
+      <label class="f" for="cActor">اسم الممثل</label><input type="text" id="cActor" value="${esc(c.actor || "")}">
+      <label class="f">الجنس (باش الاختيارات الغالطة تكون معقولة)</label>
+      <div class="seg" id="cGender"><button type="button" data-g="m">راجل</button><button type="button" data-g="f">مرا</button></div>
+      <label class="f">الصور (كل صورة = أسئلة زايدة · الأولى هي الرئيسية)</label>
+      <div class="gen-photos" id="cPhotos"></div>
+      <div class="img-tools"><button type="button" class="btn sm" id="cPick">من المكتبة</button>
+        <label class="btn sm">رفع صور<input type="file" accept="image/*" multiple id="cUp" hidden></label></div>
+      <div class="dz-note">اسحب الصور من الجهاز ولا من الصندوق. رتّبهم بالسحب، ولا انقر على صورة باش تولّي الرئيسية.</div>
+      <div id="cErr"></div>
+    </div><div id="cTray" role="complementary" aria-label="صندوق سريع"></div></div></div>
+    <div class="dlg-f"><button class="btn primary" id="cSave">${isNew ? "إضافة" : "حفظ"}</button>${isNew ? `<button class="btn" id="cSaveNext">إضافة وزيد وحدة أخرى</button>` : ""}<button class="btn" data-close>إلغاء</button></div>`);
+  d.classList.add("tray-on");
+  const drawGender = () => $$("#cGender button", d).forEach(b => b.classList.toggle("on", b.dataset.g === st.gender));
+  let tray = null;
+  const addPhoto = u => { if (!u) return; if (st.photos.includes(u)) { toast("الصورة هذي موجودة."); return; } st.photos.push(u); drawPhotos(); };
+  const move = (from, to) => { if (from === to || from < 0) return; const [x] = st.photos.splice(from, 1); st.photos.splice(to > from ? to - 1 : to, 0, x); drawPhotos(); };
+  const drawPhotos = () => {
+    const box = $("#cPhotos", d);
+    box.innerHTML = st.photos.length ? st.photos.map((u, i) => `<div class="gen-photo ${i === 0 ? "first" : ""}" data-i="${i}" title="${i ? "انقر باش تولّي الرئيسية" : "الصورة الرئيسية"}"><img src="${esc(u)}" alt="" loading="lazy" draggable="false">${i === 0 ? `<span class="main">الرئيسية</span>` : ""}<button type="button" data-rm="${i}" aria-label="نحّي الصورة">×</button></div>`).join("")
+      : `<div class="small muted" style="grid-column:1/-1;padding:10px 4px">ما فماش صور. اسحبهم هنا، ولا بلاش صور تتولّد كان أسئلة الممثل.</div>`;
+    $$("[data-rm]", box).forEach(b => b.onclick = e => { e.stopPropagation(); st.photos.splice(+b.dataset.rm, 1); drawPhotos(); });
+    $$(".gen-photo", box).forEach(el => {
+      const i = +el.dataset.i;
+      el.onclick = () => { if (i) { move(i, 0); pulse($(".gen-photo", box)); } };
+      el.draggable = true;
+      el.addEventListener("dragstart", e => { e.dataTransfer.setData(MQ_PHOTO, String(i)); e.dataTransfer.effectAllowed = "move"; el.classList.add("dragging"); });
+      el.addEventListener("dragend", () => { el.classList.remove("dragging"); $$(".drop-before", box).forEach(x => x.classList.remove("drop-before")); });
+      el.addEventListener("dragover", e => { if ([...e.dataTransfer.types].includes(MQ_PHOTO)) { e.preventDefault(); el.classList.add("drop-before"); } });
+      el.addEventListener("dragleave", () => el.classList.remove("drop-before"));
+      el.addEventListener("drop", e => { if (![...e.dataTransfer.types].includes(MQ_PHOTO)) return; e.preventDefault(); e.stopPropagation(); el.classList.remove("drop-before"); move(+e.dataTransfer.getData(MQ_PHOTO), i); });
+    });
+    tray?.refresh();
+  };
+  $$("#cGender button", d).forEach(b => b.onclick = () => { st.gender = b.dataset.g; drawGender(); });
+  $("#cPick", d).onclick = async () => { const u = await openMediaPicker(); if (u) { rememberImage(u); addPhoto(u); } };
+  $("#cUp", d).onchange = async e => { const files = [...e.target.files]; e.target.value = ""; if (files.length) uploadMany(files, addPhoto); };
+  dropZone($("#cPhotos", d), { onImage: addPhoto, onFiles: files => uploadMany(files, addPhoto) });
+  pasteImages(d, files => uploadMany(files, addPhoto));
+  tray = mountTray($("#cTray", d), { getSeries: () => $("#cSeries", d).value, getUsed: () => st.photos, onImage: u => { addPhoto(u); pulse($("#cPhotos", d)); } });
+  $("#cSeries", d).addEventListener("change", () => tray.refresh());
+  const save = async (next) => {
+    const data = { mousalsal: $("#cSeries", d).value, name: $("#cName", d).value.trim(), actor: $("#cActor", d).value.trim(), gender: st.gender, photos: [...st.photos] };
+    const errors = [];
+    if (!data.mousalsal) errors.push("اختار المسلسل.");
+    if (!data.name) errors.push("اسم الشخصية فارغ.");
+    if (S.chars.some(x => x.id !== c.id && x.mousalsal === data.mousalsal && norm(x.name) === norm(data.name))) errors.push("فما شخصية بنفس الاسم في نفس المسلسل.");
+    st.photos.forEach(rememberImage);
+    if (errors.length) { $("#cErr", d).innerHTML = `<div class="form-errors"><ul>${errors.map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>`; return; }
+    $$(".dlg-f .btn", d).forEach(b => b.disabled = true);
+    try {
+      if (isNew) { const r = await addDoc(collection(db, "characters"), { ...data, updatedAt: serverTimestamp() }); S.chars.push(normChar(r.id, data)); }
+      else { await setDoc(doc(db, "characters", c.id), { ...data, updatedAt: serverTimestamp() }); Object.assign(c, normChar(c.id, data)); }
+      sortChars(); toast(isNew ? "تمت الإضافة" : "تم الحفظ", "good"); onDone?.();
+      if (next) charEditor({ mousalsal: data.mousalsal, gender: data.gender, photos: [] }, onDone); else d.close();
+    } catch (e) { $$(".dlg-f .btn", d).forEach(b => b.disabled = false); toast(errMsg(e), "bad"); }
+  };
+  $("#cSave", d).onclick = () => save(false);
+  $("#cSaveNext", d)?.addEventListener("click", () => save(true));
+  drawGender(); drawPhotos();
+}
+
+/* ================= auth gate ================= */
+function renderAuth(state, user) {
+  const c = $("#authCard");
+  if (state === "signin") {
+    c.innerHTML = `<h1>لوحة التحكم</h1><p>مسلسلات تونسية QUIZ. الدخول مخصص للمشرفين.</p>
+      <button class="btn primary" id="gIn" style="width:100%;padding:10px">الدخول بحساب Google</button>`;
+    $("#gIn").onclick = async () => { try { await signInWithPopup(auth, new GoogleAuthProvider()); } catch (e) { toast(errMsg(e), "bad"); } };
+  } else if (state === "denied") {
+    c.innerHTML = `<h1>ما عندكش صلاحية</h1>
+      <p>الحساب <span class="ltr">${esc(user.email)}</span> ما عندوش الصلاحية <code>fireCMSUser</code>.</p>
+      <p class="small">مالك المشروع يعطيها مرة وحدة من سيرفر فيه Admin SDK:</p>
+      <pre>admin.auth().setCustomUserClaims(
+  "${esc(user.uid)}", { fireCMSUser: true });</pre>
+      <p class="small">بعدها اخرج وادخل من جديد.</p>
+      <button class="btn" id="out">خروج</button>`;
+    $("#out").onclick = () => signOut(auth);
+  }
+}
+async function doSignOut() {
+  if (pendingCount() && !await confirmBox(`فما ${pendingCount()} تغيير غير منشور. محفوظين، أما اللاعبين ما يشوفوهمش حتى تنشر. تخرج؟`, "خروج", false)) return;
+  signOut(auth);
+}
+onAuthStateChanged(auth, async user => {
+  if (!user) { unwatch.forEach(f => f()); unwatch = []; $("#app").classList.add("hidden"); $("#auth").classList.remove("hidden"); renderAuth("signin"); return; }
+  try {
+    const tok = await user.getIdTokenResult(); // claim is in the cached token; no forced refresh on every load
+    if (tok.claims.fireCMSUser !== true) {
+      const fresh = await user.getIdTokenResult(true); // only refresh if missing (claim may have just been granted)
+      if (fresh.claims.fireCMSUser !== true) { renderAuth("denied", user); return; }
+    }
+  } catch (e) { toast(errMsg(e), "bad"); renderAuth("signin"); return; }
+  $("#auth").classList.add("hidden"); $("#app").classList.remove("hidden");
+  $("#who").innerHTML = `${user.photoURL ? `<img src="${esc(user.photoURL)}" alt="">` : ""}<span>${esc(user.displayName || user.email)}</span><br><button id="logout">خروج</button>`;
+  $("#logout").onclick = doSignOut;
+  $("#mOut").onclick = doSignOut;
+  loadPendingCount();
+  watchShared();
+  route();
+});
+</script>
+</body>
+</html>
