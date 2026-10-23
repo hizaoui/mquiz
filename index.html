@@ -169,8 +169,8 @@ dialog.wide{width:min(1000px,96vw)}
 
 /* ---------- tablet / phone ---------- */
 @media (max-width:860px){
-  #app{grid-template-columns:1fr;grid-template-rows:auto 1fr}
-  aside{position:sticky;top:0;z-index:30;height:auto;padding:0}
+  #app{grid-template-columns:minmax(0,1fr);grid-template-rows:auto 1fr} /* minmax: the tab bar scrolls instead of widening the page */
+  aside{position:sticky;top:0;z-index:30;height:auto;padding:0;min-width:0}
   .brand{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;margin:0;border-bottom:0}
   .brand b{font-size:16px}
   .brand span{display:none}
@@ -311,6 +311,67 @@ body.drag-img .dz-img,body.drag-file .dz-img,body.drag-txt .dz-txt,body.drag-nam
   .tray-chip{flex:0 0 auto;width:auto;max-width:250px}
 }
 @media (prefers-reduced-motion:reduce){.dz.over{transform:none}.pop{animation:none}}
+/* ---------- scratch questions ---------- */
+.tag.scr{background:#EEE7F7;color:#5B3A8C}
+.scr-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(300px,.85fr);gap:20px;align-items:start}
+.scr-side{position:sticky;top:12px;display:flex;flex-direction:column;gap:14px}
+.scr-form{padding:18px 20px}
+.scr-form .f:first-child{margin-top:0}
+.scr-choices{display:grid;gap:8px}
+.scr-choice{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:center;border:1px solid var(--line);border-radius:var(--r-sm);padding:4px 10px;background:var(--paper);transition:border-color .15s,background .15s}
+.scr-choice.ok{border-color:#9ED4B4;background:var(--green-soft)}
+.scr-choice input[type=text]{border:0;background:transparent;padding:8px 2px;min-height:40px}
+.scr-choice input[type=text]:focus{outline:none}
+.scr-choice:focus-within{border-color:var(--blue)}
+.scr-drop{display:grid;place-items:center;text-align:center;gap:6px;border:2px dashed var(--line);border-radius:var(--r-md);padding:18px;background:var(--wall);cursor:pointer;color:var(--muted);font-size:14px;min-height:120px}
+.scr-drop:hover{border-color:var(--jasmine)}
+.scr-drop b{color:var(--ink)}
+.scr-img-row{display:flex;gap:12px;align-items:center;margin-top:8px;flex-wrap:wrap}
+.scr-img-row img{width:96px;aspect-ratio:1;object-fit:cover;border-radius:8px;background:var(--wall)}
+.scr-img-info{font-size:13px;flex:1;min-width:160px}
+.scr-warn{font-size:13px;color:#7A5410;background:var(--jasmine-soft);border-radius:8px;padding:6px 10px;margin-top:8px}
+.scr-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:18px}
+.scr-actions .grow{flex:1}
+.scr-editing{display:flex;gap:8px;align-items:center;background:#EEE7F7;color:#5B3A8C;border-radius:var(--r-sm);padding:8px 12px;margin-bottom:12px;font-size:14px}
+/* series picker */
+.sp{position:relative}
+.sp-btn{display:flex;align-items:center;gap:10px;width:100%;min-height:52px;padding:6px 10px;border:1px solid var(--line);border-radius:var(--r-sm);background:var(--paper);cursor:pointer;text-align:start;font:inherit;color:var(--ink)}
+.sp-btn:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
+.sp-btn .nm{flex:1}
+.sp-cover{width:40px;height:40px;border-radius:7px;object-fit:cover;background:var(--wall);flex:none;display:grid;place-items:center;color:var(--muted);font-size:16px}
+.sp-pop{position:absolute;z-index:30;inset-inline:0;top:calc(100% + 4px);background:var(--paper);border:1px solid var(--line);border-radius:var(--r-md);box-shadow:0 12px 32px rgba(24,33,44,.16);padding:8px}
+.sp-pop input{margin-bottom:6px}
+.sp-list{max-height:300px;overflow:auto;display:grid;gap:2px}
+.sp-opt{display:flex;align-items:center;gap:10px;width:100%;padding:6px 8px;border:0;border-radius:8px;background:none;cursor:pointer;font:inherit;text-align:start;color:var(--ink);min-height:48px}
+.sp-opt:hover,.sp-opt:focus-visible{background:var(--wall);outline:none}
+.sp-opt[aria-selected=true]{background:var(--blue-soft,#E6EEF7);font-weight:600}
+.sp-opt .c{font-size:12px;color:var(--muted);margin-inline-start:auto}
+/* phone preview */
+.scr-phone{background:#18212C;border-radius:26px;padding:14px;color:#fff;box-shadow:0 10px 30px rgba(24,33,44,.18)}
+.scr-phone .q{font-weight:600;text-align:center;margin:4px 0 12px;font-size:16px;min-height:1.4em}
+.scr-stage{position:relative;border-radius:14px;overflow:hidden;background:#0F151D;aspect-ratio:1;display:grid;place-items:center}
+.scr-stage img{width:100%;height:100%;object-fit:cover;display:block;user-select:none;-webkit-user-drag:none}
+.scr-stage canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:crosshair}
+.scr-stage .ph{color:#7C8796;font-size:13px;padding:20px;text-align:center}
+.scr-meter{display:flex;justify-content:space-between;align-items:center;margin:10px 2px 6px;font-size:13.5px;gap:8px}
+.scr-meter .stars{color:var(--jasmine);font-weight:700}
+.scr-bar{height:6px;border-radius:999px;background:#2A3542;overflow:hidden}
+.scr-bar i{display:block;height:100%;width:0;background:var(--jasmine);transition:width .12s}
+.scr-ch{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:12px}
+.scr-ch span{background:#26313E;border-radius:10px;padding:8px;text-align:center;font-size:13.5px;min-height:36px}
+.scr-ch span.ok{outline:2px solid #39B27A}
+.scr-kb{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin-top:12px;direction:rtl}
+.scr-kb span{width:30px;height:34px;border-radius:7px;background:#26313E;display:grid;place-items:center;font-size:14px}
+.scr-tools{display:flex;justify-content:space-between;gap:8px;margin-top:10px}
+.scr-tools .btn{background:#26313E;color:#fff;border-color:#26313E}
+/* list */
+.scr-list-h{display:flex;align-items:center;gap:10px;margin:26px 0 10px}
+.scr-list-h .section-t{margin:0}
+.scr-more{display:flex;justify-content:center;padding:14px}
+@media (max-width:980px){.scr-grid{grid-template-columns:1fr}.scr-side{position:static}}
+.scr-list-h .grow,.scr-editing .grow{flex:1}
+#sQcm,#sKb{margin-top:4px}
+@media (max-width:860px){#lTable td.img img{max-height:160px;width:auto;margin-inline:auto}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
@@ -650,7 +711,13 @@ async function cachedCount(name) {
 
 function issuesOf(q) {
   const out = [];
-  if (q.type === "qcm") {
+  if (q.type === "scratch") {
+    if (!q.image) out.push("سكراتش بدون صورة");
+    if (q.choices.length) {
+      if (q.choices.length !== 4) out.push("لازم 4 اختيارات");
+      if (!q.correctAnswer || !q.choices.map(c => c.trim()).includes(q.correctAnswer.trim())) out.push("الإجابة الصحيحة موش من الاختيارات");
+    } else if (!q.answer.trim()) out.push("إجابة فارغة");
+  } else if (q.type === "qcm") {
     const ch = q.choices.map(c => c.trim()).filter(Boolean);
     if (ch.length < 2) out.push("اختيارات ناقصة");
     if (!q.correctAnswer || !q.correctAnswer.trim()) out.push("ما فماش إجابة صحيحة");
@@ -747,7 +814,7 @@ const sameCanonical = (q, data) => !q.legacy && JSON.stringify({
 
 /* ================= navigation ================= */
 const ROUTES = [
-  ["overview", "نظرة عامة"], ["questions", "الأسئلة"], ["moderation", "المراجعة"], ["series", "المسلسلات"], ["generator", "مولّد الأسئلة"],
+  ["overview", "نظرة عامة"], ["questions", "الأسئلة"], ["moderation", "المراجعة"], ["series", "المسلسلات"], ["generator", "مولّد الأسئلة"], ["scratch", "أسئلة السكراتش"],
   ["media", "مكتبة الصور"], ["suggestions", "الاقتراحات"], ["bans", "الحظر"], ["players", "اللاعبين"], ["challenges", "التحديات"]
 ];
 function updateNav() {
@@ -829,7 +896,7 @@ VIEWS.questions = async (v) => {
     <div class="filters">
       <input type="search" id="fText" placeholder="ابحث في السؤال أو الإجابة…" value="${esc(S.qFilter.text)}">
       <select id="fSeries"><option value="">كل المسلسلات</option>${S.series.map(s => `<option value="${esc(s.id)}" ${S.qFilter.series === s.id ? "selected" : ""}>${esc(s.name)}</option>`).join("")}</select>
-      <select id="fType"><option value="">كل الأنواع</option><option value="qcm" ${S.qFilter.type === "qcm" ? "selected" : ""}>اختيارات</option><option value="kb" ${S.qFilter.type === "kb" ? "selected" : ""}>كتابة</option></select>
+      <select id="fType"><option value="">كل الأنواع</option><option value="qcm" ${S.qFilter.type === "qcm" ? "selected" : ""}>اختيارات</option><option value="kb" ${S.qFilter.type === "kb" ? "selected" : ""}>كتابة</option><option value="scratch" ${S.qFilter.type === "scratch" ? "selected" : ""}>سكراتش</option></select>
       <select id="fIssue"><option value="">كل الحالات</option><option value="broken" ${S.qFilter.issue === "broken" ? "selected" : ""}>فيها مشكل</option><option value="legacy" ${S.qFilter.issue === "legacy" ? "selected" : ""}>صيغة قديمة</option><option value="noimage" ${S.qFilter.issue === "noimage" ? "selected" : ""}>بدون صورة</option><option value="ok" ${S.qFilter.issue === "ok" ? "selected" : ""}>سليمة</option></select>
       <label class="chk"><input type="checkbox" id="fEmails" ${S.showEmails ? "checked" : ""}> الإيميلات</label>
     </div>
@@ -840,7 +907,8 @@ VIEWS.questions = async (v) => {
     return S.questions.filter(q => {
       if (f.series && q.mousalsal !== f.series) return false;
       if (f.type === "qcm" && q.type !== "qcm") return false;
-      if (f.type === "kb" && q.type === "qcm") return false;
+      if (f.type === "kb" && (q.type === "qcm" || q.type === "scratch")) return false;
+      if (f.type === "scratch" && q.type !== "scratch") return false;
       if (f.issue) {
         const iss = issuesOf(q);
         if (f.issue === "broken" && !iss.some(i => i !== "صيغة قديمة")) return false;
@@ -869,8 +937,8 @@ VIEWS.questions = async (v) => {
           <td class="img">${thumbHTML(q.image)}</td>
           <td class="q">${esc(q.question)}</td>
           <td class="small" data-label="المسلسل">${esc(seriesName(q.mousalsal))}</td>
-          <td data-label="النوع">${q.type === "qcm" ? `<span class="tag qcm">اختيارات</span>` : `<span class="tag">كتابة</span>`}</td>
-          <td class="small" data-label="الإجابة">${esc(q.type === "qcm" ? (q.correctAnswer || "—") : q.answer)}</td>
+          <td data-label="النوع">${q.type === "scratch" ? `<span class="tag scr">سكراتش</span>` : q.type === "qcm" ? `<span class="tag qcm">اختيارات</span>` : `<span class="tag">كتابة</span>`}</td>
+          <td class="small" data-label="الإجابة">${esc(q.type === "qcm" || (q.type === "scratch" && q.choices.length) ? (q.correctAnswer || "—") : q.answer)}</td>
           <td data-label="الحالة"><span>${iss.length ? iss.map(i => `<span class="tag bad">${esc(i)}</span>`).join(" ") : `<span class="tag good">سليم</span>`}</span></td>
           <td class="small ltr" data-label="المرسل">${esc(maskEmail(q.user))}</td>
           <td class="actions"><button class="btn sm" data-edit>تعديل</button> <button class="btn sm danger" data-del>حذف</button></td></tr>`;
@@ -884,8 +952,9 @@ VIEWS.questions = async (v) => {
     $$("#qTable tr[data-id]").forEach(tr => {
       const id = tr.dataset.id, q = S.questions.find(x => x.id === id);
       tr.querySelector("[data-sel]").onchange = e => { e.target.checked ? S.qSel.add(id) : S.qSel.delete(id); syncBulk(); };
-      tr.querySelector("[data-edit]").onclick = () => openEditor({ mode: "edit", q, onDone: draw });
+      tr.querySelector("[data-edit]").onclick = () => { if (q.type === "scratch") { S.scrEdit = q; location.hash = "#/scratch"; } else openEditor({ mode: "edit", q, onDone: draw }); };
       tr.querySelector("[data-del]").onclick = async () => {
+        if (q.type === "scratch") { if (await deleteScratch(q)) { S.qSel.delete(id); if (S.scr?.items) S.scr.items = S.scr.items.filter(x => x.id !== id); draw(); renderPubBar(); } return; }
         if (!await confirmBox(`حذف السؤال نهائياً؟\n«${q.question}»`, "حذف")) return;
         try { await deleteDoc(doc(db, "questions", id)); S.questions = S.questions.filter(x => x.id !== id); S.qSel.delete(id); markDirty(); toast("تم الحذف", "good"); draw(); }
         catch (e) { toast(errMsg(e), "bad"); }
@@ -951,7 +1020,7 @@ function trayNames(seriesId) {
   const known = new Set(chars.map(c => norm(c.text))), m = new Map();
   (S.questions || []).forEach(q => {
     if (q.mousalsal !== seriesId) return;
-    const vals = q.type === "qcm" ? q.choices : [q.answer];
+    const vals = q.choices?.length ? q.choices : [q.answer];
     vals.forEach(v => { v = String(v || "").trim(); if (!v || v.length > 40) return; const k = norm(v); if (known.has(k)) return; const e = m.get(k) || { text: v, n: 0 }; e.n++; m.set(k, e); });
   });
   return { chars, answers: [...m.values()].sort((a, b) => b.n - a.n).slice(0, 24) };
@@ -1874,6 +1943,371 @@ function charEditor(c, onDone) {
   $("#cSaveNext", d)?.addEventListener("click", () => save(true));
   drawGender(); drawPhotos();
 }
+
+/* ---------- scratch questions ----------
+   type "scratch": the picture is covered, the player scratches and guesses.
+   Unlike the other views, every create / edit / delete here PUBLISHES immediately:
+   the question write and meta/catalog.version += 1 go in the same transaction.
+   This view never reads the whole questions collection: 20 docs per page, one-time get(). */
+const SCR = { prefix: "questions/scratch", page: 20, qKey: "mq:" + firebaseConfig.projectId + ":scrQ", resizeKey: "mq:" + firebaseConfig.projectId + ":scrResize" };
+const SCR_DEFAULT_Q = "شكون هذي الشخصية؟";
+const scrStars = pct => pct >= 80 ? 10 : Math.round(100 - (pct / 80) * 90); // preview only: the game has the real formula
+
+/* exact write shape (field order as the game expects to read it) */
+function buildScratch(f) {
+  const t = v => String(v ?? "").trim();
+  const errors = [], warns = [];
+  const question = t(f.question), image = t(f.image), mousalsal = t(f.mousalsal);
+  if (!mousalsal || !S.series.some(s => s.id === mousalsal)) errors.push("اختار المسلسل.");
+  if (!question) errors.push("نص السؤال فارغ.");
+  if (!image) errors.push("الصورة إجبارية: بلاش صورة اللعبة تعتبرو سؤال عادي.");
+  const data = { question, type: "scratch", image, mousalsal };
+  if (f.mode === "qcm") {
+    const choices = f.choices.map(t);
+    if (choices.length !== 4 || choices.some(c => !c)) errors.push("لازم 4 اختيارات معمّرين.");
+    else if (new Set(choices).size !== 4) errors.push("فما اختيارات متكررة.");
+    else {
+      const low = choices.map(c => c.toLowerCase());
+      if (new Set(low).size !== 4) warns.push("زوز اختيارات يختلفو كان في الحروف الكبيرة/الصغيرة، والتصحيح يفرّق بيناتهم.");
+    }
+    const correct = Number.isInteger(f.correct) && f.correct >= 0 ? choices[f.correct] || "" : "";
+    if (!correct) errors.push("اختار الإجابة الصحيحة (الدائرة).");
+    data.answer = correct; data.choices = choices; data.correctAnswer = correct;
+  } else {
+    data.answer = t(f.answer);
+    if (!data.answer) warns.push("الإجابة فارغة: اللعبة ما تنجمش تبني الكيبورد من حروفها.");
+  }
+  data.resolved = Number.isInteger(f.resolved) ? f.resolved : 0;
+  data.user = t(f.user);
+  return { errors, warns, data };
+}
+
+/* question write + catalog bump in ONE transaction (and the shared pending counter,
+   because a bump publishes every pending change too) */
+async function scratchCommit(apply) {
+  const cref = doc(db, CATALOG.collection, CATALOG.doc);
+  const run = withPending => runTransaction(db, async tx => {
+    const s = await tx.get(cref);
+    if (withPending) await tx.get(pendingRef());
+    const v = s.exists() ? s.data().version : 0;
+    if (s.exists() && v != null && !Number.isInteger(v)) throw new Error("الحقل version موش رقم صحيح في meta/catalog. ما بدّلتش شي.");
+    apply(tx);
+    tx.set(cref, { version: increment(1), updatedAt: serverTimestamp() }, { merge: true });
+    if (withPending) tx.set(pendingRef(), { count: 0, publishedAt: serverTimestamp(), publishedBy: adminName() }, { merge: true });
+    return v ?? 0;
+  });
+  let old;
+  try { old = await run(S.shared.ok === true); }
+  catch (e) {
+    if (S.shared.ok === true && /permission/i.test(String(e?.code || e?.message || ""))) { S.shared = { ...S.shared, ok: false, err: errMsg(e) }; old = await run(false); }
+    else throw e;
+  }
+  const nv = old + 1, c = lsGet(K.cacheVer, null);
+  if (c && typeof c === "object" && c.v === old) lsSet(K.cacheVer, { ...c, v: nv }); else lsSet(K.cacheVer, null);
+  S.catalog = { version: nv, updatedAt: new Date(), exists: true };
+  if (S.shared.ok) S.shared = { ...S.shared, count: 0 };
+  clearDirty();
+  return nv;
+}
+async function confirmPublishSideEffect(action) {
+  const n = pendingCount();
+  if (!n) return true;
+  return confirmBox(`${action} ينشر اللعبة مباشرة.\nفما ${n} تغيير آخر غير منشور، وباش يتنشرو معاه.\nنكمّلو؟`, "نكمّل", false);
+}
+async function deleteScratch(q) {
+  if (!await confirmBox(`حذف سؤال السكراتش؟\n«${q.question}» · ${q.answer || q.correctAnswer || ""}\nالحذف ينشر مباشرة (الصورة تبقى في المكتبة).`, "حذف")) return false;
+  if (!await confirmPublishSideEffect("الحذف")) return false;
+  try {
+    const nv = await scratchCommit(tx => tx.delete(doc(db, "questions", q.id)));
+    if (S.questions) S.questions = S.questions.filter(x => x.id !== q.id);
+    toast(`تم الحذف والنشر · النسخة ${nv}`, "good"); return true;
+  } catch (e) { toast(errMsg(e), "bad"); return false; }
+}
+
+/* scale down to ~800px (longest side) as JPEG before upload */
+async function prepScratchImage(file, resize) {
+  if (!resize) return file;
+  let bmp; try { bmp = await createImageBitmap(file); } catch { return file; }
+  const scale = Math.min(1, 800 / Math.max(bmp.width, bmp.height));
+  if (scale === 1 && file.type === "image/jpeg") { bmp.close?.(); return file; }
+  const c = document.createElement("canvas"); c.width = Math.round(bmp.width * scale); c.height = Math.round(bmp.height * scale);
+  const x = c.getContext("2d"); x.fillStyle = "#fff"; x.fillRect(0, 0, c.width, c.height); x.drawImage(bmp, 0, 0, c.width, c.height); bmp.close?.();
+  const blob = await new Promise(r => c.toBlob(r, "image/jpeg", 0.86));
+  return blob ? new File([blob], (file.name.replace(/\.[^.]+$/, "") || "scratch") + ".jpg", { type: "image/jpeg" }) : file;
+}
+
+/* draggable scratch-off simulation over the picture */
+function scratchSim(stage, onPct) {
+  let cv = null, ctx = null, last = null, timer = 0, dpr = 1, ro = null;
+  const cover = () => {
+    const r = stage.getBoundingClientRect(); dpr = Math.min(2, window.devicePixelRatio || 1);
+    cv.width = Math.max(1, Math.round(r.width * dpr)); cv.height = Math.max(1, Math.round(r.height * dpr));
+    ctx = cv.getContext("2d", { willReadFrequently: true });
+    ctx.globalCompositeOperation = "source-over";
+    const g = ctx.createLinearGradient(0, 0, cv.width, cv.height);
+    g.addColorStop(0, "#B9C1CB"); g.addColorStop(.5, "#E3E7EC"); g.addColorStop(1, "#9EA7B2");
+    ctx.fillStyle = g; ctx.fillRect(0, 0, cv.width, cv.height);
+    ctx.fillStyle = "rgba(255,255,255,.18)";
+    for (let i = 0; i < 260; i++) ctx.fillRect(Math.random() * cv.width, Math.random() * cv.height, 2 * dpr, 2 * dpr);
+    ctx.fillStyle = "rgba(24,33,44,.55)"; ctx.font = `600 ${16 * dpr}px system-ui, sans-serif`; ctx.textAlign = "center";
+    ctx.fillText("حكّ هنا", cv.width / 2, cv.height / 2);
+    onPct(0);
+  };
+  const measure = () => {
+    const { data } = ctx.getImageData(0, 0, cv.width, cv.height); let clear = 0, n = 0;
+    for (let i = 3; i < data.length; i += 4 * 16) { n++; if (data[i] < 128) clear++; }
+    onPct(n ? Math.min(100, Math.round(clear / n * 100)) : 0);
+  };
+  const pos = e => { const r = cv.getBoundingClientRect(); return [(e.clientX - r.left) * dpr, (e.clientY - r.top) * dpr]; };
+  const scratch = p => {
+    ctx.globalCompositeOperation = "destination-out"; ctx.lineCap = ctx.lineJoin = "round"; ctx.lineWidth = 44 * dpr;
+    ctx.beginPath(); ctx.moveTo(...(last || p)); ctx.lineTo(...p); ctx.stroke(); last = p;
+    clearTimeout(timer); timer = setTimeout(measure, 60);
+  };
+  const mount = () => {
+    cv?.remove(); cv = document.createElement("canvas"); cv.setAttribute("aria-label", "محاكاة الحكّ"); stage.appendChild(cv);
+    cv.addEventListener("pointerdown", e => { cv.setPointerCapture(e.pointerId); last = null; scratch(pos(e)); });
+    cv.addEventListener("pointermove", e => { if (cv.hasPointerCapture(e.pointerId)) scratch(pos(e)); });
+    cv.addEventListener("pointerup", () => { last = null; measure(); });
+    cover();
+    ro?.disconnect(); let w0 = stage.clientWidth;
+    ro = new ResizeObserver(() => { if (cv && Math.abs(stage.clientWidth - w0) > 4) { w0 = stage.clientWidth; cover(); } }); ro.observe(stage);
+  };
+  return { mount, reset: () => cv && cover(), remove: () => { ro?.disconnect(); cv?.remove(); cv = null; onPct(0); } };
+}
+
+VIEWS.scratch = async (v) => {
+  await loadSeries();
+  const editQ = S.scrEdit; S.scrEdit = null;
+  S.scr = S.scr || { items: null, last: null, done: false, total: null };
+  const L = S.scr;
+  const blank = (keep = {}) => ({
+    id: null, mousalsal: keep.mousalsal || "", question: lsGet(SCR.qKey, SCR_DEFAULT_Q) || SCR_DEFAULT_Q,
+    mode: "qcm", choices: ["", "", "", ""], correct: -1, answer: "", image: "", file: null, preview: "", resolved: 0, user: ""
+  });
+  let F = blank(), busy = false, objUrl = "";
+  const fromDoc = q => {
+    const has = Array.isArray(q.choices) && q.choices.length > 0;
+    const ch = has ? q.choices.slice(0, 4).map(String) : ["", "", "", ""];
+    while (ch.length < 4) ch.push("");
+    return { id: q.id, mousalsal: q.mousalsal || "", question: q.question || "", mode: has ? "qcm" : "kb", choices: ch,
+      correct: has ? ch.findIndex(c => c.trim() === String(q.correctAnswer ?? "").trim() && c.trim()) : -1,
+      answer: q.answer || "", image: q.image || "", file: null, preview: "", resolved: Number.isInteger(q.resolved) ? q.resolved : 0, user: q.user || "",
+      loadNote: has && q.choices.length !== 4 ? `السؤال هذا فيه ${q.choices.length} اختيارات. الفورم يخدم بـ4: ثبّت قبل ما تحفظ.` : "" };
+  };
+  if (editQ) F = fromDoc(editQ);
+
+  v.innerHTML = `<div class="head"><div><h2>أسئلة السكراتش</h2><p>الصورة مغطّاة واللاعب يحكّ باش يعرف الشخصية. كل ما يحكّ أقل، ياخذ نجوم أكثر.</p></div></div>
+    <div class="note">كل إضافة ولا تعديل ولا حذف هنا <b>ينشر مباشرة</b> (يزيد نسخة الكتالوج). تأكد إلّي نسخة اللعبة عند اللاعبين تعرف النوع <span class="ltr">"scratch"</span>.</div>
+    <div class="scr-grid">
+      <div class="panel scr-form" id="sForm"></div>
+      <div class="scr-side">
+        <div class="scr-phone"><div class="q" id="pQ"></div><div class="scr-stage" id="pStage"></div>
+          <div class="scr-meter"><span id="pPct">محكوك: 0%</span><span class="stars" id="pStars">★ 100</span></div><div class="scr-bar"><i id="pBar"></i></div>
+          <div id="pAns"></div>
+          <div class="scr-tools"><span class="small" style="color:#AEB7C2">اسحب بالصبع ولا الفأرة على الصورة</span><button type="button" class="btn sm" id="pReset">عاود غطّي</button></div></div>
+        <div id="sTray"></div>
+      </div>
+    </div>
+    <div class="scr-list-h"><div class="section-t">الأسئلة الموجودة</div><span class="tag scr" id="lCount">…</span><span class="grow"></span><button class="btn sm" id="lReload">تحديث</button></div>
+    <div class="panel"><div class="tbl-wrap" id="lTable"></div><div class="scr-more" id="lMore"></div></div>`;
+
+  const sim = scratchSim($("#pStage"), pct => {
+    $("#pPct").textContent = `محكوك: ${pct}%`; $("#pStars").textContent = `★ ${scrStars(pct)} (تقريبي)`; $("#pBar").style.width = pct + "%";
+  });
+  const imgSrc = () => F.preview || F.image;
+  const drawPreview = () => {
+    $("#pQ").textContent = F.question.trim() || "…";
+    const src = imgSrc(), stage = $("#pStage");
+    if (stage.dataset.src !== src) {
+      stage.dataset.src = src;
+      stage.innerHTML = src ? `<img alt="" draggable="false">` : `<div class="ph">الصورة تظهر هنا مغطّاة، وتنجم تجرّب تحكّها.</div>`;
+      if (src) { const im = $("img", stage); im.onload = () => { sim.mount(); drawImgInfo(im); }; im.onerror = () => { sim.remove(); drawImgInfo(null, true); }; im.src = src; }
+      else { sim.remove(); drawImgInfo(null); }
+    }
+    $("#pAns").innerHTML = F.mode === "qcm"
+      ? `<div class="scr-ch">${F.choices.map((c, i) => `<span class="${i === F.correct && c.trim() ? "ok" : ""}">${esc(c.trim() || "…")}</span>`).join("")}</div>`
+      : `<div class="scr-kb" aria-label="حروف الكيبورد">${[...F.answer.trim().replace(/\s+/g, "")].map(ch => `<span>${esc(ch)}</span>`).join("") || `<span>…</span>`}</div>`;
+  };
+  const drawImgInfo = (im, failed) => {
+    const box = $("#sImgInfo"); if (!box) return;
+    if (failed) { box.innerHTML = `<div class="scr-warn">الصورة ما تحمّلتش. ثبّت الرابط.</div>`; return; }
+    if (!im) { box.innerHTML = ""; return; }
+    const w = im.naturalWidth, h = im.naturalHeight, warn = [];
+    if (Math.max(w, h) < 500) warn.push("الصورة صغيرة: تولّي مضبّبة على التلفون. المنصوح بيه حوالي 800px.");
+    if (w / h > 1.6 || h / w > 1.6) warn.push("الصورة طويلة برشا: الشخصية لازم تكون في الوسط باش ما تتقصّش.");
+    if (F.file && Math.max(w, h) > 800 && !lsGet(SCR.resizeKey, true)) warn.push("أكبر من 800px: اللاعبين يحمّلو أكثر من اللازم.");
+    box.innerHTML = `<span class="small muted"><span dir="ltr">${w}×${h}px</span>${F.file ? ` · ${(F.file.size / 1024).toFixed(0)} KB (قبل التصغير)` : ""}</span>${warn.map(x => `<div class="scr-warn">${esc(x)}</div>`).join("")}`;
+  };
+  const seriesBtnHTML = () => {
+    const s = S.series.find(x => x.id === F.mousalsal);
+    return `${s?.image ? `<img class="sp-cover" src="${esc(s.image)}" alt="">` : `<span class="sp-cover">🎬</span>`}<span class="nm">${s ? esc(s.name) : `<span class="muted">اختار مسلسل…</span>`}</span><span aria-hidden="true">▾</span>`;
+  };
+
+  const drawForm = () => {
+    const f = $("#sForm");
+    f.innerHTML = `${F.id ? `<div class="scr-editing">✎ تعديل سؤال موجود<span class="grow"></span><button type="button" class="btn sm" id="sCancelEdit">إلغاء التعديل</button></div>` : ""}
+      ${F.loadNote ? `<div class="scr-warn" style="margin:0 0 10px">${esc(F.loadNote)}</div>` : ""}
+      <label class="f">المسلسل</label>
+      <div class="sp" id="sp"><button type="button" class="sp-btn" id="spBtn" aria-haspopup="listbox" aria-expanded="false">${seriesBtnHTML()}</button>
+        <div class="sp-pop hidden" id="spPop"><input type="search" id="spQ" placeholder="ابحث على مسلسل…"><div class="sp-list" role="listbox" id="spList"></div></div></div>
+      <label class="f" for="sQ">السؤال</label><input type="text" id="sQ" value="${esc(F.question)}">
+      <label class="f">طريقة الإجابة</label>
+      <div class="seg" id="sMode"><button type="button" data-m="qcm">اختيارات (منصوح بيه)</button><button type="button" data-m="kb">كيبورد</button></div>
+      <div id="sQcm" class="${F.mode === "qcm" ? "" : "hidden"}"><label class="f">4 اختيارات (اختار الصحيحة بالدائرة)</label><div class="scr-choices" id="sChoices"></div>
+        <div class="small muted" style="margin-top:6px">التصحيح يفرّق بين الحروف الكبيرة والصغيرة: الإجابة الصحيحة تتسجّل كيما هي بالضبط.</div></div>
+      <div id="sKb" class="${F.mode === "kb" ? "" : "hidden"}"><label class="f" for="sA">الإجابة</label><input type="text" id="sA" value="${esc(F.answer)}">
+        <div class="small muted" style="margin-top:6px">اللعبة تبني الكيبورد من حروف الإجابة هذي.</div></div>
+      <label class="f">صورة الشخصية</label>
+      <label class="scr-drop" id="sDrop"><span><b>اسحب الصورة هنا</b> ولا انقر باش تختار</span><span class="small">واضحة، الشخصية في الوسط، حوالي 800px · Ctrl+V يخدم زادة</span>
+        <input type="file" accept="image/*" id="sFile" hidden></label>
+      <div class="scr-img-row">${imgSrc() ? `<img src="${esc(imgSrc())}" alt="">` : ""}<div class="scr-img-info" id="sImgInfo"></div></div>
+      <div class="img-tools"><button type="button" class="btn sm" id="sLib">من المكتبة</button>${imgSrc() ? `<button type="button" class="btn sm danger" id="sNoImg">نحّي الصورة</button>` : ""}
+        <label class="chk"><input type="checkbox" id="sResize" ${lsGet(SCR.resizeKey, true) ? "checked" : ""}> صغّر لـ 800px (JPEG) قبل الرفع</label></div>
+      <div id="sErr"></div>
+      <div class="scr-actions"><button class="btn primary" id="sSave">${F.id ? "حفظ ونشر" : "إضافة ونشر"}</button><button type="button" class="btn" id="sClear">تفريغ</button>
+        <span class="grow"></span><span class="small muted">بعد الإضافة، المسلسل يبقى مختار.</span></div>`;
+    $$("#sMode button", f).forEach(b => { b.classList.toggle("on", b.dataset.m === F.mode); b.onclick = () => { F.mode = b.dataset.m; if (F.mode === "kb" && !F.answer.trim() && F.correct >= 0) F.answer = F.choices[F.correct].trim(); drawForm(); drawPreview(); }; });
+    $("#sQ", f).oninput = e => { F.question = e.target.value; drawPreview(); };
+    $("#sA", f).oninput = e => { F.answer = e.target.value; drawPreview(); };
+    drawChoices();
+    // series picker
+    const pop = $("#spPop", f), btn = $("#spBtn", f);
+    const drawOpts = () => {
+      const qq = norm($("#spQ", f).value);
+      const list = S.series.filter(s => !qq || norm(s.name).includes(qq));
+      $("#spList", f).innerHTML = list.map(s => `<button type="button" class="sp-opt" role="option" aria-selected="${s.id === F.mousalsal}" data-id="${esc(s.id)}">${s.image ? `<img class="sp-cover" src="${esc(s.image)}" alt="" loading="lazy">` : `<span class="sp-cover">🎬</span>`}<span>${esc(s.name)}</span></button>`).join("") || `<div class="tray-empty">ما فماش.</div>`;
+      $$(".sp-opt", f).forEach(o => o.onclick = () => { F.mousalsal = o.dataset.id; closePop(); btn.innerHTML = seriesBtnHTML(); tray.refresh(); });
+    };
+    const closePop = () => { pop.classList.add("hidden"); btn.setAttribute("aria-expanded", "false"); document.removeEventListener("pointerdown", outside, true); };
+    const outside = e => { if (!e.target.closest("#sp")) closePop(); };
+    btn.onclick = () => {
+      if (!pop.classList.contains("hidden")) return closePop();
+      pop.classList.remove("hidden"); btn.setAttribute("aria-expanded", "true"); $("#spQ", f).value = ""; drawOpts(); $("#spQ", f).focus();
+      document.addEventListener("pointerdown", outside, true);
+    };
+    $("#spQ", f).oninput = drawOpts;
+    pop.onkeydown = e => { if (e.key === "Escape") { closePop(); btn.focus(); } };
+    // image
+    const takeFiles = files => { const file = files.find(x => x.type.startsWith("image/")); if (!file) return toast("الملف موش صورة.", "bad"); setFile(file); };
+    $("#sFile", f).onchange = e => { const files = [...e.target.files]; e.target.value = ""; if (files.length) takeFiles(files); };
+    dropZone($("#sDrop", f), { onImage: setUrl, onFiles: takeFiles });
+    $("#sLib", f).onclick = async () => { const u = await openMediaPicker(); if (u) setUrl(u); };
+    $("#sNoImg", f)?.addEventListener("click", () => setUrl(""));
+    $("#sResize", f).onchange = e => lsSet(SCR.resizeKey, e.target.checked);
+    $("#sSave", f).onclick = save;
+    $("#sClear", f).onclick = () => { F = blank({ mousalsal: F.mousalsal }); resetImgState(); drawForm(); drawPreview(); };
+    $("#sCancelEdit", f)?.addEventListener("click", () => { F = blank({ mousalsal: F.mousalsal }); resetImgState(); drawForm(); drawPreview(); });
+    const im = $("#pStage img"); if (im?.complete && im.naturalWidth) drawImgInfo(im);
+  };
+  const drawChoices = () => {
+    const box = $("#sChoices"); if (!box) return;
+    box.innerHTML = F.choices.map((c, i) => `<div class="scr-choice ${i === F.correct ? "ok" : ""}">
+      <input type="radio" name="sCorr" data-i="${i}" ${i === F.correct ? "checked" : ""} aria-label="الإجابة الصحيحة">
+      <input type="text" data-i="${i}" value="${esc(c)}" placeholder="اختيار ${i + 1}"></div>`).join("");
+    $$("input[type=radio]", box).forEach(r => r.onchange = () => { F.correct = +r.dataset.i; drawChoices(); drawPreview(); });
+    $$("input[type=text]", box).forEach(inp => {
+      inp.oninput = () => { F.choices[+inp.dataset.i] = inp.value; drawPreview(); };
+      inp.onblur = () => { const t = inp.value.trim(); if (t !== inp.value) { inp.value = t; F.choices[+inp.dataset.i] = t; drawPreview(); } };
+      dropZone(inp, { onName: t => putChoice(+inp.dataset.i, t) });
+    });
+  };
+  const putChoice = (i, t) => {
+    t = String(t).trim();
+    if (F.choices.some((c, j) => j !== i && c.trim() === t)) return toast("الاختيار هذا موجود.", "bad");
+    F.choices[i] = t; drawChoices(); drawPreview(); pulse($$("#sChoices .scr-choice")[i]);
+  };
+  const placeName = t => {
+    if (F.mode === "kb") { F.answer = String(t).trim(); $("#sA").value = F.answer; pulse($("#sA")); drawPreview(); return; }
+    const i = F.choices.findIndex(c => !c.trim());
+    if (i < 0) return toast("الـ4 اختيارات معمّرين. اسحب الاسم على اختيار باش تبدّلو.", "bad");
+    putChoice(i, t);
+  };
+  const resetImgState = () => { if (objUrl) URL.revokeObjectURL(objUrl); objUrl = ""; };
+  const setFile = file => { resetImgState(); objUrl = URL.createObjectURL(file); F.file = file; F.preview = objUrl; F.image = ""; drawForm(); drawPreview(); pulse($("#pStage")); };
+  const setUrl = url => { resetImgState(); F.file = null; F.preview = ""; F.image = String(url || "").trim(); if (F.image) rememberImage(F.image); drawForm(); drawPreview(); if (F.image) pulse($("#pStage")); };
+  v.onpaste = e => {
+    if (e.target.closest("input[type=text],input[type=search],textarea") && ![...(e.clipboardData?.files || [])].length) return;
+    const files = [...(e.clipboardData?.files || [])].filter(x => x.type.startsWith("image/"));
+    if (files.length) { e.preventDefault(); setFile(files[0]); }
+  };
+
+  const save = async () => {
+    if (busy) return;
+    const { errors, warns, data } = buildScratch({ ...F, image: F.image || (F.file ? "pending-upload" : "") });
+    $("#sErr").innerHTML = errors.length ? `<div class="form-errors"><ul>${errors.map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>` : "";
+    if (errors.length) return;
+    if (warns.length && !await confirmBox(warns.join("\n") + "\nتحفظ هكّا؟", "نحفظ", false)) return;
+    if (!await confirmPublishSideEffect(F.id ? "الحفظ" : "الإضافة")) return;
+    busy = true; const btn = $("#sSave"); btn.disabled = true; $("#sClear").disabled = true;
+    try {
+      if (F.file) {
+        btn.textContent = "جاري رفع الصورة…";
+        const ready = await prepScratchImage(F.file, lsGet(SCR.resizeKey, true));
+        data.image = await uploadFile(ready, SCR.prefix);
+        F.image = data.image; F.file = null; F.preview = ""; resetImgState(); // a retry won't upload twice
+      }
+      btn.textContent = "جاري الحفظ والنشر…";
+      const ref_ = F.id ? doc(db, "questions", F.id) : doc(collection(db, "questions"));
+      const nv = await scratchCommit(tx => tx.set(ref_, data)); // full replace: keyboard mode drops choices/correctAnswer
+      const saved = normalizeQuestion(ref_.id, data);
+      if (S.questions) { const i = S.questions.findIndex(x => x.id === ref_.id); if (i >= 0) S.questions[i] = saved; else S.questions.unshift(saved); }
+      if (L.items) { const i = L.items.findIndex(x => x.id === ref_.id); if (i >= 0) L.items[i] = saved; else { L.items.unshift(saved); if (L.total != null) L.total++; } }
+      lsSet(SCR.qKey, data.question);
+      toast(`${F.id ? "تم الحفظ" : "تمت الإضافة"} والنشر · النسخة ${nv}`, "good");
+      F = blank({ mousalsal: data.mousalsal }); // bulk add: keep the series, clear the rest
+      drawForm(); drawPreview(); drawList();
+      $("#sChoices input[type=text]")?.focus();
+    } catch (e) {
+      toast(errMsg(e), "bad");
+      btn.disabled = false; $("#sClear").disabled = false; btn.textContent = F.id ? "حفظ ونشر" : "إضافة ونشر";
+      if (F.image) drawForm();
+    } finally { busy = false; renderPubBar(); }
+  };
+
+  // ----- list: paged one-time reads, never the whole collection -----
+  const base = () => query(collection(db, "questions"), where("type", "==", "scratch"));
+  const loadPage = async () => {
+    const qy = L.last ? query(collection(db, "questions"), where("type", "==", "scratch"), startAfter(L.last), limit(SCR.page))
+      : query(collection(db, "questions"), where("type", "==", "scratch"), limit(SCR.page));
+    const snap = await getDocs(qy);
+    L.items = [...(L.items || []), ...snap.docs.map(d => normalizeQuestion(d.id, d.data()))];
+    L.last = snap.docs[snap.docs.length - 1] || L.last; L.done = snap.docs.length < SCR.page;
+  };
+  const loadCount = async () => { try { L.total = (await getCountFromServer(base())).data().count; } catch { L.total = null; } drawCount(); };
+  const drawCount = () => { $("#lCount").textContent = L.total == null ? `${L.items?.length || 0}` : `${L.total} سؤال`; };
+  const drawList = () => {
+    drawCount();
+    const items = L.items || [];
+    $("#lTable").innerHTML = items.length ? `<table class="resp"><thead><tr><th>صورة</th><th>السؤال</th><th>المسلسل</th><th>الطريقة</th><th>الإجابة</th><th></th></tr></thead><tbody>
+      ${items.map(q => { const iss = issuesOf(q); return `<tr data-id="${esc(q.id)}"><td class="img">${thumbHTML(q.image)}</td><td class="q">${esc(q.question)}${iss.length ? `<div>${iss.map(i => `<span class="tag bad">${esc(i)}</span>`).join(" ")}</div>` : ""}</td>
+        <td class="small" data-label="المسلسل">${esc(seriesName(q.mousalsal))}</td><td data-label="الطريقة">${q.choices.length ? `<span class="tag qcm">اختيارات</span>` : `<span class="tag">كيبورد</span>`}</td>
+        <td class="small" data-label="الإجابة"><b>${esc(q.choices.length ? (q.correctAnswer || "—") : (q.answer || "—"))}</b></td>
+        <td class="actions"><button class="btn sm" data-edit>تعديل</button> <button class="btn sm danger" data-del>حذف</button></td></tr>`; }).join("")}</tbody></table>`
+      : `<div class="empty-state">ما فماش أسئلة سكراتش بعد. زيد أول وحدة الفوق.</div>`;
+    $("#lMore").innerHTML = items.length && !L.done ? `<button class="btn" id="lMoreBtn">حمّل ${SCR.page} أخرين</button>` : items.length ? `<span class="small muted">هذا الكل.</span>` : "";
+    $("#lMoreBtn")?.addEventListener("click", async e => { e.target.disabled = true; e.target.textContent = "جاري التحميل…"; try { await loadPage(); } catch (err) { toast(errMsg(err), "bad"); } drawList(); });
+    $$("#lTable tr[data-id]").forEach(tr => {
+      const q = items.find(x => x.id === tr.dataset.id);
+      tr.querySelector("[data-edit]").onclick = () => { resetImgState(); F = fromDoc(q); drawForm(); drawPreview(); $("#sForm").scrollIntoView({ behavior: "smooth", block: "start" }); };
+      tr.querySelector("[data-del]").onclick = async () => {
+        if (!await deleteScratch(q)) return;
+        L.items = L.items.filter(x => x.id !== q.id); if (L.total != null) L.total = Math.max(0, L.total - 1);
+        if (F.id === q.id) { F = blank({ mousalsal: F.mousalsal }); drawForm(); drawPreview(); }
+        drawList(); renderPubBar();
+      };
+    });
+  };
+  $("#lReload").onclick = async () => { L.items = null; L.last = null; L.done = false; $("#lTable").innerHTML = `<div class="loading">جاري التحميل…</div>`; try { await loadPage(); } catch (e) { toast(errMsg(e), "bad"); L.items = []; } drawList(); loadCount(); };
+  $("#pReset").onclick = () => sim.reset();
+
+  const tray = mountTray($("#sTray"), { getSeries: () => F.mousalsal, getUsed: () => [F.image], onImage: setUrl, onName: placeName });
+  if (!S.chars) loadChars().then(() => tray.refresh()).catch(() => { S.chars = S.chars || []; });
+  drawForm(); drawPreview();
+  if (!L.items) { $("#lTable").innerHTML = `<div class="loading">جاري التحميل…</div>`; try { await loadPage(); } catch (e) { L.items = []; toast(errMsg(e), "bad"); } loadCount(); }
+  else if (L.total == null) loadCount();
+  drawList();
+};
 
 /* ================= auth gate ================= */
 function renderAuth(state, user) {
